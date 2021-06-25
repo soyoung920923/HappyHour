@@ -45,8 +45,8 @@
    <!-- [2] SqlSessionFactoryBean 빈 등록 -->
       <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
          <property name="dataSource" ref="dataSource"/>
-         <property name="configLocation"
-          value="classpath:spring/config/mybatis-config.xml"/>
+         <property name="configLocation" value="classpath:spring/config/mybatis-config.xml"/>
+         <!-- <property name="mapperLocations" value="classpath:spring/mapper/myapp/*.xml"/> -->
       </bean>
    
    <!-- [3] SqlSessionTemplate 빈 등록 -->
@@ -58,7 +58,9 @@
       여기에 설정된 패키지의 인터페이스들을 scan해서 해당 인터페이스를 구현한
       객체(Proxy)를 스프링이 대신 생성해준다. 
    -->  
-  
+   
+   <mybatis-spring:scan base-package="com.mycompany.myapp"/>
+   
 </beans>
 
 

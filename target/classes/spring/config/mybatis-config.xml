@@ -10,6 +10,7 @@
 		
 	<!-- mappers -->
 	<mappers>
+		<mapper resource="spring/mapper/myapp/UserMapper.xml" />
 	</mappers>
 	
 </configuration>
