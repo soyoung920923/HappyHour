@@ -30,9 +30,16 @@
               <li class="nav-item">
                 <a class="nav-link" href="#">게시판</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Login</a>
-              </li>
+              <c:if test="${loginUser eq null}">
+              	<li class="nav-item">
+                	<a class="nav-link" href="${pageContext.request.contextPath}/user/login">Login</a>
+             	</li>
+			  </c:if>
+			  <c:if test="${loginUser ne null}">
+			  	<li class="nav-item">
+                	<a class="nav-link" href="${pageContext.request.contextPath}/user/myInfo?origin_num=${origin_num}">My Page</a>
+             	</li>
+			  </c:if>
             </ul>
             <a class="navbar-brand" href="/happyhour" id="logo">
             	HAPPY HOUR
