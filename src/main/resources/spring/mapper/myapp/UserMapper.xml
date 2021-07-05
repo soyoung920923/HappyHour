@@ -2,8 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mycompany.myapp.user.UserMapper">
 
-	<select id="getUserAll" resultType="Map">
-		SELECT * FROM HH_USER
+	<select id="loginCheck" resultType="User" parameterType="hashmap">
+		select * from hh_user where id=#{id} and password=#{password}
 	</select>
 	
+	<select id="findUser" parameterType="User" resultType="User">
+   		select * from hh_user where id=#{id}
+    </select>
+    
+	<insert id="createUser" parameterType="User">
+	    insert into hh_user(ID, PASSWORD, NAME, ADDRESS, ADDRESS_DT, TEL, EMAIL, AGREE1, AGREE2, USER_DT, EMAIL_IDT, POSTCODE)
+	    values(#{id},#{password},#{name},#{address},#{address_dt},#{tel},#{email},#{agree1},#{agree2},#{user_dt},0,#{postcode})
+	</insert>
+	
+	<select id="idCheck" parameterType="string" resultType="int">
+   		select origin_num from hh_user where id = #{id}
+   </select>
+   
+   <select id="emailCheck" parameterType="string" resultType="int">
+   		select origin_num from hh_user where email = #{email}
+   </select>
+   
+   <select id="telCheck" parameterType="string" resultType="int">
+   		select origin_num from hh_user where tel = #{tel}
+   </select>
 </mapper>

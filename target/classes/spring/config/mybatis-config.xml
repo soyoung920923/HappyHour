@@ -6,11 +6,12 @@
 
 	<!-- typeAlias -->
 	<typeAliases>	
+	     <typeAlias type="com.mycompany.myapp.user.UserDTO" alias="User"/>
 	</typeAliases>
 		
 	<!-- mappers -->
 	<mappers>
-		<mapper resource="spring/mapper/myapp/UserMapper.xml" />
+		 <mapper resource="spring/mapper/myapp/UserMapper.xml" />
 	</mappers>
 	
 </configuration>
