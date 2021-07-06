@@ -13,4 +13,5 @@ public class StoreDTO {
 	private int hitCount;
 	private int storeIdt;
 	private String storeImg;
+	private String storeInfo;
 }
