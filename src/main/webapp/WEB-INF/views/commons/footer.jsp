@@ -21,8 +21,8 @@
 				<a href="${pageContext.request.contextPath}/user/join"><button>회원가입</button></a>
 			</c:if>
 			<c:if test="${loginUser ne null}">
-				<a href="${pageContext.request.contextPath}/user/logout">로그아웃</a>&nbsp;
-				<a href="${pageContext.request.contextPath}/user/myInfo?origin_num=${origin_num}">마이페이지</a>
+				<a href="${pageContext.request.contextPath}/user/logout"><button>로그아웃</button></a>&nbsp;
+				<a href="${pageContext.request.contextPath}/user/myInfo?origin_num=${origin_num}"><button>마이페이지</button></a>
 			</c:if>
 		</div>
 		

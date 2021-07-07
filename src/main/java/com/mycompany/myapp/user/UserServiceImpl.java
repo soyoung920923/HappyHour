@@ -1,10 +1,16 @@
 package com.mycompany.myapp.user;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.util.Random;
+
+import javax.mail.Message.RecipientType;
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 
@@ -19,6 +25,9 @@ public class UserServiceImpl implements UserService {
  
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+    private JavaMailSender mailSender;
 	
 	
 	@Override
@@ -85,7 +94,121 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
-}
+
+	@Override
+	public void mailSendKey(String email, String id, HttpServletRequest req) {
+		MimeMessage mail = mailSender.createMimeMessage();
+		String htmlStr = "<h2></h2>안녕하세요 HappyHour입니다.<br><br>"
+				+ "<h3>" + id + "님</h3>" + "<p>인증하기 버튼을 누르면 로그인 하실 수 있습니다 : "
+				+ "<a href='http://localhost:8090" + req.getContextPath() + "/user/email_idt?id=" + id + "'>인증하기</a></p>";
+		try {
+			mail.setSubject("[HappyHour] 본인인증을 해주세요." , "utf-8");
+			mail.setText(htmlStr, "utf-8", "html");
+			mail.addRecipient(RecipientType.TO, new InternetAddress(email));
+		
+		}catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		mailSender.send(mail);
+	}
+
+	@Override
+	public int email_idtAlter(String id) {
+		return userMapper.email_idtAlter(id);
+	}
+
+	@Override
+	public String checkEmail_idt(String id) {
+		return userMapper.checkEmail_idt(id);
+	}
+	
+    public String searchId(String name, String email) {
+
+        String result = "";
+
+        try {
+            result = userMapper.searchId(name, email);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+	@Override
+	public UserDTO userCheck(String id, String email) throws NotUserException{
+		UserDTO user = new UserDTO();
+		user.setId(id);
+		user.setEmail(email);
+		
+		UserDTO dbUser = findUser(user); 
+		
+		if(dbUser!=null) {
+			if(dbUser.getEmail().equals(user.getEmail())) {
+				return dbUser; 
+			}
+			throw new NotUserException("존재하지 않는 이메일 입니다.");
+		}	
+		return null;
+	}
+
+	//비밀번호 찾기 임시 비밀번호 만드는 코드  
+	private String init() {
+        Random ran = new Random();
+        StringBuffer sb = new StringBuffer();
+        int num = 0;
+
+        do {
+            num = ran.nextInt(75) + 48;
+            if ((num >= 48 && num <= 57) || (num >= 65 && num <= 90) || (num >= 97 && num <= 122)) {
+                sb.append((char) num);
+            } else {
+                continue;
+            }
+
+        } while (sb.length() < size);
+        if (lowerCheck) {
+            return sb.toString().toLowerCase();
+        }
+        return sb.toString();
+    }
+	
+
+    // 난수를 이용한 키 생성
+    private boolean lowerCheck;
+    private int size;
+
+    public String getKey(boolean lowerCheck, int size) {
+        this.lowerCheck = lowerCheck;
+        this.size = size;
+        return init();
+    }
+	
+	@Override
+	public void mailSendPwd(String id, String email, HttpServletRequest req) {
+		
+		String key = getKey(false, 6);
+		
+		 MimeMessage mail = mailSender.createMimeMessage();
+	        String htmlStr = "<h2>안녕하세요 '"+ id +"' 님</h2><br><br>"
+	                + "<p>임시 발급 비밀번호는 <h2 style='color : blue'>'" + key +"'</h2>이며 로그인 후 마이페이지에서 비밀번호를 변경하실 수 있습니다.</p><br>"
+	                + "<h3><a href='http://localhost:8090/happyhour'>홈페이지 접속</a></h3><br><br>";
+	        try {
+	            mail.setSubject("[HappyHour] 임시 비밀번호가 발급되었습니다.", "utf-8");
+	            mail.setText(htmlStr, "utf-8", "html");
+	            mail.addRecipient(RecipientType.TO, new InternetAddress(email));
+	            mailSender.send(mail);
+	        } catch (MessagingException e) {
+	            e.printStackTrace();
+	        }
+
+	        key = UserSha256.encrypt(key);
+
+	        userMapper.searchPwd(id,email,key);
+	    }
+
+	}
+ 
 
 
 

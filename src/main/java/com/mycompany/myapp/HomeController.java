@@ -25,30 +25,36 @@ import com.mycompany.myapp.user.UserMapper;
 public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-
+	
+	
+	  @Autowired
+	  @Resource(name="userMapper")
+	  UserMapper userMapper;
+	 
+	
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-			
-		/*
-		 * logger.info("Welcome home! The client locale is {}.", locale);
-		 * 
-		 * Date date = new Date(); DateFormat dateFormat =
-		 * DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		 * 
-		 * String formattedDate = dateFormat.format(date);
-		 * 
-		 * model.addAttribute("serverTime", formattedDate );
-		 * 
-		 * 
-		 * 
-		 * List<Map<String, String>> users = userMapper.getUserAll();
-		 * System.out.println(users);
-		 * 
-		 * model.addAttribute("users", users);
-		 */
+		
+		
+		  logger.info("Welcome home! The client locale is {}.", locale);
+		  
+		  Date date = new Date(); DateFormat dateFormat =
+		  DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+		  
+		  String formattedDate = dateFormat.format(date);
+		  
+		  model.addAttribute("serverTime", formattedDate );
+		 
+		 
+	
+//		  List<Map<String, String>> users = userMapper.getUserAll();
+//		  System.out.println(users);
+//		  
+//		  model.addAttribute("users", users);
+		 
 		
 		return "main";
 	}
