@@ -15,7 +15,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <jsp:include page="../commons/head.jsp" />
 </head>
+    <header>
+		<jsp:include page="../commons/header.jsp" />
+	</header>  
 <body>
 
 <br><br><br> 
@@ -95,7 +99,9 @@
 <br>
 <c:import url="/user/terms"/>
 
-
+	 <footer>
+		<jsp:include page="../commons/footer.jsp"/>
+	</footer>
 <script>
 function findPostcode() {
     new daum.Postcode({
@@ -190,7 +196,7 @@ function checkEmail(uem){
         .removeClass('text-primary');
     if( !emailck.test( $("input[name=email]").val()))
     {
-        $('#msgEmail').text('올바르지 않은 이메일 양식입니다.')
+        $('#msgEmail').text('유효하지 않은 이메일입니다.')
             .addClass('text-danger');
         $('#email').select();
 
