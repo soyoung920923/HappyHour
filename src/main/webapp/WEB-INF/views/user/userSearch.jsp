@@ -59,29 +59,29 @@ var idSearch = function(){
 }
 </script>
 	
-<div class="col-sm-8 text-center">
-<div class="in" style=" display: inline-block; margin-left: 45%;">
+<main>
+<br><br><br>
+<div class="in" style=" margin-top: 10rem;">
    <div class="card align-middle"
-        style="width: 30rem; border-radius: 20px;">
+        style="width: 30rem; border-radius: 20px; margin: 0 auto;">
 			<div class="card-title" style="margin-top: 30px;">
 				<h3 class="card-title text-center">아이디 찾기
 					</h3>
 	           </div>
 	           <div class="card-body">                
 					<label for="name" class="sr-only">이름</label>
-					 <input type="text" class="form-control" name="name" id="name" placeholder="이름을 입력하세요." required>
-				     <br>
+					 <input type="text" class="form-control" name="name" id="name" placeholder="이름을 입력하세요." required style="margin-bottom: 0.5rem;">
 					<label for="email" class="sr-only">이메일</label>
 					 <input	type="text" class="form-control" name="email" id="email" placeholder="이메일을 입력하세요" required>
 					 <br>
 					<div class="form-group">
-					<button id="searchBtn" type="button" onclick="idSearch()" class="btn btn-primary btn-block">확인</button>
-					<a class="btn btn-danger btn-block"	href="${pageContext.request.contextPath}/user/login">취소</a>
+						<button id="searchBtn" type="button" onclick="idSearch()" class="btn btn-primary btn-block">확인</button>
+					<a href="${pageContext.request.contextPath}/user/login"><button type="button" class="btn btn-primary btn-block">취소</button></a>
 					</div>
 			</div>
 			</div>
 		</div>
-	</div>
+</main>	
 	
     <footer>
 		<jsp:include page="../commons/footer.jsp"/>

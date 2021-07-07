@@ -21,12 +21,12 @@
 		<jsp:include page="../commons/header.jsp" />
 	</header>  
 <body>
-
+<main>
 <br><br><br> 
 <div class="in" style="display: inline-block; margin-left: 30%;">
     <div class="card align-middle" style="width: 40rem; border-radius: 20px;">
         <div class="card-title" style="margin-top: 30px;">
-            <h2 class="card-title text-center" style="color:#E30F0C;">SIGN UP</h2>
+            <h2 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">SIGN UP</h2>
         </div>
         <div class="card-body">
         <form:form modelAttribute="user" name="f" action="join" method="POST" >
@@ -70,9 +70,9 @@
 	                <form:errors path="email"/>
 	                </span>
 	          <br>
-	          <br><input type="text" name="postcode" id="postcode" placeholder="우편번호" style="margin-right:10px;vertical-align:20px;" readonly>
-	          <button type="button" class="btn" onclick="findPostcode()" style="vertical-align:20px;background-color:#FFAB2F;">우편번호 찾기</button>
-	          <br><label for="inputAddress" class="sr-only">*주소</label>
+	          <button type="button" id="findPostcode" class="btn" onclick="findPostcode()" class="form-control">우편번호 찾기</button>
+	          <input type="text" name="postcode" id="postcode" placeholder="우편번호" style="margin-right:10px;vertical-align:20px;" class="form-control" readonly>
+	          <label for="inputAddress" class="sr-only">*주소</label>
 	               <input type="hidden" name="addressstate" id="addressstate">
 	               <input type="text" name="address" id="address" placeholder="주소" class="form-control" readonly>
 	            <div id="address"></div>
@@ -80,12 +80,13 @@
 	               <input type="hidden" name="address2state" id="address2state">
 	               <input type="text" name="address_dt" id="address_dt" placeholder="상세주소" class="form-control" required autofocus>
 	            <div id="address2"></div>
-	          <br><input type="checkbox" name="agree1" id="agree1" value="1" style="margin: auto;"><a href="#agree1" style="color:#E30F0C;">이용약관(필수)</a>
-	          <br><input type="checkbox" name="agree2" id="agree2" value="1" style="margin: auto;color:#1F2229;">마케팅수신동의(선택)
+	          <br><input type="checkbox" name="agree1" id="agree1" value="1" style="margin: auto;"><a href="#agree1" style="color:#E30F0C;">&nbsp;이용약관(필수)</a>
+	          <br><input type="checkbox" name="agree2" id="agree2" value="1" style="margin: auto;color:#1F2229;">&nbsp;마케팅수신동의(선택)
 	          <input type="hidden" name="agree2" id="agree2_hidden" value="0" style="margin: auto;color:#1F2229;">
 	          <br>
+	          <br>
 	            <div style="text-align:center;">
-	              <button type="button" class="btn-btn btn" onclick="joinCheck()" style="background-color:#E30F0C;color:#F9EBE0;">회원가입</button> 
+	              <button type="button" class="btn-btn btn form-control" onclick="joinCheck()" style="background-color:#E30F0C;color:#F9EBE0;">회원가입</button> 
 	            </div>
 	      </form:form>
         </div>
@@ -97,8 +98,12 @@
 <br>
 <br>
 <br>
-<c:import url="/user/terms"/>
 
+<c:import url="/user/terms"/>
+<br>
+<br>
+<br>
+</main>
 	 <footer>
 		<jsp:include page="../commons/footer.jsp"/>
 	</footer>

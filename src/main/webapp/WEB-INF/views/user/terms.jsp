@@ -3,7 +3,7 @@
     
 <div id="agree1" class="terms_desc">
    <p class="title-p" style="text-align:center">이용약관</p>
-   <div style="height: 170px; padding:0px 20px 20px 20px; overflow-y : auto; width: 80%;box-sizing: border-box;border: 1px solid #ccc;margin: auto; line-height: 20px;center">
+   <div style="height: 170px; padding:0px 20px 20px 20px; overflow-y : auto; width: 80%;box-sizing: border-box;border: 1px solid #ccc;margin: auto; line-height: 20px; background-color: #fff;" >
 제1조 (목적)<br>
 본 약관은 HAPPY HOUR(이하 “(주)해피아워”라 함)가 운영하는 “HAPPY HOUR” 사이트(www.happyhour.co.kr) 또는 “HAPPY HOUR” 모바일 애플리케이션에서 제공하는 서비스(이하 “서비스”라 함)를 이용함에 있어 “HAPPY HOUR”와 이용자의 권리, 의무 및 책임 사항을 규정함을 목적으로 합니다.
 <br><br>
