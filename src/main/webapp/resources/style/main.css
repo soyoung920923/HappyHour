@@ -7,6 +7,7 @@ body {
   color: #5a5a5a;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 
@@ -102,11 +103,9 @@ body::-webkit-scrollbar-track {}
 
 /*sy custom*/
 
-body{
-  font-family: 'Noto Sans KR', sans-serif;
-}
 main{
   position: relative;
+  min-height: 100vh;
 }
 main::after{
   width: 100%;
@@ -171,6 +170,11 @@ a:hover{
   background-color:#E30F0C;
   border: 1px solid #F9EBE0;
   color: #F9EBE0;
+  
+}
+.btn:hover{
+	background-color:#FFAB2F;
+	color: #F9EBE0;
 }
 .btn-outline-success:hover, .btn-secondary:hover, .btn-primary:hover{
   background-color: #FFAB2F;
@@ -247,7 +251,7 @@ footer{
 	background-color: #1F2229;
 	margin: 0;
 	padding: 0;
-	height: 15rem;
+	height: 17rem;
 
 }
 .footer-container{
@@ -272,21 +276,31 @@ footer{
 	color: #555;
 	text-align: center;
 }
-
-.go-top{
-	color: #1F2229;
+#fixed-box{
+	width: 100%;
 	position: fixed;
-	bottom: 1%;
-	right: 1.5%;
+	bottom: 0%;
+	right: 0%;
 	z-index: 9999;
+	text-align: right;
+}
+#go-top{
+	float: right;
+	color: #1F2229;	
 	text-align: center;
 	box-shadow: 5px 2px 10px 0px rgba(0, 0, 0, 0.1);
 	border-radius: 50%;
 	opacity: 0.9;
 	width: 3.5rem;
 	height: 3.5rem;
+	margin-right: 0.7rem;
 }
-
+#bottom-nav{
+	display: none;
+}
+.bottom-nav-arrow{
+	display: none;
+}
 input[type='radio'] {
    -webkit-appearance:none;
    width:16px;
@@ -341,6 +355,10 @@ input[type='radio']:checked:before {
   .mb-md-0 {
     margin-left: 1.5rem;
   }
+  .in{
+	width: 768px;
+	margin: 0 auto;
+	}
   
 }
 
@@ -352,10 +370,7 @@ input[type='radio']:checked:before {
     margin-right: 0.5%; 
     
   }
-  .in{
-	width: 40rem;
-	margin: 0 auto;
-}
+  
 }
 
 #footer-login{
@@ -372,4 +387,8 @@ input[type='radio']:checked:before {
 	background-color: #1F2229;
 	border-radius: 2px;
 	color: #F9EBE0;
+}
+
+.bi-arrow-up-circle-fill:hover{
+	fill: #FFAB2F;
 }

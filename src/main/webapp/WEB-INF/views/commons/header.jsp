@@ -51,20 +51,51 @@
           </div>
         </div>
       </nav>
-      <div>
-      	<p class="go-top">
+      <div id="fixed-box">
+      	<p id="go-top">
       		<a href="#">
       			<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="#F9EBE0" class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
   					<path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
 				</svg>
 			</a>
 		</p>
+		<div id="bottom-nav">			
+			<ul id="bottom-nav-ul">
+				<li class="bottom-nav-li on">전체</li>
+				<li class="bottom-nav-li">한식</li>
+				<li class="bottom-nav-li">분식</li>
+				<li class="bottom-nav-li">중식</li>
+				<li class="bottom-nav-li">패스트푸드</li>
+				<li class="bottom-nav-li">양식</li>
+				<li class="bottom-nav-li">카페/디저트</li>
+				<li class="bottom-nav-li">일식</li>
+			</ul>			
+		</div>
       </div>
+      <div class="bottom-nav-arrow" id="arrow-left">
+			<i style='font-size:1.3rem' class='fas'>&#xf0d9;</i>
+	  </div>
+	 <div class="bottom-nav-arrow" id="arrow-right">
+			<i style='font-size:1.3rem' class='fas'>&#xf0da;</i>
+		</div>
       <script>
       	$(function(){
       		$('.go-top > a').click(function(){
       			$('body').animate({scrollTop:0},500);
       		});
+      		
+      		$('#arrow-left').click(function(){
+      			$('#bottom-nav').animate({
+    				scrollLeft: '-=100'
+    			}, 200);
+      		});
+      		
+      		$('#arrow-right').click(function(){
+      			$('#bottom-nav').animate({
+    				scrollLeft: '+=100'
+    			}, 200);
+      		});
+      		
       	});
       </script>
 </body>
