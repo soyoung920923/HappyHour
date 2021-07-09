@@ -2,8 +2,71 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mycompany.myapp.store.StoreMapper">
 
-	<select id="getStoreAll" resultType="Map">
-		SELECT * FROM HH_STORE
+	<select id="getStoreAll" resultType="Store" parameterType="Param">
+		SELECT
+		  @ROWNUM := @ROWNUM +1 as ROWNUM,
+		  s.IDX,
+		  s.ORIGIN,
+		  s.STORE_NM,
+		  s.STORE_TEL,
+		  s.STORE_ADDRESS,
+		  s.STORE_ADDRESS_DT,
+		  s.HIT_COUNT,
+		  s.STORE_IDT,
+		  s.STORE_IMG,
+		  s.STORE_IMG_OID,
+		  s.STORE_INFO,
+		  s.REGIST_DATE,
+		  s.REGIST_ID,
+		  s.UPDATE_DATE,
+		  s.UPDATE_ID
+		FROM HH_STORE s, (select @rownum := 0) tmp
+		<if test="path != null and path != '' and path != 0">
+			WHERE s.STORE_IDT = #{path}
+		</if>		
+		ORDER BY REGIST_DATE DESC
+		LIMIT #{startCount}, #{endCount}
 	</select>
+	
+	<select id="getTotalCount" resultType="int" parameterType="Param">
+		SELECT COUNT(*) FROM HH_STORE
+		<if test="path != null and path != '' and path != 0">
+			WHERE STORE_IDT = #{path}
+		</if>
+	</select>
+	
+	<insert id="enrollStore" parameterType="Store">
+		INSERT INTO HH_STORE(
+		  ORIGIN,
+		  STORE_NM,
+		  STORE_TEL,
+		  STORE_ADDRESS,
+		  STORE_ADDRESS_DT,
+		  HIT_COUNT,
+		  STORE_IDT,
+		  STORE_IMG,
+		  STORE_IMG_OID,
+		  STORE_INFO,
+		  REGIST_DATE,
+		  REGIST_ID,
+		  UPDATE_DATE,
+		  UPDATE_ID
+		)VALUES(
+		  #{origin},
+		  #{store_Nm},
+		  #{store_Tel},
+		  #{store_Address},
+		  #{store_Address_Dt},
+		  0,
+		  #{store_Idt},
+		  #{store_Img},
+		  #{store_Img_Oid},
+		  #{store_Info},
+		  NOW(),
+		  #{regist_Id},
+		  NOW(),
+		  #{update_Id} 
+		)
+	</insert>
 	
 </mapper>

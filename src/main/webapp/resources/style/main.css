@@ -277,7 +277,7 @@ footer{
 	text-align: center;
 }
 #fixed-box{
-	width: 100%;
+/* 	width: 100%; */
 	position: fixed;
 	bottom: 0%;
 	right: 0%;
@@ -331,7 +331,7 @@ input[type='radio']:checked:before {
 	margin-bottom: 0.2rem;
 }
 
-.sr-only{
+.sy-only{
 	font-weight: 500;
 	color: #E30F0C;
 }

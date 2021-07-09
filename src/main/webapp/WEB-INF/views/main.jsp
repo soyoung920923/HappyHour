@@ -70,14 +70,15 @@
         <!-- Three columns of text below the carousel -->
         <div class="row">
           <ul id="ul-category">
-            <li class="li-category"><a class="btn btn-secondary btn-category" href="#">전체</a></li>
-            <li class="li-category"><a class="btn btn-secondary btn-category" href="#">한식</a></li>
-            <li class="li-category"><a class="btn btn-secondary btn-category" href="#">분식</a></li>
-            <li class="li-category"><a class="btn btn-secondary btn-category" href="#">중식</a></li>
-            <li class="li-category"><a class="btn btn-secondary btn-category" href="#">패스트푸드</a></li>
-            <li class="li-category"><a class="btn btn-secondary btn-category" href="#">양식</a></li>
-            <li class="li-category"><a class="btn btn-secondary btn-category" href="#">카페/디저트</a></li>
-            <li class="li-category"><a class="btn btn-secondary btn-category" href="#">일식</a></li>
+            <li class="li-category"><a class="btn btn-secondary btn-category" href="${pageContext.request.contextPath}/store/list">전체</a></li>
+            <li class="li-category"><a class="btn btn-secondary btn-category" href="${pageContext.request.contextPath}/store/list/1">한식</a></li>
+            <li class="li-category"><a class="btn btn-secondary btn-category" href="${pageContext.request.contextPath}/store/list/2">분식</a></li>
+            <li class="li-category"><a class="btn btn-secondary btn-category" href="${pageContext.request.contextPath}/store/list/3">중식</a></li>
+            <li class="li-category"><a class="btn btn-secondary btn-category" href="${pageContext.request.contextPath}/store/list/4">패스트푸드</a></li>
+            <li class="li-category"><a class="btn btn-secondary btn-category" href="${pageContext.request.contextPath}/store/list/5">양식</a></li>
+            <li class="li-category"><a class="btn btn-secondary btn-category" href="${pageContext.request.contextPath}/store/list/6">카페/디저트</a></li>
+            <li class="li-category"><a class="btn btn-secondary btn-category" href="${pageContext.request.contextPath}/store/list/7">일식</a></li>
+            <li class="li-category"><a class="btn btn-secondary btn-category" href="${pageContext.request.contextPath}/store/list/8">아시안</a></li>
           </ul>
         </div>
         <div class="row">

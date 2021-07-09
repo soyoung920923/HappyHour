@@ -36,10 +36,16 @@
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <!-- Custom styles for this template -->
     <link href='<c:url value="/resources/style/main.css"/>' rel="stylesheet">
+    <!-- jQuery CDN -->
     <script
 	  src="https://code.jquery.com/jquery-1.12.4.min.js"
 	  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
 	  crossorigin="anonymous"></script>
+	<!-- 우편번호 Api CDN-->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<!-- common.js -->
+	<script type="text/javascript" src='<c:url value="/resources/js/common.js"/>'></script>
+	
 </head>
 <body>
 

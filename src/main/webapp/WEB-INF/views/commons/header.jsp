@@ -25,7 +25,7 @@
                 <a class="nav-link active" aria-current="page" href="/happyhour">홈</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">식당</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/store/list">식당</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">게시판</a>
@@ -61,14 +61,15 @@
 		</p>
 		<div id="bottom-nav">			
 			<ul id="bottom-nav-ul">
-				<li class="bottom-nav-li on">전체</li>
-				<li class="bottom-nav-li">한식</li>
-				<li class="bottom-nav-li">분식</li>
-				<li class="bottom-nav-li">중식</li>
-				<li class="bottom-nav-li">패스트푸드</li>
-				<li class="bottom-nav-li">양식</li>
-				<li class="bottom-nav-li">카페/디저트</li>
-				<li class="bottom-nav-li">일식</li>
+				<li class="bottom-nav-li on"><a href="${pageContext.request.contextPath}/store/list">전체</a></li>
+				<li class="bottom-nav-li"><a href="${pageContext.request.contextPath}/store/list/1">한식</a></li>
+				<li class="bottom-nav-li"><a href="${pageContext.request.contextPath}/store/list/2">분식</a></li>
+				<li class="bottom-nav-li"><a href="${pageContext.request.contextPath}/store/list/3">중식</a></li>
+				<li class="bottom-nav-li"><a href="${pageContext.request.contextPath}/store/list/4">패스트푸드</a></li>
+				<li class="bottom-nav-li"><a href="${pageContext.request.contextPath}/store/list/5">양식</a></li>
+				<li class="bottom-nav-li"><a href="${pageContext.request.contextPath}/store/list/6">카페/디저트</a></li>
+				<li class="bottom-nav-li"><a href="${pageContext.request.contextPath}/store/list/7">일식</a></li>
+				<li class="bottom-nav-li"><a href="${pageContext.request.contextPath}/store/list/8">아시안</a></li>
 			</ul>			
 		</div>
       </div>
@@ -80,6 +81,35 @@
 		</div>
       <script>
       	$(function(){
+      		
+      		var url = window.location.href;
+      		/*header nav*/
+      		if (url.indexOf("store") > -1) {
+      			$('.nav-item > a').removeClass('active');
+				$('.nav-item').eq(1).children('a').addClass('active');
+			}else if (url.indexOf("/user/login") > -1) {
+      			$('.nav-item > a').removeClass('active');
+				$('.nav-item').eq(3).children('a').addClass('active');
+			}else{
+				$('.nav-item > a').removeClass('active');
+				$('.nav-item').eq(0).children('a').addClass('active');
+			}
+      		
+      		
+      		/*bottom nav*/
+      		var dv = url.lastIndexOf("/");
+      		var pth = url.substring(dv+1);
+      		console.log(pth);
+      		
+      		if (url.indexOf("store/list/"+pth) > -1) {
+      			$('.bottom-nav-li').removeClass('on');
+      			$('.bottom-nav-li').eq(pth).addClass('on');
+      		}else{
+      			$('.bottom-nav-li').removeClass('on');
+      			$('.bottom-nav-li').eq(0).addClass('on');
+      		}
+      		
+      		
       		$('.go-top > a').click(function(){
       			$('body').animate({scrollTop:0},500);
       		});
