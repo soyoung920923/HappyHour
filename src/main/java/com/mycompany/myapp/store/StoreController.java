@@ -21,9 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.mycompany.common.CommonUtil;
 import com.mycompany.common.SearchParam;
 import com.mycompany.myapp.HomeController;
+import com.mycompany.myapp.banner.BannerDTO;
 import com.mycompany.myapp.user.UserDTO;
+
+import lombok.extern.apachecommons.CommonsLog;
 
 @Controller
 @RequestMapping(value = "/store")
@@ -36,14 +40,31 @@ public class StoreController {
 
 	@Autowired
 	StoreMapper storeMapper;
+	
+	@Autowired
+	CommonUtil commonUtil;
 
-	@RequestMapping(value = {"/list", "/list/{path}"}, method = RequestMethod.GET)
-	public String list(Model model, @PathVariable(name="path", required = false) String path) {
+	@RequestMapping(value = {"/list", "/list/{path}"})
+	public String list(Model model, @PathVariable(name="path", required = false) String path, 
+			@RequestParam(name="search", required = false) String search, HttpSession session) {
 
 		logger.info("store list", model);
 		System.out.println("store list");
 
 		SearchParam param = new SearchParam();
+		
+		@SuppressWarnings("unchecked")
+		Map<String, String> myPoint = (Map<String, String>) session.getAttribute("myPoint");
+		if (myPoint != null && !myPoint.isEmpty()) {			
+			param.setMyLat(myPoint.get("lat"));
+			param.setMyLon(myPoint.get("lon"));
+		}
+		
+		if (search != null && search != "") {
+			param.setSearch(search);
+			model.addAttribute("search", search);
+		}
+
 		if (path != null && path != "") {
 			param.setPath(Integer.parseInt(path));
 			model.addAttribute("path", path);
@@ -65,15 +86,34 @@ public class StoreController {
 	}
 
 	@RequestMapping(value = "/detail", method = RequestMethod.GET)
-	public String detail(Model model) {
-		return null;
+	public String detail(Model model, @RequestParam(name="idx", required = false) int idx) {
+		logger.info("store detail", model);
+		System.out.println("store detail - idx: "+ idx);
+		
+		StoreDTO store = storeService.getStoreDt(idx);
+		model.addAttribute("store", store);
+		
+		storeMapper.hitCountPlusOne(idx);
+		
+		return "/store/store-detail";
 	}
 
 	@RequestMapping(value = "/enroll", method = RequestMethod.GET)
-	public String enroll(Model model) {
+	public String enroll(Model model, @RequestParam(name="idx", required = false) String idx) {
 
 		logger.info("store enroll", model);
 		System.out.println("store enroll");
+		
+		List<String> timeSet = commonUtil.timeSet();
+		model.addAttribute("timeSet", timeSet);
+		
+		if (idx != null && idx != "") {
+			/*
+			 * 수정페이지
+			 * */
+			StoreDTO store = storeService.getStoreDt(Integer.parseInt(idx));
+			model.addAttribute("store", store);
+		}
 
 		return "/store/store-enroll";
 	}
@@ -94,23 +134,25 @@ public class StoreController {
 
 		String msg = "";
 
-		int result = storeService.enrollStore(store, req);
+		int result = 0;
+		if (store.getIdx() == 0) {
+			/*
+			 * 등록*/
+			msg = "등록";
+		}else {
+			/*
+			 * 수정*/
+			msg = "수정";
+		}
+		result = storeService.enrollStore(store, req, msg);
 
 		if (result == 0) {
-			msg = "등록 실패";
+			msg = msg+" 실패";
 		} else {
-			msg = "등록 성공";
+			msg = msg+" 성공";
 		}
-
-		model.addAttribute("msg", msg);
-		model.addAttribute("loc", "/happyhour/store/list");
-
-		return "message";
-	}
-
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public String delete(Model model) {
-		return null;
+		
+		return commonUtil.addMsgLoc(model, msg, "/happyhour/store/list");
 	}
 	
 	@ResponseBody
@@ -118,14 +160,26 @@ public class StoreController {
 	public Map<String, Object> moreList(Model model, HttpServletRequest req, HttpServletResponse res, HttpSession session) {
 		
 		SearchParam param = new SearchParam();
+		@SuppressWarnings("unchecked")
+		Map<String, String> myPoint = (Map<String, String>) session.getAttribute("myPoint");
+		if (myPoint != null && !myPoint.isEmpty()) {			
+			param.setMyLat(myPoint.get("lat"));
+			param.setMyLon(myPoint.get("lon"));
+		}
 		param.setStartCount(Integer.parseInt(req.getParameter("startCount")));
 		param.setEndCount(Integer.parseInt(req.getParameter("startCount"))+Integer.parseInt(req.getParameter("viewCount")));
 		//param.setViewCount(Integer.parseInt(req.getParameter("viewCount")));
 		param.setTotalCount(Integer.parseInt(req.getParameter("totalCount")));
 		
+		
+		
 		String path = req.getParameter("path");
 		if (path != null && path != "") {
 			param.setPath(Integer.parseInt(path));
+		}
+		String search = req.getParameter("search");
+		if (search != null && search != "") {
+			param.setSearch(search);
 		}
 		
 		List<StoreDTO> resultList = storeService.getStoreAll(param);
@@ -135,6 +189,18 @@ public class StoreController {
 		result.put("resultCnt",resultList.size());
 		
 		return result;
+	}
+	
+	@RequestMapping(value = "/deleteStore", method = RequestMethod.POST)
+	public String deleteStore(Model model, HttpServletRequest request, @ModelAttribute(value = "store") StoreDTO store) {
+		MultipartHttpServletRequest req = (MultipartHttpServletRequest) request;
+		int idx = store.getIdx();
+		int result = storeService.deleteStore(req, idx);
+		if (result == 0) {
+			return commonUtil.addMsgBack(model, "삭제 실패");
+		}else {			
+			return commonUtil.addMsgLoc(model, "삭제 성공", "/happyhour/store/list");		
+		}
 	}
 
 }

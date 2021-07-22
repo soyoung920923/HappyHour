@@ -12,4 +12,16 @@ public interface StoreMapper {
 
 	int getTotalCount(SearchParam param);
 
+	StoreDTO getStoreDt(int idx);
+
+	void hitCountPlusOne(int idx);
+
+	List<StoreDTO> getStoreBest();
+
+	int updateStore(StoreDTO store);
+
+	int deleteStore(int idx);
+
+	String getDelOid(int idx);
+
 }

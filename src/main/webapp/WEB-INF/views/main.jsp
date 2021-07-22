@@ -13,14 +13,36 @@
 		<jsp:include page="commons/header.jsp" />
 	</header>
 	<main>
+		<input type="hidden" name="hidLink" id="hidLink" value="<c:url value='/banner/go'/>"/>
 		<div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
-          <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        	<c:forEach var="i" begin="0" end="${size-1 }">
+        		<button type="button" data-bs-target="#myCarousel" data-bs-slide-to="${i}" <c:if test="${i == 0}">class="active" aria-current="true"</c:if>aria-label="Slide ${i+1 }"></button>
+        	</c:forEach>
+          <!-- <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
           <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
           <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+          <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button> -->
         </div>
         <div class="carousel-inner">
-          <div class="carousel-item active">
+        	<c:forEach items="${banners}" var="banner" varStatus="stat">
+        		<%-- <a href="<c:url value='/banner/go?idx=${banner.idx}&link=${banner.banner_link }'/>"> --%>
+	        		<div class="carousel-item <c:if test="${ stat.index == 0}">active</c:if>" onclick="location.href='<c:url value='/banner/go?idx=${banner.idx}&link=${banner.banner_link }'/>'">
+			            <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#1F2229"/>           	
+			            </svg>
+						<img class="banner-img" src="<c:url value='${banner.PATH }${banner.banner_img_oid }'/>"/>
+						<c:if test="${banner.caption_yn == 1 }">
+							<div class="container">
+				              <div class="carousel-caption <c:if test="${banner.banner_caption == 1 }">text-start</c:if> <c:if test="${banner.banner_caption == 2 }">text-end</c:if>">
+				                <h1>${banner.banner_subject }</h1>
+				                <p>${banner.banner_contents }</p>
+				              </div>
+				            </div>
+						</c:if>		            
+			         </div>
+        		<!-- </a> -->
+        	</c:forEach>
+          <%-- <div class="carousel-item active">
             <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#1F2229"/>           	
             </svg>
 			<img class="banner-img" src="<c:url value='/resources/image/banner1.jpg'/>"/>
@@ -51,6 +73,16 @@
               </div>
             </div>
           </div>
+          <div class="carousel-item">
+            <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#1F2229"/></svg>
+			<img class="banner-img" src="<c:url value='/resources/image/banner2.jpg'/>"/>
+            <div class="container">
+              <div class="carousel-caption">
+                <h1>Another example headline.</h1>
+                <p>Some representative placeholder content for the second slide of the carousel.</p>
+              </div>
+            </div>
+          </div> --%>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -88,34 +120,34 @@
         </div>
         <div class="row">
           <div class="col-lg-4">
-            <div class="food-img"><img src="<c:url value='/resources/image/salady.jpg'/>"/></div>
-            <h2 class="img-title">식당이름</h2>
+            <div class="food-img"><img src="<c:url value='${best.get(0).PATH }${best.get(0).store_Img_Oid}'/>"/></div>
+            <h2 class="img-title">${best.get(0).store_Nm}</h2>
             <ul class="img-contents">
-              <li>대표메뉴: </li>
-              <li>전화번호: </li>
-              <li>위치: </li>
+              <li><span class="best-span">카테고리</span> ${best.get(0).category}</li>
+              <li><span class="best-span">대표번호</span> ${best.get(0).store_Tel}</li>
+              <li><span class="best-span">위치</span> ${best.get(0).address}</li>
             </ul>
-            <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
+            <p class="best-more-p"><a class="btn btn-secondary best-more" href="<c:url value='/store/detail?idx=${best.get(0).idx}'/>">자세히 보기 &raquo;</a></p>
           </div><!-- /.col-lg-4 -->
           <div class="col-lg-4">
-            <div class="food-img"><img src="<c:url value='/resources/image/gossinae.jpg'/>"/></div>
-            <h2 class="img-title">식당이름</h2>
+            <div class="food-img"><img src="<c:url value='${best.get(1).PATH }${best.get(1).store_Img_Oid}'/>"/></div>
+            <h2 class="img-title">${best.get(1).store_Nm}</h2>
             <ul class="img-contents">
-              <li>대표메뉴: </li>
-              <li>전화번호: </li>
-              <li>위치: </li>
+               <li><span class="best-span">카테고리</span> ${best.get(1).category}</li>
+              <li><span class="best-span">대표번호</span> ${best.get(1).store_Tel}</li>
+              <li><span class="best-span">위치</span> ${best.get(1).address}</li>
             </ul>
-            <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
+            <p class="best-more-p"><a class="btn btn-secondary best-more" href="<c:url value='/store/detail?idx=${best.get(1).idx}'/>">자세히 보기 &raquo;</a></p>
           </div><!-- /.col-lg-4 -->
           <div class="col-lg-4">
-            <div class="food-img"><img src="<c:url value='/resources/image/kimchi.jpg'/>"/></div>
-            <h2 class="img-title">식당이름</h2>
+            <div class="food-img"><img src="<c:url value='${best.get(2).PATH }${best.get(2).store_Img_Oid}'/>"/></div>
+            <h2 class="img-title">${best.get(2).store_Nm}</h2>
             <ul class="img-contents">
-              <li>대표메뉴: </li>
-              <li>전화번호: </li>
-              <li>위치: </li>
+               <li><span class="best-span">카테고리</span> ${best.get(2).category}</li>
+              <li><span class="best-span">대표번호</span> ${best.get(2).store_Tel}</li>
+              <li><span class="best-span">위치</span> ${best.get(2).address}</li>
             </ul>
-            <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
+            <p class="best-more-p"><a class="btn btn-secondary best-more" href="<c:url value='/store/detail?idx=${best.get(2).idx}'/>">자세히 보기 &raquo;</a></p>
           </div><!-- /.col-lg-4 -->
         </div><!-- /.row -->
       </div><!-- /.container -->
@@ -128,13 +160,17 @@
 	
 <script type="text/javascript">
 	$(function(){
-		$(window).scroll(function(){
+		/* $(window).scroll(function(){
 			$('.col-lg-4').eq(0).fadeIn(300);
 			$('.col-lg-4').eq(1).fadeIn(450);
 			$('.col-lg-4').eq(2).fadeIn(600);
-		});
+		});	 */
 		
 	});
+	
+	
+	
+	
 </script>
 </body>
 

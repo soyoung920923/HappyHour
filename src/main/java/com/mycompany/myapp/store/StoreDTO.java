@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.mycompany.common.CommonUtil;
 
 import lombok.Data;
 
@@ -14,8 +15,8 @@ import lombok.Data;
 public class StoreDTO implements Serializable{
 	/* public static final String FILE_PATH = "D:\\hh-files"; */
 	
-	private Integer idx;
-	private Integer origin;
+	private int idx;
+	private int origin;
 	private String store_Nm;
 	private String store_Tel;
 	private String store_Address;
@@ -31,5 +32,19 @@ public class StoreDTO implements Serializable{
 	private Timestamp update_Date;
 	private String update_Id;
 	
+	private String store_open;
+	private String store_close;
+	private String break_start;
+	private String break_end;
+	private int store_break;
+	
+	
+	
 	private String category;
+	private String address;
+	private String latitude;
+	private String longitude;
+	private int distance;
+	
+	private final String PATH = CommonUtil.PATH;
 }

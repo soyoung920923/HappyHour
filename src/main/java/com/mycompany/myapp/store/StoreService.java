@@ -8,8 +8,14 @@ import com.mycompany.common.SearchParam;
 
 public interface StoreService {
 
-	int enrollStore(StoreDTO store, MultipartHttpServletRequest  req);
+	int enrollStore(StoreDTO store, MultipartHttpServletRequest req, String msg);
 
 	List<StoreDTO> getStoreAll(SearchParam param);
+
+	StoreDTO getStoreDt(int idx);
+
+	List<StoreDTO> getStoreBest();
+
+	int deleteStore(MultipartHttpServletRequest req, int idx);
 
 }

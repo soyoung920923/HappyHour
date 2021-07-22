@@ -3,8 +3,11 @@ package com.mycompany.myapp.store;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +15,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.mycompany.common.CommonUtil;
 import com.mycompany.common.SearchParam;
+import com.mycompany.myapp.HomeController;
 
 @Service("storeService")
 public class StoreServiceImpl implements StoreService{
@@ -19,6 +23,7 @@ public class StoreServiceImpl implements StoreService{
 	/* String filePath = StoreDTO.FILE_PATH; */
 	/* String filePath = "D:\\hh-files"; */
 	
+	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	@Autowired
 	StoreMapper storeMapper;
@@ -27,45 +32,24 @@ public class StoreServiceImpl implements StoreService{
 	private CommonUtil commonUtil;
 
 	@Override
-	public int enrollStore(StoreDTO store, MultipartHttpServletRequest  req) {
+	public int enrollStore(StoreDTO store, MultipartHttpServletRequest req, String msg) {
 		// TODO Auto-generated method stub
-		
-		String filePath = "\\upload";
-		String applicationPath = req.getServletContext().getRealPath("resources");
-		String uploadFilePath = applicationPath + filePath;
-		
-		System.out.println(" LOG :: [서버 루트 경로] :: " + applicationPath);
-		System.out.println(" LOG :: [파일 저장 경로] :: " + uploadFilePath);
-		
-		
-		MultipartFile file = req.getFile("file");
-		if (file != null) {
-			
-			File fileDir = new File(uploadFilePath);
-			
-			if(!fileDir.exists()) {
-				fileDir.mkdirs();
-			}
-			
-			String fileOid = "S";
-			String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-			fileOid = fileOid.concat(commonUtil.generateOid()).concat(".").concat(extension);
-			store.setStore_Img(file.getOriginalFilename());
-			store.setStore_Img_Oid(fileOid);
-			
-			try {
-				
-				file.transferTo(new File(uploadFilePath, fileOid));
-				
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
+		String delOid = null;
+		if (msg.equals("수정")) {
+			delOid = store.getStore_Img_Oid();
 		}
-		int result = storeMapper.enrollStore(store);
+		if (store.getFile() != null && !store.getFile().isEmpty()) {			
+			String type = "S";  //Store
+			Map<String, String> aboutFile = commonUtil.fileUpload(req, type, delOid);
+			store.setStore_Img(aboutFile.get("img"));
+			store.setStore_Img_Oid(aboutFile.get("imgOid"));
+		}
+		int result = 0;
+		if (msg.equals("등록")) {	
+			result = storeMapper.enrollStore(store);
+		}else {
+			result = storeMapper.updateStore(store);	
+		}
 		
 		return result;
 	}
@@ -77,44 +61,64 @@ public class StoreServiceImpl implements StoreService{
 			
 		 for (int i = 0; i < list.size(); i++) {
 			Integer idt = list.get(i).getStore_Idt();
-			switch (idt) {
-			case 1:
-				list.get(i).setCategory("한식");
-				break;
-
-			case 2:
-				list.get(i).setCategory("분식");
-				break;
-
-			case 3:
-				list.get(i).setCategory("중식");
-				break;
-
-			case 4:
-				list.get(i).setCategory("패스트푸드");
-				break;
-
-			case 5:
-				list.get(i).setCategory("양식");
-				break;
-			case 6:
-				list.get(i).setCategory("카페/디저트");
-				break;
-			case 7:
-				list.get(i).setCategory("일식");
-				break;
-			case 8:
-				list.get(i).setCategory("아시안");
-				break;
-
-			default:
-				list.get(i).setCategory("한식");
-				break;
-			}
-		}
+			String setCategory = commonUtil.storeCategory(idt);
+			list.get(i).setCategory(setCategory);
+		}	 
 			 
 		return list;
 	}
+
+	@Override
+	public StoreDTO getStoreDt(int idx) {
+		// TODO Auto-generated method stub
+		
+		StoreDTO store = storeMapper.getStoreDt(idx);
+		Integer idt = store.getStore_Idt();
+		String setCategory = commonUtil.storeCategory(idt);
+		store.setCategory(setCategory);
+		
+		String address = commonUtil.storeAddress(store.getStore_Address(), store.getStore_Address_Dt());
+		store.setAddress(address);
+		
+		return store;
+	}
+
+	@Override
+	public List<StoreDTO> getStoreBest() {
+		// TODO Auto-generated method stub
+		
+		List<StoreDTO> best = storeMapper.getStoreBest();
+		for (int i = 0; i < best.size(); i++) {
+			Integer idt = best.get(i).getStore_Idt();
+			String setCategory = commonUtil.storeCategory(idt);
+			best.get(i).setCategory(setCategory);
+			
+			String address = commonUtil.storeAddress(best.get(i).getStore_Address(), best.get(i).getStore_Address_Dt());
+			best.get(i).setAddress(address);
+		}
+		
+		return best;
+	}
+
+	@Override
+	public int deleteStore(MultipartHttpServletRequest req, int idx) {
+		// TODO Auto-generated method stub
+		String delOid = storeMapper.getDelOid(idx);
+		int i = storeMapper.deleteStore(idx);
+		if (i == 0) return i;
+		try {
+			commonUtil.fileDelete(req, delOid);
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.info("deleteStore 파일 삭제 실패: ", e);
+		}				
+		return i;
+	}
+	
+	
+	
+	
+	
 	
 	
 	
