@@ -36,8 +36,8 @@
 	               <input type="text" name="name" id="name" placeholder="이름" class="form-control" required autofocus>
 	            <div id="id"></div>
 	            
-	         <input type="checkbox" name="user_dt" id="user_dt" value="1" style="margin: auto;color:#1F2229;" onclick="doCheck(this)" checked>개인
-	             <input type="checkbox" name="user_dt" id="user_dt" value="2" style="margin: auto;color:#1F2229;" onclick="doCheck(this)">사업자<br>
+	         <input type="checkbox" name="user_dt" id="user_dt" value="1" style="margin: auto;color:#1F2229;" onclick="doCheck(this)" checked>&nbsp;개인
+	             <input type="checkbox" name="user_dt" id="user_dt" value="2" style="margin: auto;color:#1F2229;" onclick="doCheck(this)">&nbsp;사업자<br>
 	            
 	         <br><label for="inputId" class="sr-only">*아이디</label>
 	               <input type="hidden" name="idstate" id="idstate">
@@ -70,8 +70,8 @@
 	                <form:errors path="email"/>
 	                </span>
 	          <br>
-	          <button type="button" id="findPostcode" class="btn" onclick="findPostcode()" class="form-control">우편번호 찾기</button>
-	          <input type="text" name="postcode" id="postcode" placeholder="우편번호" style="margin-right:10px;vertical-align:20px;" class="form-control" readonly>
+	          <button type="button" class="btn form-contrlo" onclick="findPostcode()" style="vertical-align:20px;background-color:#FFAB2F;margin-bottom: 0.5rem;">우편번호 찾기</button>
+	          <input type="text" name="postcode" id="postcode" placeholder="우편번호" class="form-control" readonly>
 	          <label for="inputAddress" class="sr-only">*주소</label>
 	               <input type="hidden" name="addressstate" id="addressstate">
 	               <input type="text" name="address" id="address" placeholder="주소" class="form-control" readonly>
@@ -84,15 +84,13 @@
 	          <br><input type="checkbox" name="agree2" id="agree2" value="1" style="margin: auto;color:#1F2229;">&nbsp;마케팅수신동의(선택)
 	          <input type="hidden" name="agree2" id="agree2_hidden" value="0" style="margin: auto;color:#1F2229;">
 	          <br>
-	          <br>
 	            <div style="text-align:center;">
-	              <button type="button" class="btn-btn btn form-control" onclick="joinCheck()" style="background-color:#E30F0C;color:#F9EBE0;">회원가입</button> 
+	              <button type="button" class="btn-btn btn" onclick="joinCheck()" style="background-color:#E30F0C;color:#F9EBE0;">회원가입</button> 
 	            </div>
 	      </form:form>
         </div>
     </div>
 </div>
-
 <br>
 <br>
 <br>
@@ -100,7 +98,6 @@
 <br>
 
 <c:import url="/user/terms"/>
-<br>
 <br>
 <br>
 </main>
@@ -201,7 +198,7 @@ function checkEmail(uem){
         .removeClass('text-primary');
     if( !emailck.test( $("input[name=email]").val()))
     {
-        $('#msgEmail').text('유효하지 않은 이메일입니다.')
+        $('#msgEmail').text('유효하지 않은 이메일 입니다.')
             .addClass('text-danger');
         $('#email').select();
 

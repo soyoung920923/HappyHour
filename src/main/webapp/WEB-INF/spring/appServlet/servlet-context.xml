@@ -29,6 +29,12 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
+	    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <beans:property name="defaultEncoding" value="UTF-8"/>
+        <beans:property name="maxUploadSize" value="-1"/>
+        <!-- -1값을 주면 업로드 용량 무제한  -->
+    </beans:bean>
+	
 	<!-- 회원가입 메일 인증 -->
 	<beans:bean id="mailSender"	class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<beans:property name="host" value="smtp.gmail.com" />
@@ -45,5 +51,6 @@
 			</beans:props>
 		</beans:property>
 	</beans:bean>
+	
 	
 </beans:beans>

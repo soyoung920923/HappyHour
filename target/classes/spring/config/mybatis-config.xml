@@ -7,11 +7,15 @@
 	<!-- typeAlias -->
 	<typeAliases>	
 	     <typeAlias type="com.mycompany.myapp.user.UserDTO" alias="User"/>
+	     <typeAlias type="com.mycompany.myapp.board.BoardDTO" alias="Board"/>
+	     <typeAlias type="com.mycompany.myapp.board.PagingDTO" alias="Paging"/>
+	     <typeAlias type="com.mycompany.myapp.board.CommentDTO" alias="Comment"/>
 	</typeAliases>
 		
 	<!-- mappers -->
 	<mappers>
 		 <mapper resource="spring/mapper/myapp/UserMapper.xml" />
+		 <mapper resource="spring/mapper/myapp/BoardMapper.xml" />
 	</mappers>
 	
 </configuration>

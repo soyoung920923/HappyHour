@@ -26,7 +26,16 @@ public interface UserMapper {
 	public String searchId(@Param("name")String name, @Param("email")String email);
 
 	public void searchPwd(String id, String email, String key);
-	
-	
+
+	public UserDTO selectMy(Integer origin_num);
+
+	public UserDTO myOrigin_num(Integer origin_num);
+
+	public int leaveMember(Integer myOrigin_num);
+
+	public String checkUser_dt(String id);
+
+	public int updateUser(UserDTO user);
+
 }
 

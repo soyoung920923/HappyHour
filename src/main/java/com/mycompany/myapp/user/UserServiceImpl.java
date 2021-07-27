@@ -206,7 +206,42 @@ public class UserServiceImpl implements UserService {
 
 	        userMapper.searchPwd(id,email,key);
 	    }
+	
+	@Override
+	public UserDTO selectMy(Integer origin_num) {
+		return userMapper.selectMy(origin_num);
+	}
 
+	@Override
+	public UserDTO myOrigin_num(Integer origin_num) {
+		return userMapper.myOrigin_num(origin_num);
+	}
+	
+	@Override
+	public int leaveMember(Integer myOrigin_num) {
+		return userMapper.leaveMember(myOrigin_num);
+	}
+
+	@Override
+    public String checkUser_dt(String id) {
+        return userMapper.checkUser_dt(id);
+    }
+    
+	@Override
+	public int updateUser(UserDTO user) {
+		return userMapper.updateUser(user);
+	}
+	
+	@Override
+	public boolean pwdCheck(Integer origin_num, String password) {
+		UserDTO user = userMapper.selectMy(origin_num);
+		if (user.getPassword().equals(password)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	}
  
 

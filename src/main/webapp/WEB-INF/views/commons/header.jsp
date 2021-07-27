@@ -27,8 +27,11 @@
               <li class="nav-item">
                 <a class="nav-link" href="#">식당</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">게시판</a>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">Q&A</a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <li><a class="dropdown-item" href="${pageContext.request.contextPath}/complain">건의사항</a></li>
+                </ul>
               </li>
               <c:if test="${loginUser eq null}">
               	<li class="nav-item">
