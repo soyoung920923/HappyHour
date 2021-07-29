@@ -2,8 +2,209 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mycompany.myapp.store.StoreMapper">
 
-	<select id="getStoreAll" resultType="Map">
-		SELECT * FROM HH_STORE
+	<select id="getStoreAll" resultType="Store" parameterType="Param">
+		SELECT
+		  @ROWNUM := @ROWNUM +1 as ROWNUM,
+		  <if test="myLat != null and myLat != '' and myLon != null and myLon != ''">
+			  ST_DISTANCE_SPHERE(POINT(#{myLon}, #{myLat}), s.STORE_POINT) AS DISTANCE,
+		  </if>
+		  s.IDX,
+		  s.ORIGIN,
+		  s.STORE_NM,
+		  s.STORE_TEL,
+		  s.STORE_ADDRESS,
+		  s.STORE_ADDRESS_DT,
+		  s.HIT_COUNT,
+		  s.STORE_IDT,
+		  s.STORE_IMG,
+		  s.STORE_IMG_OID,
+		  s.STORE_INFO,
+		  s.REGIST_DATE,
+		  s.REGIST_ID,
+		  s.UPDATE_DATE,
+		  s.UPDATE_ID,
+		  s.LATITUDE,
+		  s.LONGITUDE,
+		  s.STORE_OPEN,
+		  s.STORE_CLOSE,
+		  s.STORE_BREAK,
+		  s.BREAK_START,
+		  s.BREAK_END
+		FROM HH_STORE s, (select @rownum := 0) tmp
+		WHERE 1=1
+		<if test="path != null and path != '' and path != 0">
+			AND s.STORE_IDT = #{path}
+		</if>
+		<if test="search != null and search != ''">
+			<![CDATA[	AND s.STORE_NM LIKE CONCAT('%', TRIM(#{search}), '%')	]]>
+		</if>
+		<if test="myLat != null and myLat != '' and myLon != null and myLon != ''">
+			AND (ST_DISTANCE_SPHERE(POINT(#{myLon}, #{myLat}), s.STORE_POINT) <![CDATA[<]]> 5000 
+					OR ST_DISTANCE_SPHERE(POINT(#{myLon}, #{myLat}), s.STORE_POINT) <![CDATA[=]]> 5000)
+		</if>		
+		ORDER BY REGIST_DATE DESC
+		LIMIT #{startCount}, #{endCount}
+	</select>
+	
+	<select id="getTotalCount" resultType="int" parameterType="Param">
+		SELECT COUNT(*) FROM HH_STORE
+		WHERE 1=1
+		<if test="path != null and path != '' and path != 0">
+			AND STORE_IDT = #{path}
+		</if>
+		<if test="search != null and search != ''">
+			<![CDATA[	AND STORE_NM LIKE CONCAT('%', TRIM(#{search}), '%')	]]>
+		</if>
+		<if test="myLat != null and myLat != '' and myLon != null and myLon != ''">
+			AND (ST_DISTANCE_SPHERE(POINT(#{myLon}, #{myLat}), STORE_POINT) <![CDATA[<]]> 5000 
+					OR ST_DISTANCE_SPHERE(POINT(#{myLon}, #{myLat}), STORE_POINT) <![CDATA[=]]> 5000)
+		</if>
+	</select>
+	
+	<select id="getStoreDt" resultType="Store" parameterType="int">
+		SELECT
+		  IDX,
+		  ORIGIN,
+		  STORE_NM,
+		  STORE_TEL,
+		  STORE_ADDRESS,
+		  STORE_ADDRESS_DT,
+		  HIT_COUNT,
+		  STORE_IDT,
+		  STORE_IMG,
+		  STORE_IMG_OID,
+		  STORE_INFO,
+		  REGIST_DATE,
+		  REGIST_ID,
+		  UPDATE_DATE,
+		  UPDATE_ID,
+		  LATITUDE,
+		  LONGITUDE,
+		  STORE_OPEN,
+		  STORE_CLOSE,
+		  STORE_BREAK,
+		  BREAK_START,
+		  BREAK_END
+		FROM HH_STORE
+		WHERE IDX = #{idx}
+	</select>
+	
+	<insert id="enrollStore" parameterType="Store">
+		INSERT INTO HH_STORE(
+		  ORIGIN,
+		  STORE_NM,
+		  STORE_TEL,
+		  STORE_ADDRESS,
+		  STORE_ADDRESS_DT,
+		  HIT_COUNT,
+		  STORE_IDT,
+		  STORE_IMG,
+		  STORE_IMG_OID,
+		  STORE_INFO,
+		  REGIST_DATE,
+		  REGIST_ID,
+		  UPDATE_DATE,
+		  UPDATE_ID,
+		  LATITUDE,
+		  LONGITUDE,
+		  STORE_POINT,
+		  STORE_OPEN,
+		  STORE_CLOSE,
+		  STORE_BREAK,
+		  BREAK_START,
+		  BREAK_END
+		)VALUES(
+		  #{origin},
+		  #{store_Nm},
+		  #{store_Tel},
+		  #{store_Address},
+		  #{store_Address_Dt},
+		  0,
+		  #{store_Idt},
+		  #{store_Img},
+		  #{store_Img_Oid},
+		  #{store_Info},
+		  NOW(),
+		  #{regist_Id},
+		  NOW(),
+		  #{update_Id},
+		  #{latitude},
+		  #{longitude},
+		  ST_GeomFromText(<trim prefix="'Point(" suffix=")'">${latitude} ${longitude}</trim>),
+		  #{store_open},
+		  #{store_close},
+		  #{store_break},
+		  #{break_start},
+		  #{break_end}
+		)
+	</insert>
+	
+	<update id="hitCountPlusOne" parameterType="int">
+		UPDATE HH_STORE
+		SET HIT_COUNT = HIT_COUNT+1
+		WHERE IDX = #{idx}
+	</update>
+	
+	<select id="getStoreBest" resultType="Store">
+		SELECT
+		  IDX,
+		  ORIGIN,
+		  STORE_NM,
+		  STORE_TEL,
+		  STORE_ADDRESS,
+		  STORE_ADDRESS_DT,
+		  HIT_COUNT,
+		  STORE_IDT,
+		  STORE_IMG,
+		  STORE_IMG_OID,
+		  STORE_INFO,
+		  REGIST_DATE,
+		  REGIST_ID,
+		  UPDATE_DATE,
+		  UPDATE_ID,
+		  STORE_OPEN,
+		  STORE_CLOSE,
+		  STORE_BREAK,
+		  BREAK_START,
+		  BREAK_END
+		FROM HH_STORE
+		ORDER BY HIT_COUNT DESC, REGIST_DATE DESC, UPDATE_DATE DESC
+		LIMIT 3
+	</select>
+	
+	<update id="updateStore" parameterType="Store">
+		UPDATE HH_STORE
+		SET
+		  STORE_NM =#{store_Nm},
+		  STORE_TEL =#{store_Tel},
+		  STORE_ADDRESS =#{store_Address},
+		  STORE_ADDRESS_DT =#{store_Address_Dt},
+		  STORE_IDT =#{store_Idt},
+		  <if test="store_Img != null and store_Img != ''">
+		  	STORE_IMG =#{store_Img},
+		  	STORE_IMG_OID =#{store_Img_Oid},
+		  </if>	  
+		  STORE_INFO =#{store_Info},
+		  UPDATE_DATE =NOW(),
+		  UPDATE_ID =#{update_Id},
+		  LATITUDE =#{latitude},
+		  LONGITUDE =#{longitude},
+		  STORE_POINT = ST_GeomFromText(<trim prefix="'Point(" suffix=")'">${latitude} ${longitude}</trim>),
+		  STORE_OPEN = #{store_open},
+		  STORE_CLOSE = #{store_close},
+		  STORE_BREAK = #{store_break},
+		  BREAK_START = #{break_start},
+		  BREAK_END = #{break_end}
+		WHERE IDX = #{idx}
+	</update>
+	
+	<delete id="deleteStore" parameterType="int">
+		DELETE FROM HH_STORE
+		WHERE IDX = #{idx}
+	</delete>
+	
+	<select id="getDelOid" parameterType="int" resultType="String">
+		SELECT STORE_IMG_OID FROM HH_STORE WHERE IDX = #{idx}
 	</select>
 	
 </mapper>
