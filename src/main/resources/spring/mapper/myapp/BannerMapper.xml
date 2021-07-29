@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myapp.banner.BannerMapper">
+
+	<select id="getAllBanner" resultType="Banner">
+		SELECT 
+			IDX,
+			BANNER_IMG_OID,
+			BANNER_ORDER,
+			HIT_COUNT,
+			BANNER_SUBJECT,
+			BANNER_CONTENTS,
+			CAPTION_YN,
+			BANNER_LINK,
+			BANNER_CAPTION
+		FROM HH_BANNER
+		WHERE DELETE_YN = 0
+		ORDER BY BANNER_ORDER ASC
+	</select>
+	
+	<select id="getThisBanner" parameterType="String" resultType="Banner">
+		SELECT
+			IDX,
+			BANNER_IMG,
+			BANNER_IMG_OID,
+			BANNER_SUBJECT,
+			BANNER_CONTENTS,
+			HIT_COUNT,
+			REGIST_DATE,
+			REGIST_ID,
+			UPDATE_DATE,
+			UPDATE_ID,
+			BANNER_ORDER,
+			BANNER_LINK,
+			DELETE_YN,
+			BANNER_CAPTION,
+			ORIGIN,
+			CAPTION_YN
+		FROM HH_BANNER
+		WHERE IDX = #{idx}
+	</select>
+	
+	<insert id="enrollBanner" parameterType="Banner">
+		INSERT INTO HH_BANNER(
+			BANNER_IMG,
+			BANNER_IMG_OID,
+			BANNER_SUBJECT,
+			BANNER_CONTENTS,
+			HIT_COUNT,
+			REGIST_DATE,
+			REGIST_ID,
+			UPDATE_DATE,
+			UPDATE_ID,
+			BANNER_ORDER,
+			BANNER_LINK,
+			DELETE_YN,
+			BANNER_CAPTION,
+			ORIGIN,
+			CAPTION_YN
+		)VALUES(
+			#{banner_img},
+			#{banner_img_oid},
+			#{banner_subject},
+			#{banner_contents},
+			0,
+			NOW(),
+			#{regist_id},
+			NOW(),
+			#{update_id},
+			#{banner_order},
+			#{banner_link},
+			0,
+			#{banner_caption},
+			#{origin},
+			#{caption_yn}
+		)
+	</insert>
+	
+	<select id="getOrder" resultType="Integer">
+		SELECT BANNER_ORDER FROM HH_BANNER
+		ORDER BY BANNER_ORDER
+	</select>
+	
+	<update id="postBannerUpdate" parameterType="HashMap">
+		UPDATE HH_BANNER SET
+			BANNER_ORDER = 
+			<choose>
+				<when test="type == 'plus'">
+					BANNER_ORDER + 1
+				</when>
+				<otherwise>
+					BANNER_ORDER - 1
+				</otherwise>
+			</choose>
+		WHERE IDX IN (SELECT IDX 
+						FROM DUAL
+						WHERE BANNER_ORDER = #{thisOrder} 
+						OR BANNER_ORDER > #{thisOrder})
+	</update>
+	
+	<update id="updateBanner" parameterType="Banner">
+		UPDATE HH_BANNER SET
+			BANNER_ORDER = #{banner_order},
+			BANNER_LINK = #{banner_link},
+			<if test="banner_img != null and banner_img != ''">
+				BANNER_IMG = #{banner_img},
+				BANNER_IMG_OID = #{banner_img_oid},
+			</if>
+			<if test="caption_yn == 1">
+				BANNER_SUBJECT = #{banner_subject},
+				BANNER_CONTENTS = #{banner_contents},
+				BANNER_CAPTION = #{banner_caption},
+			</if>
+		    UPDATE_DATE = NOW(),
+			UPDATE_ID = #{update_id}
+		WHERE IDX = #{idx}
+	</update>
+	
+	<update id="hitCountPlusOne" parameterType="String">
+		UPDATE HH_BANNER
+		SET HIT_COUNT = HIT_COUNT+1
+		WHERE IDX = #{idx}
+	</update>
+	
+	<delete id="deleteBanner" parameterType="int">
+		DELETE FROM HH_BANNER
+		WHERE IDX = #{idx}
+	</delete>
+	
+	<select id="getDelBanner" parameterType="int" resultType="Banner">
+		SELECT
+			BANNER_IMG_OID,
+			BANNER_ORDER
+		FROM HH_BANNER
+		WHERE IDX = #{idx}
+	</select>
+
+</mapper>

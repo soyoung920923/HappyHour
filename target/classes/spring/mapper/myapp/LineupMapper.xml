@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myapp.lineup.LineupMapper">
+
+	<select id="getLineupAll" resultType="Lineup" parameterType="Param">
+		SELECT
+		  @ROWNUM := @ROWNUM +1 as ROWNUM,
+		  l.IDX,
+		  l.USER_ORIGIN, 
+		  l.STORE_ORIGIN,
+		  l.LINEUP_COUNT, 
+		  l.LINEUP_YN, 
+		  l.LINEUP_DATE, 
+		  l.REGISTER_DATE, 
+		  l.REGISTER_ID, 
+		  l.UPDATE_DATE, 
+		  l.UPDATE_ID, 
+		  l.LINEUP_VISIT,
+		  (select NAME from hh_user where ORIGIN_NUM = l.USER_ORIGIN) AS LINEUP_NM,
+		  (select TEL from hh_user where ORIGIN_NUM = l.USER_ORIGIN) AS LINEUP_TEL,
+		  (select STORE_NM from hh_store where idx = l.STORE_ORIGIN) AS STORE_NM
+		FROM HH_LINEUP l, (select @rownum := 0) tmp
+		WHERE 1=1
+		<if test="store != null and store != '' and store != 0">
+			AND l.STORE_ORIGIN = #{store}
+		</if>
+		<if test="idx != null and idx != '' and idx != 0">
+			AND l.USER_ORIGIN = #{idx}
+		</if>
+		<choose>
+			<when test="past != null and past != ''">
+				AND l.LINEUP_VISIT <![CDATA[<>]]> 0
+				AND l.LINEUP_YN =  #{path}
+				ORDER BY l.LINEUP_DATE DESC
+			</when>
+			<otherwise>
+				AND l.LINEUP_DATE <![CDATA[>]]> #{today}
+				<if test="path == 1">
+					AND (l.LINEUP_DATE <![CDATA[<]]> #{todayEnd} OR l.LINEUP_DATE <![CDATA[=]]> #{todayEnd})
+					AND l.LINEUP_VISIT = 0
+				</if>
+				AND l.LINEUP_YN =  #{path}
+				ORDER BY l.LINEUP_DATE ASC
+			</otherwise>
+		</choose>
+		LIMIT #{startCount}, #{endCount}
+	</select>
+	
+	<select id="getTotalCount" resultType="int" parameterType="Param">
+		SELECT COUNT(*) FROM HH_LINEUP
+		WHERE 1=1
+		<if test="store != null and store != '' and store != 0">
+			AND STORE_ORIGIN = #{store}
+		</if>
+		<if test="idx != null and idx != '' and idx != 0">
+			AND USER_ORIGIN = #{idx}
+		</if>
+		<choose>
+			<when test="past != null and past != ''">
+				AND LINEUP_VISIT <![CDATA[<>]]> 0
+			</when>
+			<otherwise>
+				AND LINEUP_DATE <![CDATA[>]]> #{today}
+				<if test="path == 1">
+					AND (LINEUP_DATE <![CDATA[<]]> #{todayEnd} OR LINEUP_DATE <![CDATA[=]]> #{todayEnd})
+				</if>
+				AND LINEUP_VISIT = 0
+			</otherwise>
+		</choose>
+		AND LINEUP_YN =  #{path}
+	</select>
+
+	<select id="countWaiting" resultType="int" parameterType="Param">
+		SELECT COUNT(*) FROM HH_LINEUP
+		WHERE STORE_ORIGIN = #{store}
+		AND LINEUP_DATE <![CDATA[>]]> #{today}
+		AND (LINEUP_DATE <![CDATA[<]]> #{todayEnd} OR LINEUP_DATE <![CDATA[=]]> #{todayEnd})
+		AND LINEUP_VISIT = 0
+		<if test="idx != null and idx != '' and idx != 0">
+			AND IDX <![CDATA[<]]> #{idx}
+		</if>
+	</select>
+	
+	<insert id="insertLineup" parameterType="Lineup">
+		<selectKey resultType="int" keyProperty="idx" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO HH_LINEUP(
+			USER_ORIGIN, 
+			STORE_ORIGIN,
+			LINEUP_COUNT, 
+			LINEUP_YN, 
+			LINEUP_DATE, 
+			REGISTER_DATE, 
+			REGISTER_ID, 
+			UPDATE_DATE, 
+			UPDATE_ID, 
+			LINEUP_VISIT			
+		)VALUES(
+			#{user_origin},
+			#{store_origin},
+			#{lineup_count},
+			#{lineup_yn},
+			<choose>
+				<when test="lineup_yn == 2">#{dateTime},</when>
+				<otherwise>NOW(),</otherwise>
+			</choose>
+			NOW(),
+			#{regist_id},
+			NOW(),
+			#{update_id},
+			0
+		)
+	</insert>
+	
+	<update id="visitTeam" parameterType="map">
+		UPDATE HH_LINEUP SET
+			LINEUP_VISIT = #{visit}
+		WHERE IDX = #{idx}
+	</update>
+	
+	<select id="nowTeam" parameterType="map" resultType="Lineup">
+		SELECT
+		  l.IDX,
+		  l.USER_ORIGIN, 
+		  l.STORE_ORIGIN,
+		  l.LINEUP_COUNT, 
+		  l.LINEUP_YN, 
+		  l.LINEUP_DATE, 
+		  l.REGISTER_DATE, 
+		  l.REGISTER_ID, 
+		  l.UPDATE_DATE, 
+		  l.UPDATE_ID, 
+		  l.LINEUP_VISIT,
+		  l.SMS_ID,
+		  (select NAME from hh_user where ORIGIN_NUM = l.USER_ORIGIN) AS LINEUP_NM,
+		  (select TEL from hh_user where ORIGIN_NUM = l.USER_ORIGIN) AS LINEUP_TEL
+		FROM HH_LINEUP l
+		<choose>
+			<when test="idx == null or idx == ''">
+				WHERE l.STORE_ORIGIN = #{store}
+				AND LINEUP_DATE <![CDATA[>]]> #{today}
+				AND (LINEUP_DATE <![CDATA[<]]> #{todayEnd} OR LINEUP_DATE <![CDATA[=]]> #{todayEnd})
+				AND LINEUP_VISIT = 0		
+				ORDER BY LINEUP_DATE ASC
+				LIMIT 1
+			</when>
+			<otherwise>
+				WHERE IDX = #{idx}
+			</otherwise>
+		</choose>
+		
+	</select>
+	
+	<update id="updateSmsId" parameterType="Lineup">
+		UPDATE HH_LINEUP SET
+			SMS_ID = #{sms_id}
+		WHERE IDX = #{idx}
+	</update>
+</mapper>
