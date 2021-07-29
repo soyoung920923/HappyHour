@@ -4,14 +4,26 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
+	<!-- camelCase -->
+	<!-- <settings>        
+        <setting name="mapUnderscoreToCamelCase" value="true" />
+    </settings> --> 
+
 	<!-- typeAlias -->
 	<typeAliases>	
 	     <typeAlias type="com.mycompany.myapp.user.UserDTO" alias="User"/>
+	     <typeAlias type="com.mycompany.myapp.store.StoreDTO" alias="Store"/>
+	     <typeAlias type="com.mycompany.common.SearchParam" alias="Param"/>
+	     <typeAlias type="com.mycompany.myapp.banner.BannerDTO" alias="Banner"/>
+	     <typeAlias type="com.mycompany.myapp.lineup.LineupDTO" alias="Lineup"/>
 	</typeAliases>
 		
 	<!-- mappers -->
 	<mappers>
 		 <mapper resource="spring/mapper/myapp/UserMapper.xml" />
+		 <mapper resource="spring/mapper/myapp/StoreMapper.xml" />
+		 <mapper resource="spring/mapper/myapp/BannerMapper.xml" />
+		 <mapper resource="spring/mapper/myapp/LineupMapper.xml" />
 	</mappers>
 	
 </configuration>

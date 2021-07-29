@@ -24,10 +24,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.mycompany.common.CommonUtil;
 import com.mycompany.common.SearchParam;
 import com.mycompany.myapp.HomeController;
-import com.mycompany.myapp.banner.BannerDTO;
 import com.mycompany.myapp.user.UserDTO;
-
-import lombok.extern.apachecommons.CommonsLog;
 
 @Controller
 @RequestMapping(value = "/store")
@@ -50,7 +47,7 @@ public class StoreController {
 
 		logger.info("store list", model);
 		System.out.println("store list");
-
+		
 		SearchParam param = new SearchParam();
 		
 		@SuppressWarnings("unchecked")
@@ -125,8 +122,8 @@ public class StoreController {
 		System.out.println("store enroll - action");
 
 		MultipartHttpServletRequest req = (MultipartHttpServletRequest) request;
-		if (session.getAttribute("authUser") != null) {
-			UserDTO user = (UserDTO) session.getAttribute("authUser");
+		if (session.getAttribute("loginUser") != null) {
+			UserDTO user = (UserDTO) session.getAttribute("loginUser");
 			store.setOrigin(user.getOrigin_num());
 			store.setRegist_Id(user.getId());
 			store.setUpdate_Id(user.getId());

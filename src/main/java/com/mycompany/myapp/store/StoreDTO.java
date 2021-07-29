@@ -46,5 +46,5 @@ public class StoreDTO implements Serializable{
 	private String longitude;
 	private int distance;
 	
-	private final String PATH = CommonUtil.PATH;
+	private final String PATH = "\\happyImage\\";
 }

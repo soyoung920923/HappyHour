@@ -19,11 +19,11 @@
 			<form id="searchList" name="searchList">
 				<input type="hidden" id="startCount" name="startCount" value="0"/>
 				<input type="hidden" id="viewCount" name="viewCount" value="0"/>
-				<input type="hidden" id="totalCount" name="totalCount" value="${total }"/>
-				<input type="hidden" id="path" name="path" value="${path }"/>
-				<input type="hidden" id="search" name="search" value="${search }"/>
+				<input type="hidden" id="totalCount" name="totalCount" value="${total}"/>
+				<input type="hidden" id="path" name="path" value="${path}"/>
+				<input type="hidden" id="search" name="search" value="${search}"/>
 			</form>
-			<table style="margin: 0 auto;" id="store-list">
+			<table style="margin: 0 auto; width: 100%;" id="store-list">
 				<c:if test="${total > 0}">
 					<c:forEach items="${list}" var="list">
 						<tr>
@@ -33,14 +33,20 @@
 								    <div class="card align-middle list-card">
 								        <div class="card-body">				       
 									       <ul class="list-ul">
-									       	<li class="list-li-img"><a href="<c:url value='/store/detail?idx=${list.idx}'/>"><div class="list-img-thum"><img alt="" src="<c:url value='${list.PATH }${list.store_Img_Oid }'/>"></div></a></li>
+									       	<li class="list-li-img"><a href="<c:url value='/store/detail?idx=${list.idx}'/>"><div class="list-img-thum"><img alt="" src="<c:url value='${list.PATH}${list.store_Img_Oid}'/>"></div></a></li>
 									       	<li class="list-li-contents">
-									       		<h6 class="list-title"><a href="<c:url value='/store/detail?idx=${list.idx}'/>"><span class="list-category">${list.category }</span>&nbsp;&nbsp;&nbsp;${list.store_Nm}</a></h6>
-									       		<p class="list-cont">${list.store_Info}</p>
+									       		<h6 class="list-title"><a href="<c:url value='/store/detail?idx=${list.idx}'/>"><span class="list-category">${list.category}</span>&nbsp;&nbsp;&nbsp;${list.store_Nm}</a></h6>
+									       		<p class="list-cont">${list.store_open} ~ ${list.store_close}
+									       			<c:choose>
+											       		<c:when test="${list.store_break eq 0}">(브레이크타임 없음)</c:when>
+											       		<c:otherwise><br>break ${list.break_start} ~ ${list.break_end}</c:otherwise>
+											       	</c:choose>
+									       		</p>
+									       		<%-- <p class="list-cont">${list.store_Info}</p> --%>
 									       	</li>
 									       	<li class="list-li-hit">
 									       		<i style='font-size:1.3rem' class='fa open-utils'>&#xf141;</i><br>
-									       		<i style='font-size:1.3rem' class='far'>&#xf0a6;</i> ${list.hit_Count }
+									       		<i style='font-size:1.3rem' class='far'>&#xf0a6;</i> ${list.hit_Count}
 									       	</li>
 									       </ul> 				               
 								        </div>   
@@ -50,10 +56,10 @@
 									        	<i style='font-size:24px; color: #FFF;' class='fas'>&#xf095;</i>
 								        	</div>
 								        	<div class="util">
-									        	<i style='font-size:24px; color: #FFF;' class='fas'>&#xf3c5;</i>
+									        	<i onclick="findLoad('${list.store_Nm}','${list.longitude}','${list.latitude}')" style='font-size:24px; color: #FFF;' class='fas'>&#xf3c5;</i>
 								        	</div>
 								        	<div class="util">
-									        	<i style='font-size:24px; color: #FFF;' class='fas'>&#xf274;</i>
+									        	<i onclick="location.href='<c:url value='/lineup/enroll?store=${list.idx}'/>'" style='font-size:24px; color: #FFF;' class='fas'>&#xf274;</i>
 								        	</div>
 								        </div>
 								</div>
@@ -93,7 +99,8 @@
 		var ii = 0;
 		$('#bottom-nav').css('display','block');
 		$('.bottom-nav-arrow').css('display','block');
-	
+		$('#fixed-box-top').css('bottom','5.5%');
+
 		$('#moreList').click(function(){
 			moreList('store-list',5);
 		});
@@ -135,12 +142,22 @@
 			var _html = "";
 			for (var i = 0; i < resultList.length; i++) {
 				var list = resultList[i];
+				var imgPath = "/happyImage/"+list.store_Img_Oid;
+				var _choose = list.store_open+" ~ "+list.store_close;
+				if (list.store_break == 0) {
+					
+				}else{
+					_choose = _choose+"<br>break "+list.break_start+" ~ "+list.break_end;
+				}
+				var enrollUrl = "/happyhour/lineup/enroll?store="+list.idx;
 				_html += "<tr><td><div class='in list-in'><div class='card align-middle list-card'><div class='card-body'><ul class='list-ul'><li class='list-li-img'><a href='<c:url value='/store/detail?idx="+list.idx+"'/>'><div class='list-img-thum'>";
-				_html += "<img alt='' src='<c:url value='/resources/upload/"+list.store_Img_Oid+"'/>'></div></a></li>";
+				_html += "<img alt='' src='"+imgPath+"'></div></a></li>";
 				_html += "<li class='list-li-contents'><a href='<c:url value='/store/detail?idx="+list.idx+"'/>'><h6 class='list-title'><span class='list-category'>"+list.category+"</span>&nbsp;&nbsp;&nbsp;"+list.store_Nm+"</h6></a>";
-				_html += "<p class='list-cont'>"+list.store_Info+"</p></li>";
+				_html += "<p class='list-cont'>"+_choose+"</p></li>";
 				_html += "<li class='list-li-hit'><i style='font-size:1.3rem' class='fa open-utils' onclick ='onUtils("+i+","+ii+")'>&#xf141;</i><br><i style='font-size:1.3rem' class='far'>&#xf0a6;</i> "+list.hit_Count+"</li></ul></div></div>";
-				_html += "<div class='utils' id='"+ii+"utils"+i+"'><div class='util'><i style='font-size:24px; color: #FFF;' class='fas'>&#xf095;</i></div><div class='util'><i style='font-size:24px; color: #FFF;' class='fas'>&#xf3c5;</i></div><div class='util'><i style='font-size:24px; color: #FFF;' class='fas'>&#xf274;</i></div></div></div></td></tr>";		       				
+				_html += "<div class='utils' id='"+ii+"utils"+i+"'><div class='util'><i style='font-size:24px; color: #FFF;' class='fas'>&#xf095;</i></div>";
+				_html += "<div class='util'><i onclick='findLoad("+list.store_Nm+","+list.longitude+","+list.latitude+")' style='font-size:24px; color: #FFF;' class='fas'>&#xf3c5;</i></div>";
+				_html += "<div class='util'><i onclick='location.href='"+enrollUrl+"'' style='font-size:24px; color: #FFF;' class='fas'>&#xf274;</i></div></div></div></td></tr>";		       				
 			}
 			$('#store-list tr:last').after(_html);
 		}
@@ -159,8 +176,7 @@
 	});
 	
 	function onUtils(i, ii) {
-		
-		
+			
 		var thisId = $('#'+ii+'utils'+i);
 	
 		if (thisId.hasClass('open')) {
@@ -170,6 +186,13 @@
 			thisId.addClass('open');
 		}
 			
+	}
+		
+	function findLoad(name,longitude,latitude){
+		var url = "https://map.kakao.com/link/to/"+name+","+longitude+","+latitude;
+		console.log(url);
+		// 모바일(앱) -> var url2 = "kakaomap://route?sp=37.537229,127.005515&ep="+longitude+","+latitude+"&by=CAR"
+		location.href = url;
 	}
 </script>
 </body>

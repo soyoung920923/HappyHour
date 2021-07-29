@@ -23,6 +23,8 @@
 		  s.REGIST_ID,
 		  s.UPDATE_DATE,
 		  s.UPDATE_ID,
+		  s.LATITUDE,
+		  s.LONGITUDE,
 		  s.STORE_OPEN,
 		  s.STORE_CLOSE,
 		  s.STORE_BREAK,

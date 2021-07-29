@@ -174,7 +174,7 @@ a:hover{
 #myPoint-label{margin-top: 0.25rem; margin-left: 0.5rem;}
 #myPoint-label.black{color: #1F2229;}
 #myPointUtil{
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	z-index:5;
@@ -249,9 +249,12 @@ a:hover{
   object-fit:cover;
 }
 .img-title{
-  margin-top: 1rem
+  margin-top: 1.2rem;
+  color: #000;
 }
-
+.img-contents{
+	height: 100px;
+}
 #ul-category{
   width: 100%;
   text-align: center;
@@ -318,14 +321,22 @@ footer{
 	color: #555;
 	text-align: center;
 }
-#fixed-box{
-/* 	width: 100%; */
+#fixed-box-top{
 	position: fixed;
 	bottom: 0%;
 	right: 0%;
 	z-index: 9999;
 	text-align: right;
 }
+#fixed-box, #fixed-box2{
+	width: 100%;
+	position: fixed;
+	bottom: 0%;
+	right: 0%;
+	z-index: 9999;
+	text-align: right;
+}
+
 #go-top{
 	float: right;
 	color: #1F2229;	
@@ -337,7 +348,7 @@ footer{
 	height: 3.5rem;
 	margin-right: 0.7rem;
 }
-#bottom-nav{
+#bottom-nav, #bottom-nav2{
 	display: none;
 }
 .bottom-nav-arrow{

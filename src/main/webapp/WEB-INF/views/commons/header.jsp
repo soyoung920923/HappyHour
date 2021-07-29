@@ -13,7 +13,7 @@
 	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-orange">
         <div class="container-fluid">
           <form class="d-flex" method="POST" action="${pageContext.request.contextPath}/store/list">
-            <input class="form-control me-2" type="search" placeholder="식당명으로 검색하세요." aria-label="Search" name="search" value="${search }">
+            <input class="form-control me-2" type="search" placeholder="식당명으로 검색하세요." aria-label="Search" name="search" value="${search}">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
           </div>
         </div>
       </nav>
-      <div id="fixed-box">
+      <div id="fixed-box-top">
       	<p id="go-top">
       		<a href="#">
       			<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="#F9EBE0" class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
@@ -72,6 +72,8 @@
 				</svg>
 			</a>
 		</p>
+	  </div>
+	  <div id="fixed-box">
 		<div id="bottom-nav">			
 			<ul id="bottom-nav-ul">
 				<li class="bottom-nav-li on"><a href="${pageContext.request.contextPath}/store/list">전체</a></li>
@@ -93,6 +95,14 @@
 			<i style='font-size:1.3rem' class='fas'>&#xf0da;</i>
 	  </div>
 	  
+	  <div id="fixed-box2">
+	  	<div id="bottom-nav2">			
+			<ul id="bottom-nav-ul2">
+				<li class="bottom-nav-li2 on"><a href="" id="real">실시간</a></li>
+				<li class="bottom-nav-li2"><a href="" id="past">지난내역</a></li>
+			</ul>			
+		</div>
+	  </div>
 	  
 	  <!-- 내위치 모달 팝업 -->
 	  <div id="myPointUtil">
@@ -223,11 +233,15 @@
       		});
       		
       		var url = window.location.href;
+      		console.log(url);
       		/*header nav*/
-      		if (url.indexOf("store") > -1) {
+      		if (url.indexOf("store/list") > -1 || url.indexOf("store/detail") > -1 || url.indexOf("lineup/enroll") > -1) {
       			$('.nav-item > a').removeClass('active');
 				$('.nav-item').eq(1).children('a').addClass('active');
 			}else if (url.indexOf("/user/login") > -1) {
+      			$('.nav-item > a').removeClass('active');
+				$('.nav-item').eq(3).children('a').addClass('active');
+			}else if (url.indexOf("myPage") > -1) {
       			$('.nav-item > a').removeClass('active');
 				$('.nav-item').eq(3).children('a').addClass('active');
 			}else{
@@ -237,45 +251,27 @@
       		
       		
       		/*bottom nav*/
-      		var dv = url.lastIndexOf("/");
-      		var pth = url.substring(dv+1);
-      		console.log(pth);
-      		
-      		if (url.indexOf("store/list/"+pth) > -1) {
-      			$('.bottom-nav-li').removeClass('on');
-      			$('.bottom-nav-li').eq(pth).addClass('on');
-      			if (pth > 6) {
-      				$('#bottom-nav').animate({
-        				scrollLeft: '+=600'
-        			}, 200);
-      			}else if (pth > 3) {
-      				$('#bottom-nav').animate({
-        				scrollLeft: '+=400'
-        			}, 200);
-				}
-      		}else{
-      			$('.bottom-nav-li').removeClass('on');
-      			$('.bottom-nav-li').eq(0).addClass('on');
-      		}
-      		
-      		var thisCategory = '${store.store_Idt}';
-      		
-      		if (thisCategory != null && thisCategory != '') {
-      			console.log(thisCategory);
-      			$('.bottom-nav-li').removeClass('on');
-      			$('.bottom-nav-li').eq(thisCategory).addClass('on');
-      			if (thisCategory > 6) {
-      				$('#bottom-nav').animate({
-        				scrollLeft: '+=600'
-        			}, 200);
-      			}else if (thisCategory > 3) {
-      				$('#bottom-nav').animate({
-        				scrollLeft: '+=400'
-        			}, 200);
-				}
-			}
-      		
-      		
+          	var dv = url.lastIndexOf("/");
+          	var pth = url.substring(dv+1);
+          	console.log(pth);
+          		
+          	if (url.indexOf("store/list/"+pth) > -1) {
+          		$('.bottom-nav-li').removeClass('on');
+          		$('.bottom-nav-li').eq(pth).addClass('on');
+          		if (pth > 6) {
+          			$('#bottom-nav').animate({
+            			scrollLeft: '+=600'
+            		}, 200);
+          		}else if (pth > 3) {
+          			$('#bottom-nav').animate({
+            			scrollLeft: '+=400'
+            		}, 200);
+    			}
+          	}else{
+          		$('.bottom-nav-li').removeClass('on');
+          		$('.bottom-nav-li').eq(0).addClass('on');
+          	}
+          		    		
       		$('.go-top > a').click(function(){
       			$('body').animate({scrollTop:0},500);
       		});
@@ -302,6 +298,7 @@
       	});
       	
       	function myPointUtil(){
+      		$('#navbarCollapse').removeClass('show');
       		$('#myPointUtil').show();
       		$('#myPointUtil').on('scroll touchmove mousewheel', function(event) {
       		  event.preventDefault();
@@ -346,16 +343,7 @@
     			}			
     		});
       	}
-      	
-      	function myPointY(){
-      		
-      	}
-      	
-		function myPointN(){
-      		
-      	}
-      	
-      	
+
       </script>
 </body>
 </html>

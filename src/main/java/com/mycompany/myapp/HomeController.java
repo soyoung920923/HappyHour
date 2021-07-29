@@ -1,6 +1,11 @@
 package com.mycompany.myapp;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,12 +25,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mycompany.common.CommonUtil;
 import com.mycompany.myapp.banner.BannerDTO;
 import com.mycompany.myapp.banner.BannerService;
 import com.mycompany.myapp.store.StoreDTO;
 import com.mycompany.myapp.store.StoreService;
 import com.mycompany.myapp.user.UserMapper;
+import com.mycompany.sms.NaverSmsService;
 
 /**
  * Handles requests for the application home page.
@@ -42,11 +49,10 @@ public class HomeController {
 	@Autowired
 	BannerService bannerService;
 	
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
+	
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
+	public String home(Locale locale, Model model) throws InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, ParseException, URISyntaxException {
 		
 		
 	    logger.info("Welcome home! The client locale is {}.", locale);
@@ -71,7 +77,6 @@ public class HomeController {
 		}
 		model.addAttribute("banners", banners);
 		model.addAttribute("size", banners.size());
-		 
 		
 		return "main";
 	}

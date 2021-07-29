@@ -16,6 +16,8 @@ public class SearchParam {
 	private String today;
 	private String todayEnd;
 	private int store;
+	private int idx;
+	private String past;
 	
 	
 }

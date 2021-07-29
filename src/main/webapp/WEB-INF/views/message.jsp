@@ -5,5 +5,5 @@
 	if (msg != null && msg != '') {		
 		alert(msg);
 	}
-	location.href='${loc}'
+	location.href='${loc}';
 </script>
