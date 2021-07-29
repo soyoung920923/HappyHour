@@ -35,12 +35,11 @@ public interface BoardMapper {
 
 	int updateComment(CommentDTO comment);
 
-	int deleteComment(CommentDTO comment);
-
+	int deleteComment(int cnum);
+	
 	int getMyBoardTotal(PagingDTO paging);
 
 	Integer selectCommentCNumMax(CommentDTO comment);
 
-	
 	
 }

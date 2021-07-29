@@ -34,12 +34,11 @@ public interface BoardService {
 	List<CommentDTO> selectCommentAll(int num);
 	int insertComment(CommentDTO comment);
 	int updateComment(CommentDTO comment);
-	int deleteComment(CommentDTO comment);
+	int deleteComment(int cnum);
 
 
 	List<BoardDTO> myBoardselectAll(PagingDTO paging);
 
 	Integer selectCommentCNumMax(CommentDTO comment);
-
 
 }

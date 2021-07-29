@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -74,7 +76,7 @@ public class BoardController {
 
 	// 글 조회하기
 	@GetMapping("/view")
-	public String boardView(Model model, @RequestParam(defaultValue = "0") Integer num) {
+	public String boardView(Model model, @RequestParam(defaultValue = "0") Integer num, String id) {
 		if (num == 0) {
 			return "redirect:list";
 		}
@@ -383,5 +385,53 @@ public class BoardController {
 		return boardService.selectCommentAll(num);
 
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/insertComment", method = RequestMethod.POST)
+	public Map<String, Object> insertComment(@RequestBody CommentDTO comment) throws Exception {
+		Map<String, Object> result = new HashMap<>();
+		
+		Integer maxNum = boardService.selectCommentCNumMax(comment);
+		int crefer = maxNum != null ? maxNum + 1 : 1;
+		comment.setCrefer(crefer);
+		
+		try {
+			boardService.insertComment(comment);
+			result.put("status", "OK");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("status", "False");
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/updateComment", method =  RequestMethod.POST)
+	public Map<String, Object> updateComment(@RequestBody CommentDTO comment) throws Exception {
+	   Map<String, Object> result = new HashMap<>();
+
+		try {
+			boardService.updateComment(comment);
+			result.put("status", "OK");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("status", "False");
+		}
+		return result;
+	}
+	
+	@RequestMapping(value = "/deleteComment", method = RequestMethod.POST)
+
+	public Map<String, Object> deleteComment(@RequestParam("cnum") int cnum) throws Exception {
+       Map<String, Object> result = new HashMap<>();
+		
+         try {
+			boardService.deleteComment(cnum);
+			result.put("status", "OK");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("status", "False");
+		}
+		return result;
+	}	
 
 }

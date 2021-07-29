@@ -97,8 +97,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int deleteComment(CommentDTO comment) {
-		return boardMapper.deleteComment(comment);
+	public int deleteComment(int cnum) {
+		return boardMapper.deleteComment(cnum);
 	}
 
 	@Override
@@ -116,7 +116,6 @@ public class BoardServiceImpl implements BoardService {
 	public Integer selectCommentCNumMax(CommentDTO comment) {
 		return boardMapper.selectCommentCNumMax(comment);
 	}
-	
 
 	
 }
