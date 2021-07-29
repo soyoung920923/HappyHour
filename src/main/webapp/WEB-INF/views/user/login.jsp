@@ -12,6 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <jsp:include page="../commons/head.jsp" />
 <style>
 	.card-title{
@@ -54,8 +55,9 @@
 					       <a href="${pageContext.request.contextPath}/user/userSearch" style="color:#1F2229;">아이디</a>
 					       /<a href="${pageContext.request.contextPath}/user/pwdSearch" style="color:#1F2229;">&nbsp;비밀번호 찾기</a>
 					    </div>
-				   <button type="submit" class="btn form-control">Login</button>
-		      </form>
+				   <button type="submit" class="btn form-control" style=" margin-bottom: 0.5rem;">Login</button>
+				  <!--  <button type="button" class="btn" onclick="kakaoLogin()" style="background-color:#FEE500;color:#191919;">Kakao Login</button> --> 
+			</form>
 		   </div>
 		</div>
 	</div>
@@ -65,7 +67,7 @@
 		<jsp:include page="../commons/footer.jsp"/>
 	</footer>
 	
-<script>
+<script type="text/javascript">
 
 	$(document).ready(function() {
 		var userInputId = getCookie("userInputId");//저장된 쿠기값 가져오기
@@ -121,6 +123,29 @@
 		}
 		return unescape(cookieValue);
 	}
+
+
+/* 	window.Kakao.init('ba0ed2d064b8fe054898b59b89e74bf9');
+	
+	function kakaoLogin() {
+		window.Kakao.Auth.login({ 
+		    success: function(response) {
+		    	console.log(response)
+		        window.Kakao.API.request({
+		           url: '/v2/user/me', 
+		           success: (res) => {
+		    	      const kakao_account = res.kakao_account;
+		    	      console.log(kakao_account)
+		    } 
+		    }); 
+		    	window.location.href='http://localhost:8090/happyhour/' 
+		    }, 
+		    fail: function(error) { 
+		    	console.log(error); 
+		    }
+		   });
+	} 
+	 */
 </script>
 
 </body>

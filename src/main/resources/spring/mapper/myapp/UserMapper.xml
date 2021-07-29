@@ -11,6 +11,10 @@
    		select * from hh_user where id=#{id}
     </select>
     
+    <select id="myOrigin_num" parameterType="string" resultType="int">
+        select origin_num from hh_user where id = #{id}
+    </select>
+    
     <!-- 회원가입 -->
 	<insert id="createUser" parameterType="User">
 	    insert into hh_user(ID, PASSWORD, NAME, ADDRESS, ADDRESS_DT, TEL, EMAIL, AGREE1, AGREE2, USER_DT, EMAIL_IDT, POSTCODE)
@@ -40,6 +44,11 @@
 	<select id="checkEmail_idt" resultType="String" parameterType="String">
     	select email_idt from hh_user where id = #{id}
     </select>
+
+	<!-- 회원 상태 조회 -->
+	<select id="checkUser_dt" resultType="String" parameterType="String">
+    	select user_dt from hh_user where id=#{id}
+   </select>
    
    <!-- 아이디 찾기 -->
     <select id="searchId" resultType="String">
@@ -50,6 +59,28 @@
 	<!-- 회원 임시 비밀번호 발급-->
 	<update id="searchPwd" parameterType="hashmap">
 		update hh_user set password = #{param3} where id = #{param1} and email = #{param2}
+	</update>
+	
+	<!-- 마이페이지 -->
+	<select id="selectMy" resultType="User" parameterType="int">
+		select * from hh_user where origin_num = #{origin_num}
+	</select>
+	
+	<update id="leaveMember" parameterType="int">
+		update hh_user set user_dt = 4 where origin_num = #{origin_num}
+	</update>
+	
+	<update id="updateUser" parameterType="User">
+		update hh_user set
+		name = #{name}
+		, tel = #{tel}
+		, postcode = #{postcode}
+		, address = #{address}
+		, address_dt = #{address_dt}
+		<if test="password != null and password != ''">
+			,password = #{password}
+		</if>
+		where origin_num = #{origin_num}
 	</update>
   
 </mapper>

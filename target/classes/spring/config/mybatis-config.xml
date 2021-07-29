@@ -12,6 +12,9 @@
 	<!-- typeAlias -->
 	<typeAliases>	
 	     <typeAlias type="com.mycompany.myapp.user.UserDTO" alias="User"/>
+	     <typeAlias type="com.mycompany.myapp.board.BoardDTO" alias="Board"/>
+	     <typeAlias type="com.mycompany.myapp.board.PagingDTO" alias="Paging"/>
+	     <typeAlias type="com.mycompany.myapp.board.CommentDTO" alias="Comment"/>
 	     <typeAlias type="com.mycompany.myapp.store.StoreDTO" alias="Store"/>
 	     <typeAlias type="com.mycompany.common.SearchParam" alias="Param"/>
 	     <typeAlias type="com.mycompany.myapp.banner.BannerDTO" alias="Banner"/>
@@ -21,6 +24,7 @@
 	<!-- mappers -->
 	<mappers>
 		 <mapper resource="spring/mapper/myapp/UserMapper.xml" />
+		 <mapper resource="spring/mapper/myapp/BoardMapper.xml" />
 		 <mapper resource="spring/mapper/myapp/StoreMapper.xml" />
 		 <mapper resource="spring/mapper/myapp/BannerMapper.xml" />
 		 <mapper resource="spring/mapper/myapp/LineupMapper.xml" />
