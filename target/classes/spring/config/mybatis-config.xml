@@ -19,6 +19,7 @@
 	     <typeAlias type="com.mycompany.common.SearchParam" alias="Param"/>
 	     <typeAlias type="com.mycompany.myapp.banner.BannerDTO" alias="Banner"/>
 	     <typeAlias type="com.mycompany.myapp.lineup.LineupDTO" alias="Lineup"/>
+
 	</typeAliases>
 		
 	<!-- mappers -->

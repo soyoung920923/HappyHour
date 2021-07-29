@@ -152,24 +152,25 @@
     </sql>
     
     <select id="selectCommentCNumMax" parameterType="String" resultType="Integer">
-		select max(cnum) as max from hh_board
+		select max(cnum) as max from hh_comment
 	</select>
       
     <select id="selectCommentAll" resultType="Comment">
-       select cnum, num, crefer, clevel, csunbun, name, id, ccontent, wdate, update_date from hh_comment
+       select cnum, num, crefer, clevel, csunbun, name, id, ccontent, wdate  from hh_comment where num = #{num} 
+       order by crefer	desc, csunbun asc
    </select>
     
     <insert id="insertComment" parameterType="Comment">
         insert into hh_comment (num, cnum, name, id, wdate, ccontent, crefer, clevel, csunbun)
-        valus(#{num}, #{crefer}, #{name}, #{id}, now(), #{ccontent}, #{crefer}, #{clevel} ,#{csunbun})
+        values(#{num}, #{crefer}, #{name}, #{id}, now(), #{ccontent}, #{crefer}, #{clevel} ,#{csunbun})
     </insert>
     
     <update id="updateComment">
-       update hh_comment set ccontent = #{ccontent}, update_date = now() where cnum = #{cnum}
+       update hh_comment set ccontent = #{ccontent}, wdate = now() where cnum = #{cnum}
     </update>
     
     <delete id="deleteComment" parameterType="int">
-       delete from hh_coment where cnum = #{cnum}
+       delete from hh_comment where cnum = #{cnum}
     </delete>
-
+    
 </mapper>
