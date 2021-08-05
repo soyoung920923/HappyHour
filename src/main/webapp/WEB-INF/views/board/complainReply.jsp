@@ -22,11 +22,14 @@
 	</header>  
 <body>
 <main>
+<br>
+<br>
 
 <div class="container" style="margin-top: 30px">
-   <div class="row">
-      <div class="col-sm-9 text-center">
-         <h1 class="text-center">답글쓰기</h1>
+<div class="m-5 p-3 text-center"
+         style="border: 1px solid gray;border-radius:15px;background-color:white;" id="font2">
+        <h1 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">REPLY</h1>
+        <br>
 
 
          <form name="boardF" id="boardF" action="insert"
@@ -69,19 +72,14 @@
                         name="content" id="content" placeholder=""
                         class="form-control"></textarea></td>
                </tr>
-
-               <tr>
-                  <td colspan="2" class="text-center">
-                     <button class="btn btn-success" id="btnInsert">글쓰기</button>
-                     <button type="reset" class="btn btn-warning" id="btnReset">다시쓰기</button>
-                  </td>
-               </tr>
             </table>
-
+			  <div align="center">
+				  <button class="btn" id="btnInsert">글쓰기</button>
+			 </div>
          </form>
       </div>
    </div>
-</div>
+
 
 </main>
 	 <footer>

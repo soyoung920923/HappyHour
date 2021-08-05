@@ -5,8 +5,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,96 +29,63 @@
 <c:url var="deleteCommentURL" value="/deleteComment">
 </c:url>
 <main>
-	<div class="container">
-	  <div class="row">
+<br>
+<br>
+	<div class="container" style="margin-top: 30px">
+	<div class="m-5 p-3 text-center"
+         style="border: 1px solid gray;border-radius:15px;background-color:white;" id="font2">
+    <div class="row">
 			<c:if test="${board eq null }">
 				<h2 class="text-danger m-5">${board.num}번 게시글이 없습니다.</h2>
 			</c:if>
-	  <c:if test="${board ne null}">
-				<br>
-				<br>
-				 ${board.num}
-			<table class="table table-bordered">
+	  <c:if test="${board ne null}">	
+				<h5 class="card-title text-left" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;"> ${board.num}</h5>
+			<h3 style="text-align:center;"><b><c:out value="${board.title}"/></b></h3><br>
+			<div style="text-align:right;">작성자&ensp;<c:out value="${board.name}"/>(${board.id})</div>
+			<div style="text-align:right;margin-bottom: 0.5rem;">작성일&ensp;<fmt:formatDate value="${board.register_day}" pattern="yyyy-MM-dd hh:mm"/></div>
+			<table class="table" id="bbs">	
 				<tr>
-				  <td><b>제목</b></td>
-				  <td colspan="5">
-				  <c:out value="${board.title}"/>
-				  </td>
-				</tr>
-				<tr>
-				  <td><b>작성일</b></td>
-			      <td>
-				  <fmt:formatDate value="${board.register_day}" pattern="yyyy-MM-dd hh:mm"/>
-				  </td>
-				  <td><b>조회수</b></td>
-				  <td>
-				  <c:out value="${board.hits}"/>
-				  </td>
-				  <td><b>작성자</b></td>
-				  <td>
-				  <c:out value="${board.name}"/>
-				  </td>
-				</tr>
-				<tr>
-			        <td colspan="1"><b>첨부파일</b></td>
-					<td class="text-left" colspan="5">
+			        <td width="30" style="text-align:left;"><b>&ensp;&ensp;&ensp;첨부파일</b></td>
+					<td width="170" style="text-align:left;">
 						<c:if test="${board.filename ne null}">
 						<a href="#" onclick="down()">
 						<c:out value="${board.origin_filename}"/>
 						</a>
 						<!-- 물리적 파일명을 모두 소문자로 변환 (확장자 체크를 위해) -->
 						<c:set var="fname" value="${fn:toLowerCase(board.filename)}"/>
-						<c:if test="${fn:endsWith(fname,'.png') 
-						or fn:endsWith(fname,'.jpg') or fn:endsWith(fname,'.gif')}">
-							<img src="${pageContext.request.contextPath}/Upload/${board.filename}" class="img-thumbnail"
-			             width="100px">
-						</c:if>
 					   </c:if>
-					   <br>
-					    <c:if test="${board.filename2 ne null}">
+					    <c:if test="${board.filename2 ne null}">&ensp;/&ensp;
 						<a href="#" onclick="down2()">
 						<c:out value="${board.origin_filename2}"/>
 						</a>
 						<c:set var="fname" value="${fn:toLowerCase(board.filename2)}"/>
-						<c:if test="${fn:endsWith(fname,'.png') 
-						or fn:endsWith(fname,'.jpg') or fn:endsWith(fname,'.gif')}">
-							<img src="${pageContext.request.contextPath}/Upload/${board.filename2}" class="img-thumbnail"
-			             width="100px">
-						</c:if>
 					   </c:if>
 				   </td>
 				<tr>
-				   <td colspan="3">
+				   <td colspan="2">
 				   <c:out value="${board.content}"/>
 				   </td>
 				</tr>
 				<tr>
 			</tr>
 		</table>
-		     <div class='text-right'>
-		     <p>
+	   </c:if>
+  </div>	
+		     <div style="text-align:right;">
 		       <c:if test="${loginUser.id eq board.id}">
 					<form id="boardF" method="post" >
 					<input type="hidden" name="num" id="num" value="<c:out value="${board.num}"/>">
-					     	<button class="btn" onclick="goEdit()">수정</button>
-							<button class="btn" onclick="goDel()">삭제</button> 
-					</form>
-					        <button class="btn" onclick="history.back()">목록</button>
-					        <a href="javascript:goRe()"><button class="btn">답글쓰기</button></a>       
+					     	<button class="btn" onclick="goEdit()"style="margin-bottom: 0.3rem;">수정</button>
+							<button class="btn" onclick="goDel()" style="margin-bottom: 0.3rem;">삭제</button> 
+					</form>     
 				</c:if>	
-			 </p>
-			    </div>
-			    <div class='text-right'>
-			    <c:if test="${loginUser.id ne board.id }">
 			        <button class="btn" onclick="history.back()">목록</button>
-					<a href="javascript:goRe()"><button class="btn">답글쓰기</button></a>  
-				</c:if>
-			    </div>
-	    </c:if>
+					<a href="javascript:goRe()"><button class="btn">답글</button></a>  
+			 </div>
 	 </div>
-  </div>	
+</div>
 
-	<div class="my-3 p-3 bg-white rounded shadow-sm" style="padding-top: 10px; margin-left: 100px; margin-right: 100px;">
+	<div class="my-3 p-3 bg-white rounded shadow-sm" style="padding-top: 10px; margin-left: 300px; margin-right: 300px;border: 1px solid gray;border-radius:15px;">
 		<form:form name="f" id="f"  modelAttribute="commentDTO" method="POST">
 		<input type="hidden" id="num" value="${board.num}"/>
 			<div class="row">
@@ -142,7 +107,7 @@
 			</div>
 		</form:form>
 	</div>
-			<div class="my-3 p-3 bg-white rounded shadow-sm" style="padding-top: 10px; margin-left: 100px; margin-right: 100px;">
+			<div class="my-3 p-3 bg-white rounded shadow-sm" style="padding-top: 10px; margin-left: 300px; margin-right: 300px;border: 1px solid gray;border-radius:15px;">
 				<h6 class="border-bottom pb-2 mb-0">Comment List</h6>
 				<div id="commentList"></div>
 			</div> 		
@@ -169,7 +134,6 @@
    <input type="hidden" name="origin_fname2" value="${board.origin_filename2}">
 </form>
 
-
 <script type="text/javascript">
 
 $(document).ready(function(){
@@ -195,7 +159,7 @@ $(document).ready(function(){
 	
 	function goEdit() {
 	        $('#boardF').prop('method', 'post');
-	        $('#boardF').prop('action', 'edit');
+	        $('#boardF').prop('action', 'compalinEdit');
 	}
 	 
 	function goRe(){
@@ -237,7 +201,7 @@ $(document).ready(function(){
 
 		var url = "${pageContext.request.contextPath}/selectCommentAll";
 		var paramData = {"num" : "${board.num}"};
-
+		var loginUserId = '${loginUser.id}';
 		$.ajax({
             type: 'POST',
             url: url,
@@ -252,15 +216,15 @@ $(document).ready(function(){
 	                     htmls += '<div class="media text-muted pt-3" id="cnum' + this.cnum + '">';
 	                     htmls += '<svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder:32x32">';
 	                     htmls += '<title>Placeholder</title>';
-	                     htmls += '<rect width="100%" height="100%" fill="#007bff"></rect>';
-	                     htmls += '<text x="50%" fill="#007bff" dy=".3em">32x32</text>';
+	                     htmls += '<rect width="100%" height="100%" fill="#fff48c"></rect>';
+	                     htmls += '<text x="50%" fill="#fff48c" dy=".3em">32x32</text>';
 	                     htmls += '</svg>';
 	                     htmls += '<p class="media-body pb-3 mb-0 small lh-125 border-bottom horder-gray">';
 	                     htmls += '<span class="d-block">';
 	                     htmls += '<strong class="text-gray-dark">' + this.id + '</strong>';
 	                     htmls += '<strong class="text-gray-dark">' + '(' + this.name + ')' + '</strong>';
 	                     htmls += '<span style="padding-left: 7px; font-size: 9pt">';
-	                     if("${loginUser.id} == ${comment.id}"){
+	                     if( loginUserId == this.id){
 	                     htmls += '<a href="javascript:void(0)" onclick="editComment(' + this.cnum + ', \'' + this.id + '\', \'' + this.ccontent + '\' )" style="padding-right:5px">수정</a>';
 	                     htmls += '<a href="javascript:void(0)" onclick="deleteComment(' + this.cnum + ')" >삭제</a>';
 	                     }
@@ -361,15 +325,6 @@ $(document).ready(function(){
 		
 	}
 	
-
-	
 </script>
-
-
-
-
-
-
-
 
 

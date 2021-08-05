@@ -34,11 +34,20 @@
 <div class="container">
     <div class="m-5 p-3 text-center"
          style="border: 1px solid gray;border-radius:15px;background-color:white;" id="font2">
+        <form name="meF" id="meF" action="edit" method="POST">
         <h1 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">MyPage</h1>
         <br>
+        <div class="selectB">
+        <select name="user_dt" style="align:right;">
+        <option value="0" <c:if test="${user.user_dt eq 0}">selected</c:if>>미인증</option>
+        <option value="1" <c:if test="${user.user_dt eq 1}">selected</c:if>>일반회원</option>
+        <option value="2" <c:if test="${user.user_dt eq 2}">selected</c:if>>스토어회원</option>
+        <option value="4" <c:if test="${user.user_dt eq 4}">selected</c:if>>탈퇴회원</option>
+        <option value="9" <c:if test="${user.user_dt eq 9}">selected</c:if>>관리자</option>
+        </select>
+        </div>
 
         <!-- 내정보 -->
-        <form name="meF" id="meF" action="edit" method="POST">
 
             <input type="hidden" id="origin_num" name="origin_num" value="${user.origin_num }">
             <table class="table table-hover" id="mypageT">
@@ -74,31 +83,14 @@
                                id="address_dt" class="form-control" required></td>
                 </tr>
                 <tr>
-                    <th colspan="2">비밀번호 변경</th>
-                    <td colspan="2">
-
-                        <button type="button" class="btn" id="checkmypwd"
-                                onclick="checkPwd(${user.origin_num})">비밀번호 변경하기</button> 
-                                <input type="hidden" name="pwdState" id="pwdState">
-                        <div id="msgPwd"></div>
-                    </td>
+                   <th>동의</th>
+                   <td><input type="checkbox" name="agree2" id="agree2" value="1" style="margin: auto;color:#1F2229;" checked>&nbsp;마케팅수신동의(선택)
+                   <input type="hidden" name="agree2" id="agree2_hidden" value="0" style="margin: auto;color:#1F2229;"></td>
                 </tr>
-                <tr>
-                    <th colspan="2">비밀번호 입력</th>
-                    <td colspan="2"><input type="password" name="password" id="password"
-                                           class="form-control" readonly></td>
-                </tr>
-                <tr>
-                    <th colspan="2" style="font-family: 'Ubuntu', sans-serif;">비밀번호 확인</th>
-                    <td colspan="2" style="font-family: 'Ubuntu', sans-serif;"><input type="password" name="password2"
-                                           id="password2" class="form-control" readonly></td>
-                </tr>
-
             </table>
             <div class="container text-right">
                 <input type="hidden" id="res" name="res">
                 <button class="btn" id="rewrite" name="rewrite">수정하기</button>
-                <button type="reset" class="btn" id="resetbtn">다시쓰기</button>
             </div>
         </form>
         <!-- 버튼정렬div -->
@@ -111,73 +103,24 @@
 		<jsp:include page="../commons/footer.jsp"/>
 	</footer>
 </body>
+<style>
+  .selectB select {
+    width: 150px;
+    height: 30px;
+    padding-left: 5px;
+    font-size: 15px;
+    border: 1px solid gray;
+    border-radius: 3px;
+    float:right;
+    margin-right:20px;
+    margin-bottom: 0.5rem;
+  }
+</style>
 <script type="text/javascript">
 
-    //비밀번호 변경 체크
-    function checkPwd(origin_num){
-        let str = '<input type="password" id="repwd" name="repwd" class="form-control" onchange="checkp(${user.origin_num},this.value)" placeholder="현재 비밀번호를 입력해주세요">';
-        $('#msgPwd').html(str);
-        document.meF.password.readOnly = true;
-        document.meF.password2.readOnly = true;
-        $('#password').val("");
-        $('#password2').val("");
-        
-    }
-    
-    let cls='';
-    function checkp(origin_num, repwd){
-        $.ajax({
-            type:'get',
-            url:'pwdcheck?origin_num='+origin_num+"&password="+repwd,
-            dataType:'json',
-            cache:false,
-        }).done(function(res){
-            let n = parseInt(res.check);
-            
-            if(n>0){
-            	cls='';
-                cls='text-primary';
-                $('#pwdstate').val(1);
-                document.meF.password.readOnly = false;
-                document.meF.password2.readOnly = false;
-            }else{
-            	cls='';
-                cls='text-danger'
-                $('#pwdstate').val("");
-            }
-            $('#msgPwd').removeClass();
-            $('#msgPwd').text(res.okPwd).addClass(cls);
-
-
-        }).fail(function(err){
-            alert('error: '+err.status);
-
-        })
-    }
-
-   
     $(function () {
         $('#rewrite').on('click', function (e) {
             e.preventDefault();
-            
-            if(cls == 'text-primary'){
-            	if(!meF.password.value == null){
-            		 alert('수정할 비밀번호를 입력해주세요');
-                     meF.password.focus();
-                     return;
-            	}
-            	if (meF.password.value != meF.password2.value) {
-                    alert('비밀번호가 일치하지 않습니다.');
-                    meF.password2.focus();
-                    return;
-                }
-            	if (!meF.password2.value) {
-                    alert('비밀번호를 확인 해주세요');
-                    meF.password2.focus();
-                    return;
-                }
-            
-            }
             	     
             if(!meF.name.value){
             	alert('이름을 입력하세요');
@@ -209,6 +152,10 @@
             	return;
             }
             
+    		if(document.getElementById("agree2").checked){
+    			document.getElementById("agree2_hidden").disabled = true ;
+    		}		
+    		
             meF.submit();
 
         })

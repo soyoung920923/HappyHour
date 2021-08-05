@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myapp.admin.AdminMapper">
+
+	<select id="getUserCount" resultType="int" parameterType="AdminPaging">
+		select count(origin_num) from hh_user
+		<include refid="findWhere"/>
+	</select>
+	
+	<!-- 회원 목록-->
+	<select id="listUser" resultType="User" parameterType="AdminPaging">
+		select * from (select origin_num
+		, row_number() over(order by origin_num desc) RN
+		, id
+		, password
+		, name
+		, address
+		, address_dt
+		, tel
+		, email 
+		, agree1
+		, agree2
+		, user_dt
+		, email_idt
+		, postcode	
+		from hh_user
+		<include refid="findWhere"/>) a
+		<![CDATA[
+   		where a.RN > #{start} and a.RN < #{end}
+   		]]>
+	</select>
+	
+	<sql id="findWhere">
+        <if test="findKeyword != null and findKeyword !=''">
+           <where>
+	           <if test="findType==1"><!-- 이름 -->
+	              NAME LIKE CONCAT('%',#{findKeyword},'%')
+	          </if>
+	          <if test="findType==2"><!-- id -->
+	              ID LIKE CONCAT('%',#{findKeyword},'%')
+	          </if>
+	          <if test="findType==3"><!-- 전화번호 -->
+	              TEL LIKE CONCAT('%',#{findKeyword},'%')
+	          </if>
+	          <if test="findType==4"><!-- 이메일 -->
+	              EMAIL LIKE CONCAT('%',#{findKeyword},'%')
+	          </if>
+           </where>
+        </if>
+    </sql>
+    
+    <update id="deleteUser" parameterType="int">
+		update hh_user set user_dt = 4 where origin_num = #{origin_num}
+	</update>
+	
+	<select id="getUserInfo" resultType="User" parameterType="int">
+	    select * from hh_user where origin_num =#{origin_num}
+	</select>
+	
+	<update id="updateUser" parameterType="User">
+		update hh_user set id=#{id}
+		, name = #{name}
+		, address = #{address}
+		, address_dt = #{address_dt}
+		, tel = #{tel}
+		, email = #{email}
+		, agree2 = #{agree2}
+		, user_dt = #{user_dt}
+		, postcode = #{postcode}
+		where origin_num = #{origin_num}
+	</update>
+
+</mapper>

@@ -22,12 +22,15 @@
 	</header>  
 <body>
 <main>
+<br>
+<br>
 
 <div class="container" style="margin-top: 30px">
+ <div class="m-5 p-3 text-center"
+         style="border: 1px solid gray;border-radius:15px;background-color:white;" id="font2">
+        <h1 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">Q&A</h1>
+        <br>
     <div class="row">
-
-        <div class="col-sm-12 text-center">
-            <h1 class="text-center">건의사항</h1>
 
             <form name="boardF" id="boardF" action="insert" method="post"
                   enctype="multipart/form-data">
@@ -46,9 +49,12 @@
 				<th style="width:20%">첨부파일</th>
 				
 				<td style="width:80%" class="text-left">
+				    <c:if test="${board.origin_filename ne null}">
 					첨부파일1&nbsp;:&nbsp;&nbsp;&nbsp;<c:out value="${board.origin_filename}"/><br>
-					첨부파일2&nbsp;:&nbsp;&nbsp;&nbsp;<c:out value="${board.origin_filename2}"/><br>
-				    <br>
+				    </c:if>
+				    <c:if test="${board.origin_filename2 ne null}">
+					<p style=" margin-bottom: 0.5rem;">첨부파일2&nbsp;:&nbsp;&nbsp;&nbsp;<c:out value="${board.origin_filename2}" /></p>
+					</c:if>
 					<input type="file" name="mfilename" id="filename" placeholder="Attach File" class="form-control">
 					<input type="file" name="mfilename2" id="filename2" placeholder="Attach File" class="form-control">
 				</td>
@@ -63,12 +69,11 @@
                 </table>
                 <div align="center">
                     <button class="btn" id="btnInsert">수정하기</button>
-					<button type="reset" class="btn" id="btnReset">다시쓰기</button>
                 </div>
             </form>
             <div class="container">
                 <h6 class='text-right'>
-                    <button class="btn btn-success" style="width: 100px;"
+                    <button class="btn" style="width: 100px;"
                             name="btnList" id="btnList" onclick="history.back()">돌아가기</button>
                 </h6>
             </div>
