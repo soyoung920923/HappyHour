@@ -30,7 +30,7 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">Q&A</a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <li><a class="dropdown-item" href="${pageContext.request.contextPath}/complain">건의사항</a></li>
+                  <li><a class="dropdown-item" href="${pageContext.request.contextPath}/complain">Q&A</a></li>
                 </ul>
               </li>
               <c:if test="${loginUser eq null}">
@@ -56,6 +56,11 @@
 					</svg> off
 				</span>
               </li>
+            <c:if test="${loginUser.user_dt eq 9}">
+	           <li class="nav-item">
+	              <a class="nav-link" href="${pageContext.request.contextPath}/admin">관리자 페이지</a>
+	           </li>
+            </c:if>
             </ul>
             <a class="navbar-brand" href="/happyhour" id="logo">
             	HAPPY HOUR

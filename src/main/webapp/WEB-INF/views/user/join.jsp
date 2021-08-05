@@ -48,9 +48,11 @@
 		            <form:errors path="id"/>
 		         </span>
 		         
-		     <br><label for="inputPwd" class="sr-only">*비밀번호</label> 
-		             <input type="password" name="password" id="password" class="form-control" placeholder="비밀번호" required autofocus>
-	         <br><label for="inputCheckPwd" class="sr-only">*비밀번호확인</label>
+		     <a style="font-size:13px;">* 비밀번호는 대소문자, 숫자, 특수문자를 세 가지 이상 조합하여 8자 이상 15자 이내로 가능합니다.</a>
+		     <label for="inputPwd" class="sr-only">*비밀번호</label> 
+		     <input type="password" name="password" id="password" class="form-control" placeholder="비밀번호" required autofocus>
+		     <br>
+	         <label for="inputCheckPwd" class="sr-only">*비밀번호확인</label>
 	               <input type="password" name="password2" id="password2" class="form-control" placeholder="비밀번호 확인" required autofocus>
 		      
 		     <br><label for="inputTel" class="sr-only">*연락처</label>
@@ -276,19 +278,26 @@ function doCheck(chk){
 
 
 function joinCheck(){
-		
+	
+	    var passwordck =  /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;	
+
 	    if(!f.name.value){
 			alert('이름을 입력하세요');
 			f.pwd.focus();
 			return;
-		}
-	
+	   }
+	   	    
 	   if(!f.password.value){
 			alert('비밀번호를 입력하세요');
 			f.pwd.focus();
 			return;
 		}
 	   
+	   if(!passwordck.test($("input[id='password']").val())) {
+		   alert('비밀번호를 형식에 맞게 입력해주세요.');
+		    return false;
+		}
+
 		if(f.password.value != f.password2.value){
 			alert('비밀번호가 서로 다릅니다.');
 			f.pwd2.select();
