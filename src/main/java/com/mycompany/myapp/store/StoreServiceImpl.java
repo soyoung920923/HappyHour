@@ -114,8 +114,14 @@ public class StoreServiceImpl implements StoreService{
 		}				
 		return i;
 	}
-	
-	
+
+	@Override
+	public boolean isMyStore(int userIdx, int idx) {
+		// TODO Auto-generated method stub
+		StoreDTO store = storeMapper.getStoreDt(idx);
+		return store.getOrigin() == userIdx;
+	}
+		
 	
 	
 	

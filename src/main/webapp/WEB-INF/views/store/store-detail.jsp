@@ -41,7 +41,7 @@
 				       	<tr>
 				       		<td class="cont-center">
 				       			<ul id="utils-ul">
-				       				<li><i style='font-size:2rem; color: #E30F0C;' class='fas'>&#xf095;</i>&nbsp;&nbsp;전화걸기</li>
+				       				<li onclick='telOrPop("${store.store_Nm}","${store.store_Tel}")'><i style='font-size:2rem; color: #E30F0C;' class='fas'>&#xf095;</i>&nbsp;&nbsp;전화걸기</a></li>
 				       				<li onclick='findLoad()'><i style='font-size:2rem; color: #E30F0C;' class='fas'>&#xf3c5;</i>&nbsp;&nbsp;길찾기</li>
 				       				<li onclick="location.href='<c:url value='/lineup/enroll?store=${store.idx}'/>'"><i style='font-size:2rem; color: #E30F0C;' class='fas'>&#xf274;</i>&nbsp;&nbsp;줄서기/예약</li>
 				       			</ul>
@@ -137,12 +137,35 @@
 	const longitude = '${store.longitude}';
 	
 	
+	var url = "";
+	var myLong = "";
+	var myLati = "";
 	function findLoad(){
-		var url = "https://map.kakao.com/link/to/"+name+","+longitude+","+latitude;
+		if ('${myPoint}' != null && '${myPoint}' != '') {
+			myLong = '${myPoint.lon}';
+			myLati = '${myPoint.lat}';
+			goNaverMap();
+		}else{
+			askMyPointOn();
+			myLong = '${myPoint.lon}';
+			myLati = '${myPoint.lat}';
+			goNaverMap();
+		}
+		
+		
+	}
+	function goNaverMap(){
+		console.log("내위치:	"+myLong+"	/	"+myLati);
+		console.log("목적지:	"+latitude+"	/	"+longitude);
+		if (isMobile()) {				
+			url = "http://m.map.naver.com/route.nhn?menu=route&sname=내위치&sx="+myLong+"&sy="+myLati+"&ename="+name+"&ex="+longitude+"&ey="+latitude+"&pathType=0&showMap=true";
+		}else{
+			url = "http://map.naver.com/index.nhn?slng="+myLong+"&slat="+myLati+"&stext=내위치&elng="+longitude+"&elat="+latitude+"&etext="+name+"&menu=route&pathType=1";
+		}
 		console.log(url);
-		// 모바일(앱) -> var url2 = "kakaomap://route?sp=37.537229,127.005515&ep="+longitude+","+latitude+"&by=CAR"
 		location.href = url;
 	}
+	
 	
 	var searchAddress = '${store.store_Address}';
 	searchAddress = searchAddress.substring(searchAddress.indexOf("|")+1);
@@ -184,7 +207,19 @@
 	        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
 	        map.setCenter(coords);
 	    } 
-	});     
+	});  
+	
+	function telOrPop(nm, tel){
+		if (isMobile()) {
+			document.location.href = "tel:"+tel;
+		}else{
+			alert("'"+nm+"'의 전화번호는 "+tel+"'입니다.");
+		}
+	}
+	
+	function isMobile() {
+	    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+	}
 </script>
 </body>
 

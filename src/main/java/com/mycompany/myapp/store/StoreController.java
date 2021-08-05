@@ -43,18 +43,45 @@ public class StoreController {
 
 	@RequestMapping(value = {"/list", "/list/{path}"})
 	public String list(Model model, @PathVariable(name="path", required = false) String path, 
-			@RequestParam(name="search", required = false) String search, HttpSession session) {
+			@RequestParam(name="search", required = false) String search, 
+			@RequestParam(name="business", required = false) String business, HttpSession session) {
 
 		logger.info("store list", model);
 		System.out.println("store list");
 		
+		String rt = "/store/store-list";
+		String msg = "";
+		
+		int userIdx = 0;
+		UserDTO user = commonUtil.getUser(session);
+		if (user != null) {
+			model.addAttribute("userIdx", user.getOrigin_num());
+			userIdx = user.getOrigin_num();
+		}
+		
 		SearchParam param = new SearchParam();
 		
-		@SuppressWarnings("unchecked")
-		Map<String, String> myPoint = (Map<String, String>) session.getAttribute("myPoint");
-		if (myPoint != null && !myPoint.isEmpty()) {			
-			param.setMyLat(myPoint.get("lat"));
-			param.setMyLon(myPoint.get("lon"));
+		boolean isBusiness = (business != null && business != "");
+		
+		// 식당 관리 메뉴로 접근했을 때는 위치 정보를 셋팅하지 않는다.
+		if (!isBusiness) {			
+			@SuppressWarnings("unchecked")
+			Map<String, String> myPoint = (Map<String, String>) session.getAttribute("myPoint");
+			if (myPoint != null && !myPoint.isEmpty()) {			
+				param.setMyLat(myPoint.get("lat"));
+				param.setMyLon(myPoint.get("lon"));
+			}
+		}else {
+			if (user != null && user.getUser_dt().equals("2")) {				
+				param.setIdx(userIdx);
+				rt = "/store/store-business";
+			}else if(user != null && !user.getUser_dt().equals("2")){
+				msg = "잘못된 접근입니다.";
+				rt = commonUtil.addMsgBack(model, msg);
+			}else {
+				msg = "로그인 후 이용해주세요.";
+				rt = commonUtil.addMsgLoc(model, msg, "/happyhour/login");
+			}
 		}
 		
 		if (search != null && search != "") {
@@ -79,7 +106,7 @@ public class StoreController {
 		model.addAttribute("total", total);
 		model.addAttribute("list", list);
 		
-		return "/store/store-list";
+		return rt;
 	}
 
 	@RequestMapping(value = "/detail", method = RequestMethod.GET)
@@ -96,23 +123,49 @@ public class StoreController {
 	}
 
 	@RequestMapping(value = "/enroll", method = RequestMethod.GET)
-	public String enroll(Model model, @RequestParam(name="idx", required = false) String idx) {
+	public String enroll(Model model, @RequestParam(name="idx", required = false) String idx, HttpSession session) {
 
 		logger.info("store enroll", model);
 		System.out.println("store enroll");
 		
-		List<String> timeSet = commonUtil.timeSet();
-		model.addAttribute("timeSet", timeSet);
+		String rt = "";
+		String msg = "";
 		
-		if (idx != null && idx != "") {
-			/*
-			 * 수정페이지
-			 * */
-			StoreDTO store = storeService.getStoreDt(Integer.parseInt(idx));
-			model.addAttribute("store", store);
+		UserDTO user = commonUtil.getUser(session);
+		int userIdx = 0;
+		String userDt = "";
+		if (user != null) {
+			model.addAttribute("userIdx", user.getOrigin_num());
+			userIdx = user.getOrigin_num();
+			userDt = user.getUser_dt();
+			if (!"2".equals(userDt)) {
+				msg = "잘못된 접근입니다.";
+				rt = commonUtil.addMsgBack(model, msg);
+			}else {
+				List<String> timeSet = commonUtil.timeSet();
+				model.addAttribute("timeSet", timeSet);				
+				if (idx != null && idx != "") {
+					/*수정페이지*/
+					StoreDTO store = storeService.getStoreDt(Integer.parseInt(idx));
+					if (store.getOrigin() != Integer.parseInt(userDt)) {
+						msg = "잘못된 접근입니다.";
+						rt = commonUtil.addMsgBack(model, msg);
+					}else {					
+						model.addAttribute("store", store);
+						rt = "/store/store-enroll";
+					}
+				}else {
+					/*등록페이지*/
+					rt = "/store/store-enroll";
+				}						
+			}
+		}else {
+			msg = "로그인 후 이용해주세요.";
+			rt = commonUtil.addMsgLoc(model, msg, "/happyhour/login"); 
 		}
-
-		return "/store/store-enroll";
+		
+		
+		return rt;
 	}
 
 	@RequestMapping(value = "/enroll", method = RequestMethod.POST)
@@ -122,47 +175,69 @@ public class StoreController {
 		System.out.println("store enroll - action");
 
 		MultipartHttpServletRequest req = (MultipartHttpServletRequest) request;
-		if (session.getAttribute("loginUser") != null) {
-			UserDTO user = (UserDTO) session.getAttribute("loginUser");
+		
+		String msg = "";
+		String rt = "";
+		
+		UserDTO user = commonUtil.getUser(session);
+
+		if (user != null) {
 			store.setOrigin(user.getOrigin_num());
 			store.setRegist_Id(user.getId());
 			store.setUpdate_Id(user.getId());
-		}
-
-		String msg = "";
-
-		int result = 0;
-		if (store.getIdx() == 0) {
-			/*
-			 * 등록*/
-			msg = "등록";
+			int result = 0;
+			if (store.getIdx() == 0) {
+				msg = "등록";
+			}else {
+				msg = "수정";
+			}
+			result = storeService.enrollStore(store, req, msg);			
+			if (result == 0) {
+				msg = msg+" 실패";
+				rt = commonUtil.addMsgBack(model, msg);
+			} else {
+				msg = msg+" 성공";
+				rt = commonUtil.addMsgLoc(model, msg, "/happyhour/store/list");
+			}
 		}else {
-			/*
-			 * 수정*/
-			msg = "수정";
+			msg = "로그인 후 이용해주세요.";
+			rt = commonUtil.addMsgLoc(model, msg, "/happyhour/login");
 		}
-		result = storeService.enrollStore(store, req, msg);
 
-		if (result == 0) {
-			msg = msg+" 실패";
-		} else {
-			msg = msg+" 성공";
-		}
+
 		
-		return commonUtil.addMsgLoc(model, msg, "/happyhour/store/list");
+		return rt;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/getMoreList", method = RequestMethod.POST)
 	public Map<String, Object> moreList(Model model, HttpServletRequest req, HttpServletResponse res, HttpSession session) {
 		
-		SearchParam param = new SearchParam();
-		@SuppressWarnings("unchecked")
-		Map<String, String> myPoint = (Map<String, String>) session.getAttribute("myPoint");
-		if (myPoint != null && !myPoint.isEmpty()) {			
-			param.setMyLat(myPoint.get("lat"));
-			param.setMyLon(myPoint.get("lon"));
+		int userIdx = 0;
+		UserDTO user = commonUtil.getUser(session);
+		if (user != null) {
+			model.addAttribute("userIdx", user.getOrigin_num());
+			userIdx = user.getOrigin_num();
 		}
+		
+		SearchParam param = new SearchParam();
+		
+		boolean isBusiness = (req.getParameter("business") != null && req.getParameter("business") != "");
+		
+		// 식당 관리 메뉴로 접근했을 때는 위치 정보를 셋팅하지 않는다.
+		if (!isBusiness) {			
+			@SuppressWarnings("unchecked")
+			Map<String, String> myPoint = (Map<String, String>) session.getAttribute("myPoint");
+			if (myPoint != null && !myPoint.isEmpty()) {			
+				param.setMyLat(myPoint.get("lat"));
+				param.setMyLon(myPoint.get("lon"));
+			}
+		}else {
+			if (user != null && user.getUser_dt().equals("2")) {				
+				param.setIdx(userIdx);
+			}
+		}
+		
 		param.setStartCount(Integer.parseInt(req.getParameter("startCount")));
 		param.setEndCount(Integer.parseInt(req.getParameter("startCount"))+Integer.parseInt(req.getParameter("viewCount")));
 		//param.setViewCount(Integer.parseInt(req.getParameter("viewCount")));
@@ -189,15 +264,36 @@ public class StoreController {
 	}
 	
 	@RequestMapping(value = "/deleteStore", method = RequestMethod.POST)
-	public String deleteStore(Model model, HttpServletRequest request, @ModelAttribute(value = "store") StoreDTO store) {
+	public String deleteStore(Model model, HttpServletRequest request, @ModelAttribute(value = "store") StoreDTO store, HttpSession session) {
 		MultipartHttpServletRequest req = (MultipartHttpServletRequest) request;
-		int idx = store.getIdx();
-		int result = storeService.deleteStore(req, idx);
-		if (result == 0) {
-			return commonUtil.addMsgBack(model, "삭제 실패");
-		}else {			
-			return commonUtil.addMsgLoc(model, "삭제 성공", "/happyhour/store/list");		
+		String rt = "";
+		String msg = "";
+		int userIdx = 0;
+		UserDTO user = commonUtil.getUser(session);
+		if (user != null) {
+			model.addAttribute("userIdx", user.getOrigin_num());
+			userIdx = user.getOrigin_num();
+			int idx = store.getIdx();
+			boolean isMyStore = storeService.isMyStore(userIdx, idx);
+			if (isMyStore) {		
+				int result = storeService.deleteStore(req, idx);
+				if (result == 0) {
+					msg = "삭제 실패";
+					rt = commonUtil.addMsgBack(model, msg);
+				}else {		
+					msg = "삭제 성공";
+					rt = commonUtil.addMsgLoc(model, msg, "/happyhour/store/list");		
+				}
+			}else {
+				msg = "잘못된 접근입니다.";
+				rt = commonUtil.addMsgBack(model, msg);
+			}
+		}else {
+			msg = "로그인 후 이용해주세요.";
+			rt = commonUtil.addMsgLoc(model, msg, "/happyhour/login");
 		}
+		
+		return rt;
 	}
 
 }

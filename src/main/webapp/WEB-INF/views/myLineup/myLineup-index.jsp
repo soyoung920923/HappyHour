@@ -17,12 +17,12 @@
 	<main>
 		<br><br><br>
 		<div class="in list-in" >
-			<a href="<c:url value='/lineup/list/1?userIdx=${userIdx}&myOrStore=myPage'/>">
+			<a href="<c:url value='/lineup/list/1?myOrStore=myPage'/>">
 				<div class="card align-middle list-card lineup-visit-btn lineup-index-btn">
 					내 줄서기
 				</div>
 			</a>
-			<a href="<c:url value='/lineup/list/2?userIdx=${userIdx}&myOrStore=myPage'/>">
+			<a href="<c:url value='/lineup/list/2?myOrStore=myPage'/>">
 				<div class="card align-middle list-card lineup-visit-btn lineup-index-btn">
 					내 예약
 				</div>
@@ -62,8 +62,10 @@
 	
 <script type="text/javascript">
 	$(function(){
-		
-		
+		$('#bottom-nav3').css('display','block');
+		$('#fixed-box-top').css('bottom','5.5%');
+		$('.bottom-nav-li3').removeClass('on');
+  		$('.bottom-nav-li3').eq(1).addClass('on');
 	});
 	
 </script>

@@ -18,6 +18,14 @@
 			<br><br><br>
 			<h2 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">Bnner List</h2>
 			<br>
+			<!-- 배너 추가 -->
+			<div class="in list-in" >
+				<a href="<c:url value='/banner/enroll'/>">
+					<div class="card align-middle list-card photo banner-plus">
+						+
+					</div>
+				</a>
+			</div>
 			<c:forEach items="${banners}" var="banner">
 				<!-- 리스트 한 개 시작 -->			
 				<div class="in list-in">
@@ -32,14 +40,7 @@
 			</c:forEach>
 			
 			
-			<!-- 배너 추가 -->
-			<div class="in list-in" >
-				<a href="<c:url value='/banner/enroll'/>">
-					<div class="card align-middle list-card photo banner-plus">
-						+
-					</div>
-				</a>
-			</div>
+			
 			
 	</main>
 	

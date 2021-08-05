@@ -45,9 +45,16 @@
 								</div>
 							</c:when>
 							<c:otherwise>
-								<input type="file" name="file" id="file" class="form-control" ><br>
+								<input type="file" name="file" id="file" class="form-control"/><br>
 							</c:otherwise>
 						</c:choose>
+						<div id="preview-frame">
+							<img id="preview" />
+							<div id="preview-caption">
+								<h5 id="preview-caption-h5"></h5>
+								<p id="preview-caption-p"></p>
+							</div>
+						</div>
 						<label class="sy-only">*캡션사용</label><br>
 						<div id="chk-wrap">
 					    	<input type="radio" name="caption_yn" class="storeIdt" value="1" class="inputName" <c:if test="${banner.caption_yn eq '1'}"> checked </c:if> />&nbsp;사용&nbsp;&nbsp;
@@ -60,10 +67,11 @@
 							<input type="text" name="banner_contents" id="banner_contents" class="form-control" value="${banner.banner_contents}"/>		
 							<label class="sy-only">*위치</label><br>
 							<div id="chk-wrap">
-						    	<input type="radio" name="banner_caption" class="storeIdt banner_caption" value="0" class="inputName" <c:if test="${banner.banner_caption eq '0'}"> checked </c:if>/>&nbsp;가운데&nbsp;&nbsp;
+						    	<input type="radio" name="banner_caption" class="storeIdt banner_caption" value="0" class="inputName" checked <c:if test="${banner.banner_caption eq '0'}"> checked </c:if>/>&nbsp;가운데&nbsp;&nbsp;
 							    <input type="radio" name="banner_caption" class="storeIdt banner_caption" value="1" class="inputName" <c:if test="${banner.banner_caption eq '1'}"> checked </c:if>/>&nbsp;왼쪽&nbsp;&nbsp;
 							    <input type="radio" name="banner_caption" class="storeIdt banner_caption" value="2" class="inputName" <c:if test="${banner.banner_caption eq '2'}"> checked </c:if>/>&nbsp;오른쪽&nbsp;&nbsp;
 						    </div>
+						    
 					    </div>				        
 					    <label class="sy-only">연결링크</label><br>
 						<input type="text" name="banner_link" id="banner_link" class="form-control" value="${banner.banner_link}"><br>
@@ -95,6 +103,23 @@
 </body>
 <style>
 	#yesCaption{height: 0; overflow: hidden;}
+	#preview-frame{
+		width: 100%; height: 0; overflow: hidden;
+		position: relative;
+		
+	}
+	#preview{width: 100%; object-fit:cover; height: 13rem;}
+	#preview-caption{
+		position: absolute;
+		bottom: 5%;
+		left: 50%;
+		transform: translateX(-50%);
+		text-align: center;
+		color: #fff;
+		display: none;
+	}
+	#preview-caption-h5{margin-bottom: 0;}
+	
 </style>
 <script type="text/javascript">
 $(function(){
@@ -126,12 +151,24 @@ $(function(){
 		}
 	});
 	
+	var subj = "";
+	var conts = "";
+	$('input[name="banner_caption"]').change(function(){
+		previewWhere();
+	});
+	
+	
+	
 	$(document).on('change', "input[name='file']" ,function() {
 		var chkFileName = $(this).val();
 		chkFileName = chkFileName.split('.').pop().toLowerCase();
 		if ($.inArray(chkFileName, ['hwp','pdf', 'xls', 'zip', 'pptx', 'xlsx','doc']) > -1) {
 			alert("이미지 형식의 파일만 업로드 가능합니다.");
 			$(this).val("");
+		}else{
+			$('#preview-frame').css('height','13rem');
+			$('#preview-frame').css('margin-bottom','1rem');
+			readURL(this);			
 		}
 	});
 	
@@ -147,11 +184,29 @@ $(function(){
 		}else{
 			$('#banner_subject').val("");
 			$('#banner_contents').val("");
-			$('.banner_caption').val("");
+			$("input[name='banner_caption']").eq(0).prop('checked',true);
+			$('#preview-caption-h5').text("");
+			$('#preview-caption-p').text("");
 			$('#yesCaption').animate({
 				height: '-=200'
 			}, 200);
 		}
+	});
+	
+	$('input[name="banner_subject"]').on('input', function(event) {
+		event.stopPropagation();
+		event.preventDefault();
+		subj =  $(this).val();
+		$('#preview-caption-h5').text(subj);
+		previewWhere();
+	});
+	
+	$('input[name="banner_contents"]').on('input', function(event) {
+		event.stopPropagation();
+		event.preventDefault();
+		conts =  $(this).val();
+    	$('#preview-caption-p').text(conts);
+    	previewWhere();
 	});
 	
 	$('#change-img').click(function(){
@@ -190,9 +245,7 @@ $(function(){
 			
 		     
 		    if (isCap == 1) {
-		    	var subj = $('#banner_subject').val();
-		    	var conts = $('#banner_contents').val();
-		    	
+		    		    	
 				if ((subj == null && conts == null) || (subj == '' && conts == '')) {
 					alert('캡션의 제목과 내용 중 한가지는 입력하여야 합니다');
 					$('#banner_subject').focus();
@@ -213,7 +266,37 @@ $(function(){
 	   	
 	   $('#f').submit();
 	}
+	
 
+	function readURL(input) {
+		  if (input.files && input.files[0]) {
+		    var reader = new FileReader();
+		    reader.onload = function(e) {
+		      document.getElementById('preview').src = e.target.result;
+		    };
+		    reader.readAsDataURL(input.files[0]);
+		  } else {
+		    document.getElementById('preview').src = "";
+		  }
+	}
+	
+	function previewWhere(){
+		var cap = $('input[name="banner_caption"]:checked').val();
+		$('#preview-caption').show();
+    	if (cap == '0') {
+			$('#preview-caption').css('text-align','center');
+			$('#preview-caption').css('left','50%');
+			$('#preview-caption').css('transform','translateX(-50%)');
+		}else if(cap == '1'){
+			$('#preview-caption').css('text-align','left');
+			$('#preview-caption').css('left','15%');
+			$('#preview-caption').css('transform','translateX(0%)');
+		}else{
+			$('#preview-caption').css('text-align','right');
+			$('#preview-caption').css('right','15%');
+			$('#preview-caption').css('transform','translateX(0%)');
+		}
+	}
 });
 
 

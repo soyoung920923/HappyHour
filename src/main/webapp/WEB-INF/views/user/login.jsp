@@ -124,6 +124,28 @@
 		return unescape(cookieValue);
 	}
 
+
+/* 	window.Kakao.init('ba0ed2d064b8fe054898b59b89e74bf9');
+	
+	function kakaoLogin() {
+		window.Kakao.Auth.login({ 
+		    success: function(response) {
+		    	console.log(response)
+		        window.Kakao.API.request({
+		           url: '/v2/user/me', 
+		           success: (res) => {
+		    	      const kakao_account = res.kakao_account;
+		    	      console.log(kakao_account)
+		    } 
+		    }); 
+		    	window.location.href='http://localhost:8090/happyhour/' 
+		    }, 
+		    fail: function(error) { 
+		    	console.log(error); 
+		    }
+		   });
+	} 
+	 */
 </script>
 
 </body>

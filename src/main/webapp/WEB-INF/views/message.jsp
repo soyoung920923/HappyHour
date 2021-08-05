@@ -5,5 +5,10 @@
 	if (msg != null && msg != '') {		
 		alert(msg);
 	}
-	location.href='${loc}';
+	var loc = '${loc}';
+	if (loc != null && loc != '') {
+		location.href=loc;
+	}else{
+		window.close();
+	}
 </script>

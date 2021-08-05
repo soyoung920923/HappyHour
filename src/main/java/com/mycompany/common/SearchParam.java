@@ -15,8 +15,8 @@ public class SearchParam {
 	private String myLon;
 	private String today;
 	private String todayEnd;
-	private int store;
-	private int idx;
+	private int store = 0;
+	private int idx = 0;
 	private String past;
 	
 	

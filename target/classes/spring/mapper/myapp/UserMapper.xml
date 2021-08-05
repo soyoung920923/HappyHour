@@ -66,7 +66,6 @@
 		select * from hh_user where origin_num = #{origin_num}
 	</select>
 	
-	<!-- 회원 탈퇴 -->
 	<update id="leaveMember" parameterType="int">
 		update hh_user set user_dt = 4 where origin_num = #{origin_num}
 	</update>

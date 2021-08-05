@@ -213,7 +213,7 @@ public class BoardController {
 	}
 
 	// 글 수정
-	@RequestMapping(value = "/compalinEdit", method = RequestMethod.POST)
+	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	public String complainEdit(Model model, HttpServletRequest req) {
 		int num = Integer.parseInt(req.getParameter("num"));
 		if (num == 0) {
@@ -383,6 +383,7 @@ public class BoardController {
 	public List<CommentDTO> getReplyList(@RequestParam("num") int num) throws Exception {
 
 		return boardService.selectCommentAll(num);
+
 	}
 	
 	@ResponseBody

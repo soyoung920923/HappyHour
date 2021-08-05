@@ -18,4 +18,6 @@ public interface StoreService {
 
 	int deleteStore(MultipartHttpServletRequest req, int idx);
 
+	boolean isMyStore(int userIdx, int idx);
+
 }

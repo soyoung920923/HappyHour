@@ -22,6 +22,12 @@ public interface LineupMapper {
 
 	LineupDTO nowTeam(Map<String, Object> param);
 
-	int updateSmsId(LineupDTO lineup);	
+	int updateSmsId(LineupDTO lineup);
+
+	Map<String, Object> isMyLineup(int idx);
+
+	Map<String, Object> getStoreUser(int idx);
+
+	int oneclick(int idx, int approval);	
 
 }

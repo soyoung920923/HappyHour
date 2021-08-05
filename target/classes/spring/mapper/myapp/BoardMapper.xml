@@ -126,7 +126,6 @@
 		        , filename
 		        , hits
 		        , name
-		        , id
 		        , refer
 		        , level
 		        , sunbun

@@ -26,11 +26,10 @@
 <br>
 
 <div class="container" style="margin-top: 30px">
-<div class="m-5 p-3 text-center"
-         style="border: 1px solid gray;border-radius:15px;background-color:white;" id="font2">
-        <h1 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">Q&A</h1>
-        <br>
     <div class="row">
+
+        <div class="col-sm-12 text-center">
+            <h1 class="text-center">건의사항</h1>
 
             <form name="boardF" id="boardF" action="insert" method="post"
                   enctype="multipart/form-data">
@@ -60,20 +59,21 @@
                     </tr>
                 </table>
                 <div align="center">
-                   <button class="btn" id="btnInsert">글쓰기</button>       
+                   <button class="btn" id="btnInsert">글쓰기</button>
+                   <button type="reset" class="btn" id="btnReset">다시쓰기</button>
                 </div>
             </form>
             <div class="container">
                 <h6 class='text-right'>
-                    <button class="btn" style="width: 100px;"
+                    <button class="btn btn-success" style="width: 100px;"
                             name="btnList" id="btnList" onclick="history.back()">목록</button>
                 </h6>
 
             </div>
 
         </div>
-      </div>
-   </div>
+    </div>
+</div>
 </main>
 	 <footer>
 		<jsp:include page="../commons/footer.jsp"/>

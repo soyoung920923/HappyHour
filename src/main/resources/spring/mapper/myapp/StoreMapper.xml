@@ -32,6 +32,9 @@
 		  s.BREAK_END
 		FROM HH_STORE s, (select @rownum := 0) tmp
 		WHERE 1=1
+		<if test="idx != null and idx != '' and idx != 0">
+			AND s.ORIGIN = #{idx}
+		</if>
 		<if test="path != null and path != '' and path != 0">
 			AND s.STORE_IDT = #{path}
 		</if>
@@ -58,6 +61,9 @@
 		<if test="myLat != null and myLat != '' and myLon != null and myLon != ''">
 			AND (ST_DISTANCE_SPHERE(POINT(#{myLon}, #{myLat}), STORE_POINT) <![CDATA[<]]> 5000 
 					OR ST_DISTANCE_SPHERE(POINT(#{myLon}, #{myLat}), STORE_POINT) <![CDATA[=]]> 5000)
+		</if>
+		<if test="idx != null and idx != '' and idx != 0">
+			AND ORIGIN = #{idx}
 		</if>
 	</select>
 	
@@ -130,7 +136,7 @@
 		  #{update_Id},
 		  #{latitude},
 		  #{longitude},
-		  ST_GeomFromText(<trim prefix="'Point(" suffix=")'">${latitude} ${longitude}</trim>),
+		  ST_GeomFromText(<trim prefix="'Point(" suffix=")'">${longitude} ${latitude}</trim>),
 		  #{store_open},
 		  #{store_close},
 		  #{store_break},
@@ -189,7 +195,7 @@
 		  UPDATE_ID =#{update_Id},
 		  LATITUDE =#{latitude},
 		  LONGITUDE =#{longitude},
-		  STORE_POINT = ST_GeomFromText(<trim prefix="'Point(" suffix=")'">${latitude} ${longitude}</trim>),
+		  STORE_POINT = ST_GeomFromText(<trim prefix="'Point(" suffix=")'">${longitude} ${latitude}</trim>),
 		  STORE_OPEN = #{store_open},
 		  STORE_CLOSE = #{store_close},
 		  STORE_BREAK = #{store_break},

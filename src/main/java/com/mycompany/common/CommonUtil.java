@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.mycompany.myapp.HomeController;
+import com.mycompany.myapp.user.UserDTO;
 
 @Component
 public class CommonUtil {
@@ -175,6 +178,15 @@ public class CommonUtil {
 				}
 			}
 			return timeSet;
+		}
+
+		public UserDTO getUser(HttpSession session) {
+			// TODO Auto-generated method stub
+			UserDTO user = null;
+			if (session.getAttribute("loginUser") != null) {
+				user = (UserDTO) session.getAttribute("loginUser");
+			}
+			return user;
 		}
 		
 		

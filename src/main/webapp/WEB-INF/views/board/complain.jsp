@@ -7,7 +7,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-
 <title>HAPPY HOUR</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -25,10 +24,10 @@
 <c:set var="myctx" value="${pageContext.request.contextPath}"/>
 
 <div class="container" style="margin-top: 30px">
-	<div class="m-5 p-3 text-center"
-         style="border: 1px solid gray;border-radius:15px;background-color:white;" id="font2">
-        <h1 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">Q&A</h1>
-        <br>
+	<div class="row">
+
+		<div class="col-sm-9 text-center">
+			<h1 class="text-center m-4">건의사항</h1>
 			<div class="row">
 				<div class="col-md-9">
 					<!-- 검색폼------------------------------------- -->
@@ -49,7 +48,7 @@
 			</div>
 
 			<table class="table table-hover" id="bbs">
-				<tr style="font-weight:bold;">
+				<tr class="table-secondary">
 					<th width="10%">글번호</th>
 					<th width="40%">제 목</th>
 					<th width="20%">작성자</th>
@@ -85,7 +84,7 @@
 					</c:forEach>
 				</c:if>	
 			  </table>
-				    <div class="container" style="padding-top: 30px;" id="paging">
+				    <div align="center">
 						${pageNavi}
 				    </div>
 			  <div align="right">
@@ -94,6 +93,7 @@
 
 				</div>
 	</div>
+</div>
 
   
 
@@ -102,36 +102,23 @@
 		<jsp:include page="../commons/footer.jsp"/>
 	</footer>
 </body>
-<style>
-#bbs th{
- font-family: 'Ubuntu', sans-serif;
- font-size: 0.9rem;
- font-weight: bolder;
-}
 
-.page-item.active .page-link {
- color:white;
- background:#E30F0C;
- border-color:#E30F0C;
-}
-</style>
-<script type="text/javascript">
-	$(function() {
-		$('#findF').on('submit', function() {
-			var $type = $('#findType');
-			var $keyword = $('#findKeyword');
-			if ($type.val() == 0) {
-				alert('검색 유형을 선택하세요');
-				$type.focus();
-				return false;
-			}
-			if (!$keyword.val()) {
-				alert('검색어를 입력하세요');
-				$keyword.focus();
-				return false;
-			}
-			return true;
+	<script type="text/javascript">
+		$(function() {
+			$('#findF').on('submit', function() {
+				var $type = $('#findType');
+				var $keyword = $('#findKeyword');
+				if ($type.val() == 0) {
+					alert('검색 유형을 선택하세요');
+					$type.focus();
+					return false;
+				}
+				if (!$keyword.val()) {
+					alert('검색어를 입력하세요');
+					$keyword.focus();
+					return false;
+				}
+				return true;
+			})
 		})
-	})
-</script>
-</html>
+	</script>

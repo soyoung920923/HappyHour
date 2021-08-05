@@ -19,7 +19,6 @@
 	     <typeAlias type="com.mycompany.common.SearchParam" alias="Param"/>
 	     <typeAlias type="com.mycompany.myapp.banner.BannerDTO" alias="Banner"/>
 	     <typeAlias type="com.mycompany.myapp.lineup.LineupDTO" alias="Lineup"/>
-	     <typeAlias type="com.mycompany.myapp.admin.AdminPagingDTO" alias="AdminPaging"/>
 
 	</typeAliases>
 		
@@ -30,7 +29,6 @@
 		 <mapper resource="spring/mapper/myapp/StoreMapper.xml" />
 		 <mapper resource="spring/mapper/myapp/BannerMapper.xml" />
 		 <mapper resource="spring/mapper/myapp/LineupMapper.xml" />
-		 <mapper resource="spring/mapper/myapp/AdminMapper.xml" />
 	</mappers>
 	
 </configuration>

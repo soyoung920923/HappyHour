@@ -16,12 +16,24 @@
 	
 	<main>
 			<br><br><br>
+			<h2 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">My Store List</h2>
+			<br>
+			<!-- 배너 추가 -->
+			<div class="in list-in" >
+				<a href="<c:url value='/store/enroll'/>">
+					<div class="card align-middle list-card photo banner-plus store-plus">
+						+
+					</div>
+				</a>
+			</div>
 			<form id="searchList" name="searchList">
 				<input type="hidden" id="startCount" name="startCount" value="0"/>
 				<input type="hidden" id="viewCount" name="viewCount" value="0"/>
 				<input type="hidden" id="totalCount" name="totalCount" value="${total}"/>
 				<input type="hidden" id="path" name="path" value="${path}"/>
 				<input type="hidden" id="search" name="search" value="${search}"/>
+				<input type="hidden" id="userIdx" name="userIdx" value="${userIdx}"/>
+				<input type="hidden" id="business" name="business" value="business"/>
 			</form>
 			<table style="margin: 0 auto; width: 100%;" id="store-list">
 				<c:if test="${total > 0}">
@@ -33,35 +45,21 @@
 								    <div class="card align-middle list-card">
 								        <div class="card-body">				       
 									       <ul class="list-ul">
-									       	<li class="list-li-img"><a href="<c:url value='/store/detail?idx=${list.idx}'/>"><div class="list-img-thum"><img alt="" src="<c:url value='${list.PATH}${list.store_Img_Oid}'/>"></div></a></li>
+									       	<li class="list-li-img"><a href="<c:url value='/store/enroll?idx=${list.idx}'/>"><div class="list-img-thum"><img alt="" src="<c:url value='${list.PATH}${list.store_Img_Oid}'/>"></div></a></li>
 									       	<li class="list-li-contents">
-									       		<h6 class="list-title"><a href="<c:url value='/store/detail?idx=${list.idx}'/>"><span class="list-category">${list.category}</span>&nbsp;&nbsp;&nbsp;${list.store_Nm}</a></h6>
-									       		<p class="list-cont">${list.store_open} ~ ${list.store_close}
-									       			<c:choose>
-											       		<c:when test="${list.store_break eq 0}">(브레이크타임 없음)</c:when>
-											       		<c:otherwise><br>break ${list.break_start} ~ ${list.break_end}</c:otherwise>
-											       	</c:choose>
+									       		<h6 class="list-title"><a href="<c:url value='/store/enroll?idx=${list.idx}'/>"><span class="list-category">${list.category}</span>&nbsp;&nbsp;&nbsp;${list.store_Nm}</a></h6>
+									       		<p class="list-cont">
+									       			<a href="/happyhour/lineup/list/1?store=${list.idx}&myOrStore=store"><input type="button" class="btn-btn btn form-contol modi-btn" value="줄서기 현황"/></a>
+									       			<a href="/happyhour/lineup/list/2?store=${list.idx}&myOrStore=store"><input type="button" class="btn-btn btn form-contol modi-btn" value="예약관리"/></a>
 									       		</p>
 									       		<%-- <p class="list-cont">${list.store_Info}</p> --%>
 									       	</li>
 									       	<li class="list-li-hit">
-									       		<i style='font-size:1.3rem' class='fa open-utils'>&#xf141;</i><br>
 									       		<i style='font-size:1.3rem' class='far'>&#xf0a6;</i> ${list.hit_Count}
 									       	</li>
 									       </ul> 				               
 								        </div>   
 								    </div>
-								    <div class="utils">
-								        	<div class="util">
-									        	<i onclick="telOrPop('${list.store_Nm}','${list.store_Tel}')" style='font-size:24px; color: #FFF;' class='fas'>&#xf095;</i>
-								        	</div>
-								        	<div class="util">
-									        	<i onclick="findLoad('${list.store_Nm}','${list.longitude}','${list.latitude}');" style='font-size:24px; color: #FFF;' class='fas'>&#xf3c5;</i>
-								        	</div>
-								        	<div class="util">
-									        	<i onclick="location.href='<c:url value='/lineup/enroll?store=${list.idx}'/>'" style='font-size:24px; color: #FFF;' class='fas'>&#xf274;</i>
-								        	</div>
-								        </div>
 								</div>
 								<!-- 리스트 한 개 끝 -->
 							</td>
@@ -92,17 +90,22 @@
 	<%--  <footer>
 		<jsp:include page="../commons/footer.jsp"/>
 	</footer> --%>
-	
+<style>
+.store-plus{height: 197px;}
+	.list-li-contents {
+    padding-bottom: 0rem;}
+	.modi-btn{width: 100%; background-color: #FFAB2F; color: #fff; height: 42px; font-size: 1.2rem;}
+	.modi-btn:hover{background-color: #E30F0C;}
+
+</style>	
 <script type="text/javascript">
-		
 	$(function(){
 		
 		var ii = 0;
-		$('#bottom-nav').css('display','block');
-		$('.bottom-nav-arrow').css('display','block');
+		$('#bottom-nav3').css('display','block');
 		$('#fixed-box-top').css('bottom','5.5%');
-		
-		
+		$('.bottom-nav-li3').removeClass('on');
+  		$('.bottom-nav-li3').eq(2).addClass('on');
 
 		$('#moreList').click(function(){
 			moreList('store-list',5);
@@ -146,22 +149,13 @@
 			for (var i = 0; i < resultList.length; i++) {
 				var list = resultList[i];
 				var imgPath = "/happyImage/"+list.store_Img_Oid;
-				var _choose = list.store_open+" ~ "+list.store_close;
-				if (list.store_break == 0) {
-					
-				}else{
-					_choose = _choose+"<br>break "+list.break_start+" ~ "+list.break_end;
-				}
-				var enrollUrl = "/happyhour/lineup/enroll?store="+list.idx;
 				
 				_html += "<tr><td><div class='in list-in'><div class='card align-middle list-card'><div class='card-body'><ul class='list-ul'><li class='list-li-img'><a href='<c:url value='/store/detail?idx="+list.idx+"'/>'><div class='list-img-thum'>";
 				_html += "<img alt='' src='"+imgPath+"'></div></a></li>";
 				_html += "<li class='list-li-contents'><a href='<c:url value='/store/detail?idx="+list.idx+"'/>'><h6 class='list-title'><span class='list-category'>"+list.category+"</span>&nbsp;&nbsp;&nbsp;"+list.store_Nm+"</h6></a>";
-				_html += "<p class='list-cont'>"+_choose+"</p></li>";
-				_html += "<li class='list-li-hit'><i style='font-size:1.3rem' class='fa open-utils' onclick ='onUtils("+i+","+ii+")'>&#xf141;</i><br><i style='font-size:1.3rem' class='far'>&#xf0a6;</i> "+list.hit_Count+"</li></ul></div></div>";
-				_html += "<div class='utils' id='"+ii+"utils"+i+"'><div class='util'><i onclick='telOrPop(\""+list.store_Nm+"\",\""+list.store_Tel+"\")' style='font-size:24px; color: #FFF;' class='fas'>&#xf095;</i></div>";
-				_html += "<div class='util'><i onclick='findLoad(\""+list.store_Nm+"\",\""+list.longitude+"\",\""+list.latitude+"\");' style='font-size:24px; color: #FFF;' class='fas'>&#xf3c5;</i></div>";
-				_html += "<div class='util'><i onclick='location.href='"+enrollUrl+"'' style='font-size:24px; color: #FFF;' class='fas'>&#xf274;</i></div></div></div></td></tr>";		       				
+				_html += "<p class='list-cont'><a href='/happyhour/lineup/list/1?store="+list.idx+"&myOrStore=store'><input type='button' class='btn-btn btn form-contol modi-btn' value='줄서기 현황'/></a>";
+				_html += "<a href='/happyhour/lineup/list/2?store="+list.idx+"&myOrStore=store'><input type='button' class='btn-btn btn form-contol modi-btn' value='예약관리'/></a></p></li>";
+				_html += "<li class='list-li-hit'><i style='font-size:1.3rem' class='far'>&#xf0a6;</i> "+list.hit_Count+"</li></ul></div></div>";		       				
 			}
 			$('#store-list tr:last').after(_html);
 		}
@@ -191,54 +185,13 @@
 		}
 			
 	}
-	
-	var name = "";
-	var latitude = "";
-	var longitude = "";	
-	var url = "";
-	var myLong = "";
-	var myLati = "";
-	
-	function findLoad(nm, lg, lt){
 		
-		if ('${myPoint}' != null && '${myPoint}' != '') {
-			myLong = '${myPoint.lon}';
-			myLati = '${myPoint.lat}';
-			goNaverMap(nm, lg, lt);
-		}else{
-			askMyPointOn();
-			myLong = '${myPoint.lon}';
-			myLati = '${myPoint.lat}';
-			goNaverMap(nm, lg, lt);
-		}			
-	}
-	
-	function goNaverMap(nm, lg, lt){
-		name = nm;
-		longitude = lg;
-		latitude = lt;
-		console.log("내위치:	"+myLong+"	/	"+myLati);
-		console.log("목적지:	"+latitude+"	/	"+longitude);
-		if (isMobile()) {				
-			url = "http://m.map.naver.com/route.nhn?menu=route&sname=내위치&sx="+myLong+"&sy="+myLati+"&ename="+name+"&ex="+longitude+"&ey="+latitude+"&pathType=0&showMap=true";
-		}else{
-			url = "http://map.naver.com/index.nhn?slng="+myLong+"&slat="+myLati+"&stext=내위치&elng="+longitude+"&elat="+latitude+"&etext="+name+"&menu=route&pathType=1";
-		}
+	function findLoad(name,longitude,latitude){
+		var url = "https://map.kakao.com/link/to/"+name+","+longitude+","+latitude;
 		console.log(url);
+		// 모바일(앱) -> var url2 = "kakaomap://route?sp=37.537229,127.005515&ep="+longitude+","+latitude+"&by=CAR"
 		location.href = url;
 	}
-	function isMobile() {
-	    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-	}
-	
-	function telOrPop(nm, tel){
-		if (isMobile()) {
-			document.location.href = "tel:"+tel;
-		}else{
-			alert("'"+nm+"'의 전화번호는 "+tel+"'입니다.");
-		}
-	}
-	
 </script>
 </body>
 

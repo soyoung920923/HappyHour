@@ -48,8 +48,8 @@ function findPostcode1() {
             //주소-좌표 변환 객체를 생성합니다	
 			var geocoder = new kakao.maps.services.Geocoder();
 			geocoder.addressSearch(addr, function(result, status) {
-				var latitude = result[0].x;  // 위도
-				var longitude = result[0].y;  // 경도
+				var latitude = result[0].y;  // 위도
+				var longitude = result[0].x;  // 경도
 				$('#latitude').val(latitude);
 				$('#longitude').val(longitude);
 			});
@@ -58,8 +58,8 @@ function findPostcode1() {
 }
 
 
-function myLocation(){
-
+function myLocation(event){
+	
 	var mapContainer = document.getElementById('map_h'), // 지도를 표시할 div 
     mapOption = {
         center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
@@ -77,7 +77,7 @@ function myLocation(){
 	        
 	        var lat = position.coords.latitude, // 위도
 	            lon = position.coords.longitude; // 경도        
-	                      
+	        console.log("geo:	"+lat+"/"+lon);             
             searchDetailAddrFromCoords(lon,lat, function(result, status) {
                 if (status === kakao.maps.services.Status.OK) {
                     var detailAddr = !!result[0].road_address ? '도로명주소 : ' + result[0].road_address.address_name : '';
@@ -108,6 +108,8 @@ function myLocation(){
             
 	            
 	      });
+	      
+	     
 	    
 	} else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
 	    
@@ -126,5 +128,6 @@ function myLocation(){
 	    // 좌표로 법정동 상세 주소 정보를 요청합니다
 	    geocoder.coord2Address(lon, lat, callback);
 	}
+
 }
 

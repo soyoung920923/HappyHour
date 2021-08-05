@@ -173,16 +173,17 @@ a:hover{
 }
 #myPoint-label{margin-top: 0.25rem; margin-left: 0.5rem;}
 #myPoint-label.black{color: #1F2229;}
-#myPointUtil{
+#myPointUtil, #myReserveUtil{
 	position: fixed;
 	top: 0;
 	left: 0;
-	z-index:5;
+	z-index:15;
 	width: 100%;
 	height: 100vh;
 	background-color: rgba(0,0,0,0.5);
 	display:none;
 }
+
 #flexSwitchCheckDefault{
 	width: 3.2rem;
 	height: 1.7rem;
@@ -328,7 +329,7 @@ footer{
 	z-index: 9999;
 	text-align: right;
 }
-#fixed-box, #fixed-box2{
+#fixed-box, #fixed-box2, #fixed-box3{
 	width: 100%;
 	position: fixed;
 	bottom: 0%;
@@ -348,7 +349,7 @@ footer{
 	height: 3.5rem;
 	margin-right: 0.7rem;
 }
-#bottom-nav, #bottom-nav2{
+#bottom-nav, #bottom-nav2, #bottom-nav3{
 	display: none;
 }
 .bottom-nav-arrow{

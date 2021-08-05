@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
 		MimeMessage mail = mailSender.createMimeMessage();
 		String htmlStr = "<h2></h2>안녕하세요 HappyHour입니다.<br><br>"
 				+ "<h3>" + id + "님</h3>" + "<p>인증하기 버튼을 누르면 로그인 하실 수 있습니다 : "
-				+ "<a href='http://localhost:8090" + req.getContextPath() + "/user/email_idt?id=" + id + "'>인증하기</a></p>";
+				+ "<a href='http://localhost:8080" + req.getContextPath() + "/user/email_idt?id=" + id + "'>인증하기</a></p>";
 		try {
 			mail.setSubject("[HappyHour] 본인인증을 해주세요." , "utf-8");
 			mail.setText(htmlStr, "utf-8", "html");
@@ -192,7 +192,7 @@ public class UserServiceImpl implements UserService {
 		 MimeMessage mail = mailSender.createMimeMessage();
 	        String htmlStr = "<h2>안녕하세요 '"+ id +"' 님</h2><br><br>"
 	                + "<p>임시 발급 비밀번호는 <h2 style='color : blue'>'" + key +"'</h2>이며 로그인 후 마이페이지에서 비밀번호를 변경하실 수 있습니다.</p><br>"
-	                + "<h3><a href='http://localhost:8090/happyhour'>홈페이지 접속</a></h3><br><br>";
+	                + "<h3><a href='http://localhost:8080/happyhour'>홈페이지 접속</a></h3><br><br>";
 	        try {
 	            mail.setSubject("[HappyHour] 임시 비밀번호가 발급되었습니다.", "utf-8");
 	            mail.setText(htmlStr, "utf-8", "html");

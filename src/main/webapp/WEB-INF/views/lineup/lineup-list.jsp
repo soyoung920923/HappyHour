@@ -25,25 +25,48 @@
 				<input type="hidden" id="pastOrNot" name="past" value="${past}"/>
 			</form>
 			<div class="in list-in" >
+			<c:choose>
+				<c:when test="${past eq null || past eq ''}">
+					<ul id="top-arrow-menu-ul">
+						<li>
+							<a href="<c:url value='/store/list?business=business'/>" class="top-arrow-menu">
+								<svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+								  <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+								</svg>&nbsp;목록
+							</a>
+						</li>
+						<li>
+							<a href="<c:if test='${path == 2}'><c:url value='/lineup/list/2?store=${store}&myOrStore=store&past=past'/></c:if><c:if test='${path == 1}'><c:url value='/lineup/list/1?store=${store}&myOrStore=store&past=past'/></c:if>" class="top-arrow-menu">
+								<c:if test="${path == 2}">지난 예약</c:if><c:if test="${path == 1}">지난 줄서기</c:if>&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+								  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+								</svg>
+							</a>
+						</li>
+					</ul>
+				</c:when>
+				<c:otherwise>
+					<ul id="top-arrow-menu-ul">
+						<li>
+							<a href="<c:url value='/store/list?business=business'/>" class="top-arrow-menu">
+								<svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+								  <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+								</svg>&nbsp;목록
+							</a>
+						</li>
+						<li>
+							<a href="<c:if test='${path == 2}'><c:url value='/lineup/list/2?store=${store}&myOrStore=store'/></c:if><c:if test='${path == 1}'><c:url value='/lineup/list/1?store=${store}&myOrStore=store'/></c:if>" class="top-arrow-menu">
+								<c:if test="${path == 2}">실시간 예약</c:if><c:if test="${path == 1}">실시간 줄서기</c:if>&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+								  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+								</svg>
+							</a>
+						</li>
+					</ul>
+				</c:otherwise>
+			</c:choose>
+																
 			<c:if test="${total > 0}">
 				<c:choose>
 					<c:when test="${past eq null || past eq ''}">					
-						<ul id="top-arrow-menu-ul">
-							<li>
-								<a href="<c:url value='/lineup/index?store=${store}'/>" class="top-arrow-menu">
-									<svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-									  <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-									</svg>&nbsp;목록
-								</a>
-							</li>
-							<li>
-								<a href="<c:if test='${path == 2}'><c:url value='/lineup/list/1?store=${store}&myOrStore=store'/></c:if><c:if test='${path == 1}'><c:url value='/lineup/list/2?store=${store}&myOrStore=store'/></c:if>" class="top-arrow-menu">
-									<c:if test="${path == 2}">줄서기</c:if><c:if test="${path == 1}">예약</c:if>&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-									  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-									</svg>
-								</a>
-							</li>
-						</ul>													
 						<a href="<c:url value='/lineup/visitTeam?visit=1&idx=${list.get(0).idx}&path=${path}&store=${store}'/>">
 							<div class="card align-middle list-card lineup-visit-btn">
 								<c:if test="${path == 1}">
@@ -57,22 +80,6 @@
 						</a>							
 					</c:when>
 					<c:otherwise>
-						<ul id="top-arrow-menu-ul">
-							<li>
-								<a href="<c:url value='/lineup/index?store=${store}'/>" class="top-arrow-menu">
-									<svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-									  <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-									</svg>&nbsp;목록
-								</a>
-							</li>
-							<li>
-								<a href="<c:if test='${path == 2}'><c:url value='/lineup/list/1?store=${store}&myOrStore=store&past=past'/></c:if><c:if test='${path == 1}'><c:url value='/lineup/list/2?store=${store}&myOrStore=store&past=past'/></c:if>" class="top-arrow-menu">
-									<c:if test="${path == 2}">이전 줄서기</c:if><c:if test="${path == 1}">이전 예약</c:if>&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="2.5rem" height="2.5rem" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-									  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-									</svg>
-								</a>
-							</li>
-						</ul>
 						<div class="card align-middle list-card lineup-visit-btn1">
 								<c:if test="${path == 1}">
 									이전 줄서기 내역<br>
@@ -90,8 +97,8 @@
 					<c:forEach items="${list}" var="list" varStatus="i">
 						<tr class='listS'>
 							<td>								
-								<div class="in" >
-								    <div class="card align-middle">
+								<div class="in">
+								    <div class="card align-middle <c:if test="${list.lineup_visit eq 4}">card-bold</c:if>">
 								        <div class="card-body">				       
 									       <table style="width: 100%;">
 									       <c:choose>
@@ -101,8 +108,8 @@
 													       	<tr>
 													       		<td style="width:5%;">${i.count}</td>
 													       		<td style="width:30%;">${list.lineup_nm}</td>
-													       		<td style="width:45%;">${list.lineup_tel}</td>
-													       		<td style="width:5%;">${list.lineup_count}</td>											       		
+													       		<td style="width:40%;">${list.lineup_tel}</td>
+													       		<td style="width:10%;">${list.lineup_count}명</td>											       		
 													       		<td style="width:15%; text-align: right;">
 													       			<input type='button' class='form-control lineupNs-btn' value="노쇼" onclick="location.href='<c:url value='/lineup/visitTeam?visit=2&idx=${list.idx}&path=${path}&store=${store}'/>'"/>
 													       		</td>
@@ -111,11 +118,18 @@
 										       			<c:otherwise>
 										       				<tr>
 													       		<td style="width:5%;">${i.count}</td>
-													       		<td style="width:45%;">${list.lineup_nm} [${list.lineup_Date}]</td>
+													       		<td style="width:40%;">${list.lineup_nm} [${list.lineup_Date}]</td>
 													       		<td style="width:30%;">${list.lineup_tel}</td>
-													       		<td style="width:5%;">${list.lineup_count}</td>												       		
+													       		<td style="width:10%;">${list.lineup_count}명</td>												       		
 													       		<td style="width:15%; text-align: right;">
-													       			<input type='button' class='form-control lineupNs-btn' value="노쇼" onclick="location.href='<c:url value='/lineup/visitTeam?visit=2&idx=${list.idx}&path=${path}&store=${store}'/>'"/>
+													       			<c:choose>
+													       				<c:when test="${list.lineup_visit eq 4}">
+													       					<input type='button' class='form-control lineupApp-btn' value="예약확인" onclick="messagePop('${list.idx}','${list.lineup_Date}');"/>
+													       				</c:when>
+													       				<c:otherwise>
+															       			<input type='button' class='form-control lineupNs-btn' value="노쇼" onclick="location.href='<c:url value='/lineup/visitTeam?visit=2&idx=${list.idx}&path=${path}&store=${store}'/>'"/>
+													       				</c:otherwise>
+													       			</c:choose>
 													       		</td>
 													       	</tr>
 										       			</c:otherwise>
@@ -127,8 +141,8 @@
 													       	<tr>
 													       		<td style="width:5%;">${i.count}</td>
 													       		<td style="width:30%;">${list.lineup_nm}</td>
-													       		<td style="width:45%;">${list.lineup_tel}</td>
-													       		<td style="width:5%;">${list.lineup_count}</td>											       		
+													       		<td style="width:40%;">${list.lineup_tel}</td>
+													       		<td style="width:10%;">${list.lineup_count}명</td>											       		
 													       		<td style="width:15%; text-align: right;">
 													       			<c:if test="${list.lineup_visit eq 1}">입장</c:if>
 													       			<c:if test="${list.lineup_visit eq 2}">노쇼</c:if>
@@ -139,9 +153,9 @@
 										       			<c:otherwise>
 										       				<tr>
 													       		<td style="width:5%;">${i.count}</td>
-													       		<td style="width:45%;">${list.lineup_nm} [${list.lineup_Date}]</td>
+													       		<td style="width:40%;">${list.lineup_nm} [${list.lineup_Date}]</td>
 													       		<td style="width:30%;">${list.lineup_tel}</td>
-													       		<td style="width:5%;">${list.lineup_count}</td>											       		
+													       		<td style="width:10%;">${list.lineup_count}명</td>											       		
 													       		<td style="width:15%; text-align: right;">
 													       			<c:if test="${list.lineup_visit eq 1}">입장</c:if>
 													       			<c:if test="${list.lineup_visit eq 2}">노쇼</c:if>
@@ -206,6 +220,12 @@
 		<jsp:include page="../commons/footer.jsp"/>
 	</footer> --%>
 <style>
+.card-bold{
+	box-shadow: 5px 2px 10px 0px rgb(0 0 0 / 30%);
+	border-color: #FFAB2F;
+	background-color: #FFAB2F;
+	color: #fff;
+}
 #top-arrow-menu-ul{
 	width: 100%;
 }
@@ -221,13 +241,13 @@
 	}
 	.lineup-visit-btn, .lineup-visit-btn1{
 		text-align: center;
-		cursor:pointer;
 		border-color: #E30F0C;
 		font-size: 2rem;
 		color: #E30F0C;
 		font-weight: bold;
 		padding: 1.5rem 0;
 	}
+	.lineup-visit-btn{cursor:pointer;}
 	.lineup-visit-btn:hover{
 		background-color: #E30F0C;
 		color: #fff;
@@ -236,6 +256,8 @@
 		background-color: #1F2229;
 		color: #fff;
 	}
+	.lineupApp-btn{border-color: #FFF; background-color: #FFAB2F; color: #fff;}
+	.lineupApp-btn:hover{background-color: #fff; color: #FFAB2F;}
 	#list-waiting{font-weight: normal; font-size: 1rem; line-height: 2;}
 </style>
 	
@@ -246,24 +268,10 @@
 		var pastOrNot = $('#pastOrNot').val();
 		var store = $('#store').val();
 		
-		$('#bottom-nav2').css('display','block');
+		$('#bottom-nav3').css('display','block');
 		$('#fixed-box-top').css('bottom','5.5%');
-		
-		var real = "/happyhour/lineup/list/${path}?store=${store}&myOrStore=store";
-		var past = "/happyhour/lineup/list/${path}?store=${store}&myOrStore=store&past=past";
-		var lineup_url = window.location.href;
-		
-		$('#real').prop('href',real);
-		$('#past').prop('href',past);
-
-		if (lineup_url.indexOf("past") > -1) {
-      		$('.bottom-nav-li2').removeClass('on');
-      		$('.bottom-nav-li2').eq(1).addClass('on');
-		}else{
-			$('.bottom-nav-li2').removeClass('on');
-      		$('.bottom-nav-li2').eq(0).addClass('on');
-		}
-		
+		$('.bottom-nav-li3').removeClass('on');
+		$('.bottom-nav-li3').eq(2).addClass('on');
 		
 		$('#moreList').click(function(){
 			moreList('store-list',5);
@@ -320,16 +328,16 @@
 						_html += "<tr class='listS'><td><div class='in'><div class='card align-middle'><div class='card-body'><table style='width: 100%;'><tr>";
 						_html += "<td style='width:5%; '>"+ii+"</td>";
 						_html += "<td style='width:30%;'>"+list.lineup_nm+"</td>";	       		
-						_html += "<td style='width:45%;'>"+list.lineup_tel+"</td>";	
-						_html += "<td style='width:5%;'>"+list.lineup_count+"</td>";
+						_html += "<td style='width:40%;'>"+list.lineup_tel+"</td>";	
+						_html += "<td style='width:10%;'>"+list.lineup_count+"명</td>";
 						_html += "<td style='width:15%; text-align: right;'>"+visit+"</td>";
 						_html += "</tr></table></div></div></div></td></tr>";	       		
 					}else{
 						_html += "<tr class='listS'><td><div class='in'><div class='card align-middle'><div class='card-body'><table style='width: 100%;'><tr>";
 						_html += "<td style='width:5%; '>"+ii+"</td>";
-						_html += "<td style='width:45%;'>"+list.lineup_nm+" ["+list.lineup_Date+"]</td>";	       		
+						_html += "<td style='width:40%;'>"+list.lineup_nm+" ["+list.lineup_Date+"]</td>";	       		
 						_html += "<td style='width:30%;'>"+list.lineup_tel+"</td>";	
-						_html += "<td style='width:5%;'>"+list.lineup_count+"</td>";
+						_html += "<td style='width:10%;'>"+list.lineup_count+"명</td>";
 						_html += "<td style='width:15%; text-align: right;'>"+visit+"</td>";
 						_html += "</tr></table></div></div></div></td></tr>";
 					}				
@@ -338,16 +346,16 @@
 						_html += "<tr class='listS'><td><div class='in'><div class='card align-middle'><div class='card-body'><table style='width: 100%;'><tr>";
 						_html += "<td style='width:5%; '>"+ii+"</td>";
 						_html += "<td style='width:30%;'>"+list.lineup_nm+"</td>";	       		
-						_html += "<td style='width:45%;'>"+list.lineup_tel+"</td>";	       		
-						_html += "<td style='width:5%;'>"+list.lineup_count+"</td>";	       		
+						_html += "<td style='width:40%;'>"+list.lineup_tel+"</td>";	       		
+						_html += "<td style='width:10%;'>"+list.lineup_count+"명</td>";	       		
 						_html += "<td style='width:15%; text-align: center;'><input type='button' class='form-control lineupNs-btn' value='노쇼' onclick='location.href='<c:url value='/lineup/visitTeam?visit=2&idx="+list.idx+"&path="+path+"&store="+store+"'/>''/></td>";
 						_html += "</tr></table></div></div></div></td></tr>";	       		
 					}else{
 						_html += "<tr class='listS'><td><div class='in'><div class='card align-middle'><div class='card-body'><table style='width: 100%;'><tr>";
 						_html += "<td style='width:5%; '>"+ii+"</td>";
-						_html += "<td style='width:45%;'>"+list.lineup_nm+" ["+list.lineup_Date+"]</td>";	       		
+						_html += "<td style='width:40%;'>"+list.lineup_nm+" ["+list.lineup_Date+"]</td>";	       		
 						_html += "<td style='width:30%;'>"+list.lineup_tel+"</td>";
-						_html += "<td style='width:5%;'>"+list.lineup_count+"</td>";
+						_html += "<td style='width:10%;'>"+list.lineup_count+"명</td>";
 						_html += "<td style='width:15%; text-align: center;'><input type='button' class='form-control lineupNs-btn' value='노쇼' onclick='location.href='<c:url value='/lineup/visitTeam?visit=2&idx="+list.idx+"&path="+path+"&store="+store+"'/>''/></td>";
 						_html += "</tr></table></div></div></div></td></tr>";
 					}	
@@ -357,9 +365,57 @@
 			}
 			$('.listS:last').after(_html);
 		}
-
+		
+		$('#closeMyReserveUtil').click(function(){
+			$('#myReserveUtil').hide();
+		});
+		
+		
+		$(document).on('change', "input[name='approval']" ,function() {
+			approval = $("input[name='approval']:checked").val();
+			if (approval == 0) {
+				$('#userMsg').text(dateTime+"에 예약이 확정되었습니다.");
+			}else{
+				$('#userMsg').text("식당의 사정으로 예약이 반려되었습니다.");
+			}
+		});
+		
+		$('#submitMyReserve').click(function(){
+			oneClickAjax();
+			//window.location.href = "/happyhour/lineup/oneclick?idx="+idx+"&dateTime="+dateTime+"&approval="+approval+"oneclick=no&userMsg=";
+		});
 		
 	});
+	
+	function messagePop(i,time){
+		$('#navbarCollapse').removeClass('show');
+		$('#idx').val(i);
+		$('#dateTime').val(time);
+		$('#userMsg').text(time+"에 예약이 확정되었습니다.");
+  		$('#myReserveUtil').show();
+  		$('#myReserveUtil').on('scroll touchmove mousewheel', function(event) {
+      		event.preventDefault();
+      		event.stopPropagation();
+      		return false;
+  		});
+	}
+	
+	function oneClickAjax(){
+		$.ajax({
+			type		: "POST",
+			url			: "/happyhour/lineup/oneclick",
+			data		: $('#approveReservation').serialize(),
+			success		: function(result){
+				alert(result);
+				$('#myReserveUtil').hide();
+				location.reload();
+			},
+			error		: function(e){
+				console.log(e);
+			}
+			
+		});
+	}
 	
 </script>
 </body>

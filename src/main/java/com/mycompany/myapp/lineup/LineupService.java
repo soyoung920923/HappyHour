@@ -23,6 +23,10 @@ public interface LineupService {
 
 	int visitTeam(Map<String, Object> param) throws ParseException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException;
 
+	boolean isMyLineup(int userIdx, int idx);
+
+	int oneclick(int idx, String dateTime, int approval) throws ParseException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException;
+
 	
 
 }

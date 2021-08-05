@@ -35,19 +35,11 @@
 			        </div>
 			        <div class="card-body">
 				        <h6 class="form-signin-heading" style="text-align:center;color:1F2229;">양식에 맞춰 입력해 주세요</h6>
-				        <%-- <label class="sy-only">*이름</label><br>
-						<input type="text" name="lineup_nm" id="storeNm" class="form-control" value="${lineup.lineup_nm }"><br> --%>
-						
-						<!-- <label class="sy-only">*구분</label><br> -->
 						<div id="chk-wrap">
-					    	<%-- <input type="radio" name="lineup_yn" class="storeIdt" value="1" class="inputName" <c:if test="${lineup.lineup_yn eq '1' }"> checked </c:if>/>&nbsp;줄서기&nbsp;&nbsp;
-						    <input type="radio" name="lineup_yn" class="storeIdt" value="2" class="inputName" <c:if test="${lineup.lineup_yn eq '2' }"> checked </c:if>/>&nbsp;예약&nbsp;&nbsp;
-					    	 --%>
 					    	<br>
-					    	<input type="radio" class="btn-check" name="lineup_yn" id="success-outlined" autocomplete="off" value="1" <c:if test="${lineup.lineup_yn eq '1' }"> checked </c:if> />
-							<label class="btn btn-outline-success_" for="success-outlined">줄서기</label>
-							
-							<input type="radio" class="btn-check" name="lineup_yn" id="danger-outlined" autocomplete="off" value="2" <c:if test="${lineup.lineup_yn eq '2' }"> checked </c:if>>
+					    	<input type="radio" class="btn-check" name="lineup_yn" id="success-outlined" autocomplete="off" value="1" <c:if test="${lineup.lineup_yn ne '2'}"> checked </c:if>/>
+							<label class="btn btn-outline-success_" for="success-outlined">줄서기</label>							
+							<input type="radio" class="btn-check" name="lineup_yn" id="danger-outlined" autocomplete="off" value="2" <c:if test="${lineup.lineup_yn eq '2'}"> checked </c:if>/>
 							<label class="btn btn-outline-danger" for="danger-outlined">예약</label>
 					    </div>
 					    <div id="yesCaption">
