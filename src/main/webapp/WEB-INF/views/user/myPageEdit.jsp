@@ -7,6 +7,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
+
+<style>
+#mypageT th{
+ font-family: 'Ubuntu', sans-serif;
+}
+</style>
+
 <title>HAPPY HOUR</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -26,8 +33,8 @@
 <!-- 내정보 -->
 <div class="container">
     <div class="m-5 p-3 text-center"
-         style="border: 1px solid gray; border-radius: 15px" id="font2">
-        <h1 class="text-bold" id="font1">MyPage</h1>
+         style="border: 1px solid gray;border-radius:15px;background-color:white;" id="font2">
+        <h1 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">MyPage</h1>
         <br>
 
         <!-- 내정보 -->
@@ -70,7 +77,7 @@
                     <th colspan="2">비밀번호 변경</th>
                     <td colspan="2">
 
-                        <button type="button" class="btn btn-primary" id="checkmypwd"
+                        <button type="button" class="btn" id="checkmypwd"
                                 onclick="checkPwd(${user.origin_num})">비밀번호 변경하기</button> 
                                 <input type="hidden" name="pwdState" id="pwdState">
                         <div id="msgPwd"></div>
@@ -82,8 +89,8 @@
                                            class="form-control" readonly></td>
                 </tr>
                 <tr>
-                    <th colspan="2">비밀번호 확인</th>
-                    <td colspan="2"><input type="password" name="password2"
+                    <th colspan="2" style="font-family: 'Ubuntu', sans-serif;">비밀번호 확인</th>
+                    <td colspan="2" style="font-family: 'Ubuntu', sans-serif;"><input type="password" name="password2"
                                            id="password2" class="form-control" readonly></td>
                 </tr>
 
