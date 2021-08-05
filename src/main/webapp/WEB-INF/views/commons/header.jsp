@@ -39,16 +39,8 @@
              	</li>
 			  </c:if>
 			  <c:if test="${loginUser ne null}">
-			  	<li class="nav-item dropdown">
-                	<a class="nav-link dropdown-toggle" id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">My Page</a>
-                	<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-	                  <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/myInfo?origin_num=${origin_num}">내정보</a></li>
-	                  <li><a class="dropdown-item" href="${pageContext.request.contextPath}/lineup/myIndex?&myOrStore=myPage">줄서기/예약</a></li>
-	                  <c:if test="${loginUser.user_dt eq 2 }">
-		                  <li><a class="dropdown-item" href="${pageContext.request.contextPath}/store/list?business=business">식당관리</a></li>
-	                  </c:if>
-	                  <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/logout">로그아웃</a></li>
-	                </ul>
+			  	<li class="nav-item">
+                	<a class="nav-link" href="${pageContext.request.contextPath}/user/myInfo?origin_num=${origin_num}">My Page</a>
              	</li>
 			  </c:if>
 			  <li class="nav-item nav-link myPoint-li">
@@ -120,16 +112,6 @@
 		</div>
 	  </div>
 	  
-	  <div id="fixed-box3">
-	  	<div id="bottom-nav3">			
-			<ul id="bottom-nav-ul3">
-				<li class="bottom-nav-li3 on"><a href="${pageContext.request.contextPath}/user/myInfo?origin_num=${origin_num}" id="my-userInfo">내정보</a></li>
-				<li class="bottom-nav-li3"><a href="${pageContext.request.contextPath}/lineup/myIndex?&myOrStore=myPage" id="my-lineup">줄서기/예약</a></li>
-				<c:if test="${loginUser.user_dt eq 2}"><li class="bottom-nav-li3"><a href="${pageContext.request.contextPath}/store/list?business=business" id="my-mng">식당관리</a></li></c:if>
-			</ul>			
-		</div>
-	  </div>
-	  
 	  <!-- 내위치 모달 팝업 -->
 	  <div id="myPointUtil">
 	  	<br>
@@ -155,56 +137,47 @@
 	  	</div>
 	  </div>
 	  
-	  <!-- 식당-예약확인 모달 팝업 -->
-	  <div id="myReserveUtil">
-	  	<br>
-	  	<br>
-	  	<br>
-	  	<br>
-	  	<br>
-	  	<div id="mr-modal" class="in">	  		
-	    	<div class="card align-middle">
-	    		<div class="card-title" style="margin-top: 30px;">
-	    			<h2 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">Approve Reservation</h2>
-	    		</div>
-	    		<div class="card-body">
-	    			<form id="approveReservation" name="approveReservation">
-	    				<input type="hidden" name="idx" id="idx"/>  			
-	    				<input type="hidden" name="dateTime" id="dateTime"/>  			
-	    				<input type="hidden" name="oneclick" id="oneclick" value="no"/>  			
-		    			<div style="margin: 30px 0px;">
-		    				<input type="radio" class="btn-check" name="approval" id="success-outlined1" autocomplete="off" value="0" checked/>
-							<label class="btn btn-outline-success_" for="success-outlined1">승인</label>						
-							<input type="radio" class="btn-check" name="approval" id="danger-outlined1" autocomplete="off" value="5"/>
-							<label class="btn btn-outline-danger" for="danger-outlined1">반려</label>
-		    			</div>
-		    			<div style="margin-bottom: 30px;">
-		    				*고객에게 전송할 문자 내용을 입력해주세요.
-		    				<textarea class="form-control" id="userMsg" name="userMsg"></textarea>
-		    			</div>	    				
-	    			</form>
-	    			<input type="button" id="submitMyReserve" value="완&nbsp;료" class="btn-btn btn form-control"/>
-	    			<input type="button" id="closeMyReserveUtil" value="닫&nbsp;기" class="btn-btn btn form-control" style="margin-bottom: 0.8rem; "/>
-	    		</div>
-	  		</div>
-	  	</div>
-	  </div>
-	  
       <script>
       	$(function(){
       		var loca = document.location.href;
       		var pp = loca.substring(loca.indexOf('/happyhour/')).replace('/happyhour/','');
       		
       		var mpInSession = '${myPoint}';
+      		console.log("mpInSession: "+mpInSession);
       		
       		if (navigator.geolocation) {
-      			
+      			console.log(1);
       			if (mpInSession == null || mpInSession == '') {
-      				
+      				console.log(2);
       				if (pp == '') {					
-      					askMyPointOn();
+		      			var sessionSet = confirm("내 위치를 켜시겠습니까?");
+		      			if (sessionSet) {
+		      				console.log(3);
+				      		navigator.geolocation.getCurrentPosition(function(position) {
+		 		      			 var lat = position.coords.latitude, // 위도
+		 		 	            lon = position.coords.longitude; // 경도        
+		 		 	        	settingMyPoint(lat, lon);
+		 	      			});
+			      			$('.myPointActive').show();
+				      		$('.myPointOff').hide();
+			      			$('#flexSwitchCheckDefault').prop('checked', true);
+			      			$('#myPoint-label').text('내 위치 끄기');
+			      			$('#map_h').show();
+			      			myLocation();
+			      			$('#map_x').hide();
+			      			
+						}else{
+							console.log(4);
+			      			$('.myPointActive').hide();
+				      		$('.myPointOff').show();
+			      			$('#flexSwitchCheckDefault').prop('checked', false);
+			      			$('#myPoint-label').text('내 위치 켜기');
+			      			$('#map_h').hide();
+			      			$('#map_x').show();
+			      			
+						}
 					}else{
-						
+						console.log(4);
 		      			$('.myPointActive').hide();
 			      		$('.myPointOff').show();
 		      			$('#flexSwitchCheckDefault').prop('checked', false);
@@ -213,7 +186,7 @@
 		      			$('#map_x').show();
 					}
 				}else{
-					
+					console.log(5);
 					$('.myPointActive').show();
 		      		$('.myPointOff').hide();
 	      			$('#flexSwitchCheckDefault').prop('checked', true);
@@ -223,7 +196,7 @@
 	      			$('#map_x').hide();
 				}
       		}else{
-      			
+      			console.log(6);
       			$('.myPointActive').hide();
 	      		$('.myPointOff').show();
       			alert("브라우저 위치정보를 허용해주세요.");
@@ -242,8 +215,7 @@
       	      			$('.myPointOff').hide();
       	      			navigator.geolocation.getCurrentPosition(function(position) {
       		      			 var lat = position.coords.latitude, // 위도
-      		 	            lon = position.coords.longitude; // 경도   
-      		 	         alert(lat+", "+lon);
+      		 	            lon = position.coords.longitude; // 경도        
       		 	        	settingMyPoint(lat, lon);
       	      			});
       	      		$('#myPoint-label').text('내 위치 끄기');
@@ -335,20 +307,19 @@
       	
       	function myPointUtil(){
       		$('#navbarCollapse').removeClass('show');
-      		$('#myReserveUtil').hide();
       		$('#myPointUtil').show();
       		$('#myPointUtil').on('scroll touchmove mousewheel', function(event) {
-	      		event.preventDefault();
-	      		event.stopPropagation();
-	      		return false;
+      		  event.preventDefault();
+      		  event.stopPropagation();
+      		  return false;
       		});
       		
       		if ($('#myPoint-label').text() == '내 위치 끄기') {
+      			console.log(7);
       			$('#map_h').show();
       			myLocation();
       			$('#map_x').hide();
 			}
-   		
       	}
       	
       	function settingMyPoint(lat, lon){
@@ -380,34 +351,7 @@
     			}			
     		});
       	}
-		
-      	function askMyPointOn(){
-      		var sessionSet = confirm("내 위치를 켜시겠습니까?");
-  			if (sessionSet) {
-	      		navigator.geolocation.getCurrentPosition(function(position) {
-		      			 var lat = position.coords.latitude, // 위도
-		 	            lon = position.coords.longitude; // 경도        
-		 	        	settingMyPoint(lat, lon);
-	      			});
-      			$('.myPointActive').show();
-	      		$('.myPointOff').hide();
-      			$('#flexSwitchCheckDefault').prop('checked', true);
-      			$('#myPoint-label').text('내 위치 끄기');
-      			$('#map_h').show();
-      			myLocation();
-      			$('#map_x').hide();
-      			
-			}else{				
-      			$('.myPointActive').hide();
-	      		$('.myPointOff').show();
-      			$('#flexSwitchCheckDefault').prop('checked', false);
-      			$('#myPoint-label').text('내 위치 켜기');
-      			$('#map_h').hide();
-      			$('#map_x').show();
-      			
-			}
-      	}
-      	
+
       </script>
 </body>
 </html>
