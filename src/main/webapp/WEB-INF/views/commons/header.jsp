@@ -369,9 +369,15 @@
 			}else if (url.indexOf("/user/login") > -1) {
       			$('.nav-item > a').removeClass('active');
 				$('.nav-item').eq(3).children('a').addClass('active');
-			}else if (url.indexOf("myPage") > -1) {
+			}else if (url.indexOf("myInfo") > -1) {
       			$('.nav-item > a').removeClass('active');
 				$('.nav-item').eq(3).children('a').addClass('active');
+			}else if (url.indexOf("complain") > -1) {
+      			$('.nav-item > a').removeClass('active');
+				$('.nav-item').eq(2).children('a').addClass('active');
+			}else if (url.indexOf("admin") > -1) {
+      			$('.nav-item > a').removeClass('active');
+				$('.nav-item').eq(5).children('a').addClass('active');
 			}else{
 				$('.nav-item > a').removeClass('active');
 				$('.nav-item').eq(0).children('a').addClass('active');

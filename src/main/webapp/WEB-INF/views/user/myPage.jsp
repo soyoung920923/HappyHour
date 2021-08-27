@@ -102,6 +102,12 @@
 
 
 <script type="text/javascript">
+	$(function(){
+		$('#bottom-nav3').css('display','block');
+		$('#fixed-box-top').css('bottom','5.5%');
+		$('.bottom-nav-li3').removeClass('on');
+  		$('.bottom-nav-li3').eq(0).addClass('on');
+	});
 	function leave(num){
 		if(confirm("탈퇴 하시겠습니까?")){
 		var n = $('#origin_num').val(num);
