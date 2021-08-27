@@ -71,7 +71,7 @@
 							<c:if test="${board.level>=1}">
 								<div class="badge badge-info">답변</div>&nbsp;
                            </c:if>
-							<c:out	value="${board.title}" /></a>
+							<c:out value="${board.title}" /></a>
 							<c:if test="${board.origin_filename ne null}">
 							   <img src="/resources/image/exist.png" width="16px">
 							</c:if>

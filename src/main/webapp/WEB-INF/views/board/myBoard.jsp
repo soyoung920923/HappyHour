@@ -64,7 +64,16 @@
 				<c:if test="${boardList ne null and not empty boardList}">
 					<c:forEach var="board" items="${boardList}">
 						<tr>
-							<td><c:out value="${board.num}" /></td>
+						    <td>
+						      <c:choose>
+							    <c:when test="${board.category eq 0 }">
+									<div class="badge rounded-pill bg-danger" style="font-size:15px;">공지</div>&nbsp;
+								</c:when>
+								<c:otherwise>
+									<c:out value="${board.num}" />
+								</c:otherwise>
+						      </c:choose>
+							</td>
 							<td style="text-align: left; padding-left: 10px">
 							<c:forEach var="k" begin="0"  end="${board.level}">&ensp;</c:forEach>
 							<a href="view?num=<c:out value="${board.num}"/>">

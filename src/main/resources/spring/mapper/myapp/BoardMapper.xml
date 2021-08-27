@@ -107,6 +107,7 @@
 		        , register_day
 		        , if(date_sub(now(), interval 7 day) <![CDATA[<=]]> register_day, 1, 0) as newImg
 		        , filename
+		        , category
 		        , hits
 		        , name
 		        , refer

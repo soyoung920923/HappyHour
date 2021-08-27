@@ -72,6 +72,7 @@
                    <th>상세주소</th>
                    <td><input type="text" value="${user.address_dt}" name="address_dt"
                                id="address_dt" class="form-control" required></td>
+                   <div id="address2"></div>
                 </tr>
                 <tr>
                     <th colspan="2">비밀번호 변경</th>
