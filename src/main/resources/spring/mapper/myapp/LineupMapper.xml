@@ -35,7 +35,9 @@
 				ORDER BY l.LINEUP_DATE DESC
 			</when>
 			<otherwise>
-				AND l.LINEUP_DATE <![CDATA[>]]> #{today}
+				AND CASE WHEN l.LINEUP_VISIT = 0 THEN l.LINEUP_DATE <![CDATA[>]]> #{today}
+					ELSE l.LINEUP_DATE = l.LINEUP_DATE
+					END
 				<if test="path == 1">
 					AND (l.LINEUP_DATE <![CDATA[<]]> #{todayEnd} OR l.LINEUP_DATE <![CDATA[=]]> #{todayEnd})					
 				</if>
@@ -62,7 +64,9 @@
 				AND LINEUP_VISIT <![CDATA[<>]]> 4
 			</when>
 			<otherwise>
-				AND LINEUP_DATE <![CDATA[>]]> #{today}
+				AND CASE WHEN LINEUP_VISIT = 0 THEN LINEUP_DATE <![CDATA[>]]> #{today}
+					ELSE LINEUP_DATE = LINEUP_DATE
+					END
 				<if test="path == 1">
 					AND (LINEUP_DATE <![CDATA[<]]> #{todayEnd} OR LINEUP_DATE <![CDATA[=]]> #{todayEnd})
 				</if>
@@ -184,6 +188,31 @@
 		WHERE L.IDX = #{idx}			
 	</select>
 	
+	<update id="oneclick" parameterType="Lineup">
+		UPDATE HH_LINEUP SET 
+			LINEUP_VISIT = #{lineup_visit}
+		WHERE IDX = #{idx}
+	</update>
+	
+	<select id="getNewCnt" parameterType="int" resultType="Store">
+		SELECT COUNT(*) AS newRsv
+		FROM HH_LINEUP
+		WHERE STORE_ORIGIN = #{store}
+		AND LINEUP_VISIT = 4
+	</select>
+	
+	<select id="getCount" parameterType="Map" resultType="Map">
+		SELECT
+			IDX,
+			STORE_ORIGIN,
+			LINEUP_VISIT,
+			LINEUP_DATE
+		FROM HH_LINEUP
+		WHERE STORE_ORIGIN = #{idx}
+		AND (LINEUP_DATE <![CDATA[>]]> #{start} OR LINEUP_DATE = #{start})
+		AND (LINEUP_DATE <![CDATA[<]]> #{end} OR LINEUP_DATE = #{end})
+		AND LINEUP_YN = #{path}
+	</select>
 	
 	
 </mapper>

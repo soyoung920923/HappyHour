@@ -24,7 +24,7 @@ import com.mycompany.myapp.user.UserDTO;
 @Controller
 @RequestMapping(value = "/banner")
 public class BannerController {
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(BannerController.class);
 	
 	@Autowired
 	BannerService bannerService;

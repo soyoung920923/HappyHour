@@ -15,7 +15,7 @@
 	</header>
 	
 	<main>
-			<br><br><br>
+			<br><br>
 			<form id="searchList" name="searchList">
 				<input type="hidden" id="startCount" name="startCount" value="0"/>
 				<input type="hidden" id="viewCount" name="viewCount" value="0"/>
@@ -167,20 +167,36 @@
 						<c:when test="${past eq null || past eq ''}">
 							<c:choose>
 								<c:when test="${path eq 1}">
-									<h5 style="width: 100%; text-align:center;">오늘 줄서기한 식당이 없습니다.</h5>
+									<div class="in">
+									    <div class="card align-middle">
+									        <div class="card-body"><h5 style="width: 100%; text-align:center;">오늘 줄서기한 식당이 없습니다.</h5></div>
+									    </div>
+								    </div>
 								</c:when>
 								<c:otherwise>
-									<h5 style="width: 100%; text-align:center;">예약한 식당이 없습니다.</h5>
+									<div class="in">
+									    <div class="card align-middle">
+									        <div class="card-body"><h5 style="width: 100%; text-align:center;">예약한 식당이 없습니다.</h5></div>
+									    </div>
+								    </div>
 								</c:otherwise>
 							</c:choose>						
 						</c:when>
 						<c:otherwise>
 							<c:choose>
 								<c:when test="${path eq 1}">
-									<h5 style="width: 100%; text-align:center;">지난 줄서기 내역이 없습니다.</h5>
+									<div class="in">
+									    <div class="card align-middle">
+									        <div class="card-body"><h5 style="width: 100%; text-align:center;">지난 줄서기 내역이 없습니다.</h5></div>
+									    </div>
+								    </div>
 								</c:when>
 								<c:otherwise>
-									<h5 style="width: 100%; text-align:center;">지난 예약 내역이 없습니다.</h5>
+									<div class="in">
+									    <div class="card align-middle">
+									        <div class="card-body"><h5 style="width: 100%; text-align:center;">지난 예약 내역이 없습니다.</h5></div>
+									    </div>
+								    </div>
 								</c:otherwise>
 							</c:choose>
 						</c:otherwise>
@@ -236,7 +252,10 @@
 		background-color: #1F2229;
 		color: #fff;
 	}
-	
+	.box-input{
+		display: inline-block !important;
+		border-color: #fff !important;
+	}
 </style>
 	
 <script type="text/javascript">

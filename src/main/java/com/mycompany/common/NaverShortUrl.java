@@ -17,7 +17,7 @@ public class NaverShortUrl {
         String clientId = "PDkza_JOmqQ7CQ7Rj2C3"; //애플리케이션 클라이언트 아이디값"
         String clientSecret = "MeU0UOAC49"; //애플리케이션 클라이언트 시크릿값"
 
-        String apiURL = "https://openapi.naver.com/v1/util/shorturl?url=" + originalURL;
+        String apiURL = "https://openapi.naver.com/v1/util/shorturl?url="+originalURL;
 
         Map<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put("X-Naver-Client-Id", clientId);

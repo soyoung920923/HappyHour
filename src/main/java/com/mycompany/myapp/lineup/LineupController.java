@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mycompany.common.CommonUtil;
 import com.mycompany.common.SearchParam;
 import com.mycompany.myapp.HomeController;
+import com.mycompany.myapp.holiday.HolidayDTO;
+import com.mycompany.myapp.holiday.HolidayMapper;
 import com.mycompany.myapp.store.StoreDTO;
+import com.mycompany.myapp.store.StoreMapper;
 import com.mycompany.myapp.store.StoreService;
 import com.mycompany.myapp.user.UserDTO;
 
@@ -41,7 +45,7 @@ import com.mycompany.myapp.user.UserDTO;
 @RequestMapping(value = "/lineup")
 public class LineupController {
 
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(LineupController.class);
 
 	@Autowired
 	LineupService lineupService;
@@ -51,6 +55,12 @@ public class LineupController {
 	
 	@Autowired
 	StoreService storeService;
+	
+	@Autowired
+	StoreMapper storeMapper;
+	
+	@Autowired
+	HolidayMapper holidayMapper;
 	
 	@Autowired
 	CommonUtil commonUtil;
@@ -125,6 +135,15 @@ public class LineupController {
 					if (storeService.isMyStore(userIdx, Integer.parseInt(store))) {						
 						param.setStore(Integer.parseInt(store));
 						model.addAttribute("store", store);
+						StoreDTO dto = storeMapper.getStoreDt(Integer.parseInt(store));
+						model.addAttribute("storeNm", dto.getStore_Nm());
+						int service = 0;
+						if ("1".equals(path)) {
+							service = dto.getLine_yn();
+						}else {
+							service = dto.getRsv_yn();
+						}
+						model.addAttribute("service", service);
 						rt = "/lineup/lineup-list";
 					}else {
 						rt = commonUtil.addMsgBack(model, "잘못된 접근입니다.");
@@ -163,6 +182,13 @@ public class LineupController {
 				lineupDate = lineupDate.substring(0,16);
 				list.get(i).setLineup_Date(lineupDate);
 				param.setStore(list.get(i).getStore_origin());
+				int cnt = 0;
+				int visitTeamIdx = 0;
+				if (cnt < 2 && list.get(i).getLineup_visit() == 0) {
+					visitTeamIdx = list.get(i).getIdx();
+					cnt ++;
+				}
+				model.addAttribute("visitTeamIdx", visitTeamIdx);
 			}
 			
 			
@@ -176,6 +202,7 @@ public class LineupController {
 					param.setIdx(idx);
 					waiting = lineupService.countWaiting(param);
 					list.get(i).setWaiting(waiting);
+					
 				}
 			}
 			
@@ -200,6 +227,7 @@ public class LineupController {
 		if (user != null) {			
 			SearchParam param = new SearchParam();
 			Calendar cal = Calendar.getInstance();
+			int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK); // 오늘 요일
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			String today = df.format(cal.getTime())+" 00:00:00";
 			String todayEnd = df.format(cal.getTime())+" 23:59:59";
@@ -209,15 +237,65 @@ public class LineupController {
 			int waiting = lineupService.countWaiting(param);
 			model.addAttribute("waiting",waiting );
 			
-			List<String> dateSet = new ArrayList<String>();
-			for (int i = 1; i < 4; i++) {			
-				cal.add(Calendar.DATE, +1);
-				dateSet.add(df.format(cal.getTime()));
-			}
+			StoreDTO storeDt = storeService.getStoreDt(Integer.parseInt(store));
+			param.setIdx(Integer.parseInt(store));
+			List<HolidayDTO> tempHolidays = holidayMapper.getHolidays(param);
 			
+			List<String> dateSet = new ArrayList<String>();
+			int rsvDay = 0;
+			for (int i = 0; i < 3; i++) {			
+				cal.add(Calendar.DATE, +1);
+				
+				String dateSetDay = df.format(cal.getTime());
+				String holidayStart = null;
+				String holidayEnd = null;
+				int ii = 0;
+				for (int j = 0; j < tempHolidays.size(); j++) {
+					Calendar start = Calendar.getInstance();
+					Calendar end = Calendar.getInstance();
+					holidayStart = tempHolidays.get(j).getHoliday_start();
+					holidayEnd = tempHolidays.get(j).getHoliday_end();
+					try {
+						Date hStart = df.parse(holidayStart);
+						Date hEnd = df.parse(holidayEnd);
+						start.setTime(hStart);
+						end.setTime(hEnd);					
+						while (dateSetDay.equals(df.format(start.getTime())) && ii < 1) {
+							cal.add(Calendar.DATE, +1);
+							start.add(Calendar.DATE, +1);
+							ii++;
+
+							int a = (int) start.getTime().getTime();
+							int b = (int) end.getTime().getTime();
+							
+							if (a>b) {
+								System.out.println("탈출");
+								break;
+							}else {
+								System.out.println("반복");
+							}
+						}
+					} catch (java.text.ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				rsvDay = cal.get(Calendar.DAY_OF_WEEK); // 예약일 요일
+				// 휴무일 정보로 오늘 휴무인지 여부 및 예약일 세팅
+				for (int j = 0; j < storeDt.getHolidays().length; j++) {
+					if (dayOfWeek == Integer.parseInt(storeDt.getHolidays()[j])) {
+						storeDt.setHoliday("holiday");
+					}
+					if (rsvDay == Integer.parseInt(storeDt.getHolidays()[j])) {
+						cal.add(Calendar.DATE, +1);
+					}
+				}
+				dateSet.add(df.format(cal.getTime()));
+			}			
 			List<String> timeSet = commonUtil.timeSet();
 			
-			StoreDTO storeDt = storeService.getStoreDt(Integer.parseInt(store));
+			
+			
 			
 			int openIndex = 0;
 			int closeIndex = 0;
@@ -265,7 +343,8 @@ public class LineupController {
 			
 			model.addAttribute("dateSet", dateSet);
 			model.addAttribute("timeSet", timeSet);
-			model.addAttribute("store_origin", store); 
+			model.addAttribute("store_origin", store);
+			model.addAttribute("storeDt", storeDt);
 			
 			return "/lineup/lineup-enroll";
 		}else {
@@ -385,50 +464,58 @@ public class LineupController {
 		String url = "";
 		if (user != null) {
 			int userIdx = user.getOrigin_num();
-			boolean isMyLineup = lineupService.isMyLineup(userIdx, idx);
-			if (isMyLineup) {				
-				Map<String, Object> param = new HashMap<String, Object>();	
-				param.put("visit", visit);
-				param.put("idx", idx);
-				param.put("path", path);
-				param.put("store", store);
-				Calendar cal = Calendar.getInstance();
-				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-				String today = df.format(cal.getTime())+" 00:00:00";
-				String todayEnd = df.format(cal.getTime())+" 23:59:59";
-				param.put("today", today);
-				param.put("todayEnd", todayEnd);
-				int i = lineupService.visitTeam(param);
-				if (visit == 1) {
-					msg = "입장 처리";
-				}else if(visit == 2){
-					msg = "노쇼 처리";
-				}else {
-					if (path.equals("1")) {
-						msg = "줄서기 취소";
+			
+			if (idx == 0) {
+				msg = "입장할 팀이 없습니다.";
+				rt = commonUtil.addMsgBack(model, msg);
+			}else {	
+				boolean isMyLineup = lineupService.isMyLineup(userIdx, idx);
+				if (isMyLineup) {	
+					
+					Map<String, Object> param = new HashMap<String, Object>();	
+					param.put("visit", visit);
+					param.put("idx", idx);
+					param.put("path", path);
+					param.put("store", store);
+					Calendar cal = Calendar.getInstance();
+					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+					String today = df.format(cal.getTime())+" 00:00:00";
+					String todayEnd = df.format(cal.getTime())+" 23:59:59";
+					param.put("today", today);
+					param.put("todayEnd", todayEnd);
+					int i = lineupService.visitTeam(param);
+					if (visit == 1) {
+						msg = "입장 처리";
+					}else if(visit == 2){
+						msg = "노쇼 처리";
 					}else {
-						msg = "예약 취소";
-					}
-				}
-				if (i == 0) {
-					msg = msg+" 실패";
-					rt = commonUtil.addMsgBack(model, msg);
-				}else {
-					msg = msg+" 성공";
-					url="/happyhour/lineup/list";
-					if (path != null && path != "") {
-						url += "/"+path;
-						if (store != null && store != "") {
-							url += "?store="+store+"&myOrStore=store";
+						if (path.equals("1")) {
+							msg = "줄서기 취소";
 						}else {
-							url += "?userIdx="+user.getOrigin_num()+"&myOrStore=myPage";
+							msg = "예약 취소";
 						}
 					}
-					rt = commonUtil.addMsgLoc(model, msg, url);
+					if (i == 0) {
+						msg = msg+" 실패";
+						rt = commonUtil.addMsgBack(model, msg);
+					}else {
+						msg = msg+" 성공";
+						url="/happyhour/lineup/list";
+						if (path != null && path != "") {
+							url += "/"+path;
+							if (store != null && store != "") {
+								url += "?store="+store+"&myOrStore=store";
+							}else {
+								url += "?userIdx="+user.getOrigin_num()+"&myOrStore=myPage";
+							}
+						}
+						rt = commonUtil.addMsgLoc(model, msg, url);
+					}
+					
+				}else {
+					msg = "잘못된 접근입니다.";
+					rt = commonUtil.addMsgBack(model, msg);
 				}
-			}else {
-				msg = "잘못된 접근입니다.";
-				rt = commonUtil.addMsgBack(model, msg);
 			}
 		}else {
 			msg = "로그인 후 이용해주세요.";
@@ -440,41 +527,61 @@ public class LineupController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/oneclick")
-	public String oneclick(Model model, @RequestParam(name="idx", required = false) int idx,
-			@RequestParam(name="dateTime", required = false) String dateTime,
-			@RequestParam(name="approval", required = false) int approval,
-			@RequestParam(name="oneclick", required = false) String oneclick,
-			@RequestParam(name="userMsg", required = false) String userMsg, HttpSession session) throws ParseException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException {
+	@RequestMapping(value = {"/oneclick/{approval}/{date}/{time}", "/oneclick"}, method= {RequestMethod.GET,  RequestMethod.POST})
+	public String oneclick(Model model, @RequestParam(name="idx", required = false) Integer idx,
+			@PathVariable(name="date", required = false) String date,
+			@PathVariable(name="time", required = false) String time,
+			@PathVariable(name="approval", required = false) Integer approval,
+			HttpServletRequest request, HttpSession session) throws ParseException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException {
+		approval = approval == null ? 0 : approval;
+		idx = idx == 0 ? Integer.parseInt(request.getParameter("lidx")) : idx;
 		int result = 0;
 		String msg = "";
 		String url = "";
-		String rt = commonUtil.addMsgLoc(model, msg, url);
-		if (oneclick == null || !oneclick.equals("no")) {
-			//result = lineupService.oneclick(idx, dateTime, approval);
-			if (result > 0) {
-				msg = "예약이 완료되었습니다.";
-				url = null;			
+		String rt = "";
+		String dateTime = date == null ? request.getParameter("dateTime") : date+" "+time;
+		String userMsg = request.getParameter("userMsg");	
+		if (userMsg == null || userMsg.equals("")) {
+			/**원클릭*/
+			Map<String, Object> param = new HashMap<String, Object>();
+			param.put("idx", idx);
+			LineupDTO nowTeam = lineupMapper.nowTeam(param);
+			if (nowTeam.getLineup_visit() == 4) {			
+				result = lineupService.oneclick(idx, dateTime, approval, null);
+				if (result > 0) {
+					msg = "예약이 완료되었습니다.";
+					url = null;			
+				}else {
+					msg = "처리중 에러가 발생했습니다. 예약페이지를 확인해주세요.";
+					url = "/happyhour";
+				}			
+			}else if(nowTeam.getLineup_visit() == 5){
+				msg = "이미 반려된 예약입니다.";
+				url = null;	
 			}else {
-				msg = "처리중 에러가 발생했습니다. 예약페이지를 확인해주세요.";
-				url = "/happyhour";
-			}			
+				msg = "이미 처리된 예약입니다.";
+				url = null;	
+			}
+			rt = commonUtil.addMsgLoc(model, msg, url);
 		}else {
+			/**웹*/
 			UserDTO user = commonUtil.getUser(session);
 			if (user != null) {
 				int userIdx = user.getOrigin_num();
 				boolean isMyLineup = lineupService.isMyLineup(userIdx, idx);
 				if (isMyLineup) {
-					//result = lineupService.oneclick(idx, dateTime, approval);
+					result = lineupService.oneclick(idx, dateTime, approval, userMsg);
 					Map<String, Object> map = lineupMapper.getStoreUser(idx);
 					if (result > 0) {
 						msg = "예약이 완료되었습니다.";
 					}else {
 						msg = "처리 실패";
-					}								
+					}
+					url = "/happyhour/lineup/list/2?store="+map.get("store")+"&myOrStore=store";
+					rt = commonUtil.addMsgLoc(model, msg, url);
 				}else {
 					msg = "잘못된 접근입니다.";
-					rt = new String(msg.getBytes("8859_1"), "UTF-8");
+					rt = commonUtil.addMsgBack(model, msg);
 				}
 			}
 		}

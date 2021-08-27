@@ -28,6 +28,11 @@ public interface LineupMapper {
 
 	Map<String, Object> getStoreUser(int idx);
 
-	int oneclick(int idx, int approval);	
+	int oneclick(LineupDTO lineup);
+
+	StoreDTO getNewCnt(int store);
+
+	List<LineupDTO> getCount(Map<String, String> nowRmap);
+
 
 }

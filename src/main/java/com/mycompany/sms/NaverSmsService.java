@@ -3,7 +3,7 @@ package com.mycompany.sms;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -34,7 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class NaverSmsService {
 	
 	
-	public NaverSmsResponseDTO sendSms(String recipientPhoneNumber, String content, String reserveTime, String reserveTimeZone, String smsId) throws ParseException, JsonProcessingException, 
+	public NaverSmsResponseDTO sendSms(String recipientPhoneNumber, String content, String reserveTime, String reserveTimeZone, String smsId, String type) throws ParseException, JsonProcessingException, 
 	UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException, URISyntaxException { 
 		Long time = new Date().getTime();
 		String jsonBody = null;
@@ -45,9 +45,9 @@ public class NaverSmsService {
 			NaverSmsRequestDTO smsRequestDto = null;
 			
 			if (reserveTime != null && reserveTime != "") {
-				smsRequestDto = new NaverSmsRequestDTO(reserveTime, "SMS", "COMM", "82", NaverSmSDTO.SEND_FROM, "MangoLtd", messages); // 쌓아온 바디를 json 형태로 변환시켜준다. 
+				smsRequestDto = new NaverSmsRequestDTO(reserveTime, type, "COMM", "82", NaverSmSDTO.SEND_FROM, "MangoLtd", messages); // 쌓아온 바디를 json 형태로 변환시켜준다. 
 			}else {			
-				smsRequestDto = new NaverSmsRequestDTO("SMS", "COMM", "82", NaverSmSDTO.SEND_FROM, "MangoLtd", messages); // 쌓아온 바디를 json 형태로 변환시켜준다. 
+				smsRequestDto = new NaverSmsRequestDTO(type, "COMM", "82", NaverSmSDTO.SEND_FROM, "MangoLtd", messages); // 쌓아온 바디를 json 형태로 변환시켜준다. 
 			}
 			ObjectMapper objectMapper = new ObjectMapper(); 
 			jsonBody = objectMapper.writeValueAsString(smsRequestDto); // 헤더에서 여러 설정값들을 잡아준다.
@@ -57,7 +57,7 @@ public class NaverSmsService {
 		}
 		System.out.println(requestUri);
 		HttpHeaders headers = new HttpHeaders(); 
-		headers.setContentType(MediaType.APPLICATION_JSON); 
+		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 		headers.set("x-ncp-apigw-timestamp", time.toString()); 
 		headers.set("x-ncp-iam-access-key", NaverSmSDTO.ACCESS_KEY ); // 제일 중요한 signature 서명하기. 
 		String sig = "";
@@ -72,15 +72,15 @@ public class NaverSmsService {
 		System.out.println(entity); // restTemplate로 post 요청을 보낸다. 별 일 없으면 202 코드 반환된다. 
 		RestTemplate restTemplate = new RestTemplate();
 		NaverSmsResponseDTO sendSmsResponseDto = new NaverSmsResponseDTO();
-		if (recipientPhoneNumber != null && recipientPhoneNumber != "") {			
-			sendSmsResponseDto = restTemplate.postForObject(new URI(requestUri), entity, NaverSmsResponseDTO.class); 
-			System.out.println(sendSmsResponseDto);
-		}else {
-			ResponseEntity<String> resEntity = restTemplate.exchange(requestUri, HttpMethod.DELETE,entity, String.class );
-			System.out.println(resEntity);
-		}
 		
-		
+		  if (recipientPhoneNumber != null && recipientPhoneNumber != "") {
+			  sendSmsResponseDto = restTemplate.postForObject(new URI(requestUri), entity, NaverSmsResponseDTO.class); 
+			  System.out.println(sendSmsResponseDto); 
+		  }else {
+			  ResponseEntity<String> resEntity = restTemplate.exchange(requestUri,
+			  HttpMethod.DELETE,entity, String.class ); 
+			  System.out.println(resEntity); 
+		  }
 		return sendSmsResponseDto;
 	}
 

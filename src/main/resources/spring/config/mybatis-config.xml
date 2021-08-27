@@ -20,6 +20,7 @@
 	     <typeAlias type="com.mycompany.myapp.banner.BannerDTO" alias="Banner"/>
 	     <typeAlias type="com.mycompany.myapp.lineup.LineupDTO" alias="Lineup"/>
 	     <typeAlias alias="AdminPaging" type="com.mycompany.myapp.admin.AdminPagingDTO"/>
+	     <typeAlias type="com.mycompany.myapp.holiday.HolidayDTO" alias="Holiday"/>
 	</typeAliases>
 		
 	<!-- mappers -->
@@ -30,6 +31,7 @@
 		 <mapper resource="spring/mapper/myapp/BannerMapper.xml" />
 		 <mapper resource="spring/mapper/myapp/LineupMapper.xml" />
 		 <mapper resource="spring/mapper/myapp/AdminMapper.xml"/>
+		 <mapper resource="spring/mapper/myapp/HolidayMapper.xml" />
 	</mappers>
 	
 </configuration>

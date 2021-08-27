@@ -29,7 +29,14 @@
 		  s.STORE_CLOSE,
 		  s.STORE_BREAK,
 		  s.BREAK_START,
-		  s.BREAK_END
+		  s.BREAK_END,
+		  s.LINE_YN,
+		  s.RSV_YN,
+		  s.LINE_NOTICE,
+		  s.RSV_NOTICE,
+		  s.HOLIDAY,
+		  s.HOLIDAY_ETC,
+		  s.STORE_USE
 		FROM HH_STORE s, (select @rownum := 0) tmp
 		WHERE 1=1
 		<if test="idx != null and idx != '' and idx != 0">
@@ -90,7 +97,14 @@
 		  STORE_CLOSE,
 		  STORE_BREAK,
 		  BREAK_START,
-		  BREAK_END
+		  BREAK_END,
+		  LINE_YN,
+		  RSV_YN,
+		  LINE_NOTICE,
+		  RSV_NOTICE,
+		  HOLIDAY,
+		  HOLIDAY_ETC,
+		  STORE_USE
 		FROM HH_STORE
 		WHERE IDX = #{idx}
 	</select>
@@ -118,7 +132,12 @@
 		  STORE_CLOSE,
 		  STORE_BREAK,
 		  BREAK_START,
-		  BREAK_END
+		  BREAK_END,
+		  LINE_YN,
+		  RSV_YN,
+		  HOLIDAY,
+		  HOLIDAY_ETC,
+		  STORE_USE
 		)VALUES(
 		  #{origin},
 		  #{store_Nm},
@@ -141,7 +160,12 @@
 		  #{store_close},
 		  #{store_break},
 		  #{break_start},
-		  #{break_end}
+		  #{break_end},
+		  ${line_yn},
+		  ${rsv_yn},
+		  ${holiday},
+		  ${holiday_etc},
+		  ${store_use}
 		)
 	</insert>
 	
@@ -172,7 +196,12 @@
 		  STORE_CLOSE,
 		  STORE_BREAK,
 		  BREAK_START,
-		  BREAK_END
+		  BREAK_END,
+		  LINE_YN,
+		  RSV_YN,
+		  HOLIDAY,
+		  HOLIDAY_ETC,
+		  STORE_USE
 		FROM HH_STORE
 		ORDER BY HIT_COUNT DESC, REGIST_DATE DESC, UPDATE_DATE DESC
 		LIMIT 3
@@ -200,7 +229,11 @@
 		  STORE_CLOSE = #{store_close},
 		  STORE_BREAK = #{store_break},
 		  BREAK_START = #{break_start},
-		  BREAK_END = #{break_end}
+		  BREAK_END = #{break_end},
+		  LINE_YN = #{line_yn},
+		  RSV_YN = #{rsv_yn},
+		  HOLIDAY = #{holiday},
+		  HOLIDAY_ETC = #{holiday_etc}
 		WHERE IDX = #{idx}
 	</update>
 	
@@ -212,5 +245,21 @@
 	<select id="getDelOid" parameterType="int" resultType="String">
 		SELECT STORE_IMG_OID FROM HH_STORE WHERE IDX = #{idx}
 	</select>
+	
+	<update id="updateService" parameterType="Store">
+		UPDATE HH_STORE
+		SET
+		<choose>
+			<when test="line_yn != null and line_notice != null and line_notice != ''">
+				LINE_YN = #{line_yn},
+				LINE_NOTICE = #{line_notice}
+			</when>
+			<otherwise>
+				RSV_YN = #{rsv_yn},
+				RSV_NOTICE = #{rsv_notice}
+			</otherwise>
+		</choose>
+		WHERE IDX = #{idx}
+	</update>
 	
 </mapper>

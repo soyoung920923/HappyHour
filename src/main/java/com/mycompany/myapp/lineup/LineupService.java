@@ -25,7 +25,7 @@ public interface LineupService {
 
 	boolean isMyLineup(int userIdx, int idx);
 
-	int oneclick(int idx, String dateTime, int approval) throws ParseException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException;
+	int oneclick(int idx, String dateTime, int approval, String userMsg) throws ParseException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException;
 
 	
 

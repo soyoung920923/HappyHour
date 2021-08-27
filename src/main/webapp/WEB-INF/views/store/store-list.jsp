@@ -33,14 +33,52 @@
 								    <div class="card align-middle list-card">
 								        <div class="card-body">				       
 									       <ul class="list-ul">
-									       	<li class="list-li-img"><a href="<c:url value='/store/detail?idx=${list.idx}'/>"><div class="list-img-thum"><img alt="" src="<c:url value='${list.PATH}${list.store_Img_Oid}'/>"></div></a></li>
-									       	<li class="list-li-contents">
+									       	<li class="list-li-img">
+									       		<a href="<c:url value='/store/detail?idx=${list.idx}'/>">
+									       			<div class="list-img-thum">
+									       				<img alt="" src="<c:url value='${list.PATH}${list.store_Img_Oid}'/>">
+									       				<div class="ready-block <c:if test="${list.holiday ne null && list.holiday ne ''}">block</c:if>">
+									       					<i class='fas'>&#xf2e7;</i> 
+									       					<c:choose>
+									       						<c:when test="${list.holiday eq 'holiday' }">
+									       							정기휴일
+									       						</c:when>
+									       						<c:otherwise>
+									       							${list.holiday}
+									       						</c:otherwise>
+									       					</c:choose>
+									       				</div>
+									       			</div>
+									       		</a>
+									       	</li>
+									       	<li class="list-li-contents list-li-contents-1">
 									       		<h6 class="list-title"><a href="<c:url value='/store/detail?idx=${list.idx}'/>"><span class="list-category">${list.category}</span>&nbsp;&nbsp;&nbsp;${list.store_Nm}</a></h6>
-									       		<p class="list-cont">${list.store_open} ~ ${list.store_close}
+									       		<p class="list-cont">
+									       			<i class='fas'>&#xf017;</i><span class='miniTitle'> 영업시간</span> ${list.store_open} ~ ${list.store_close}
 									       			<c:choose>
-											       		<c:when test="${list.store_break eq 0}">(브레이크타임 없음)</c:when>
-											       		<c:otherwise><br>break ${list.break_start} ~ ${list.break_end}</c:otherwise>
+											       		<c:when test="${list.store_break eq 0}"></c:when>
+											       		<c:otherwise><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break ${list.break_start} ~ ${list.break_end}</c:otherwise>
 											       	</c:choose>
+											       	<br><i class='fas' style="font-size: 1.1rem;">&#xf273;</i><span class="miniTitle"> 휴일</span>
+											       	<c:choose>
+									       				<c:when test="${list.holidays ne null}">매주
+										       				<c:forEach items="${list.holidays}" var="holiday">
+											       				<c:if test="${holiday eq 2}">월 </c:if>
+											       				<c:if test="${holiday eq 3}">화 </c:if>
+											       				<c:if test="${holiday eq 4}">수 </c:if>
+											       				<c:if test="${holiday eq 5}">목 </c:if>
+											       				<c:if test="${holiday eq 6}">금 </c:if>
+											       				<c:if test="${holiday eq 7}">토 </c:if>
+											       				<c:if test="${holiday eq 1}">일 </c:if>
+											       			</c:forEach>
+										       			</c:when>
+										       			<c:otherwise>
+										       				<c:choose>
+										       					<c:when test="${list.holiday_etc ne null && list.holiday_etc ne ''}">${list.holiday_etc}</c:when>
+										       					<c:otherwise>-</c:otherwise>
+										       				</c:choose>										       				
+										       			</c:otherwise>
+										       		</c:choose>
 									       		</p>
 									       		<%-- <p class="list-cont">${list.store_Info}</p> --%>
 									       	</li>
@@ -153,11 +191,45 @@
 					_choose = _choose+"<br>break "+list.break_start+" ~ "+list.break_end;
 				}
 				var enrollUrl = "/happyhour/lineup/enroll?store="+list.idx;
+				var holiday = list.holiday;
+				if (holiday == 'holiday') {
+					holiday = "block";
+				}else{
+					holiday = "";
+				}
+				var holidayCont = "매주 ";
+				if (true) {
+					//var holidays[] = list.holidays;
+					var weekOfDay = "";
+					for (var i = 0; i < list.holidays.length; i++) {
+						if (list.holidays[i] == 1){
+							holidayCont += "일 ";
+						}else if(list.holidays[i] == 2){
+							holidayCont += "월 ";
+						}else if(list.holidays[i] == 3){
+							holidayCont += "화 ";
+						}else if(list.holidays[i] == 4){
+							holidayCont += "수 ";
+						}else if(list.holidays[i] == 5){
+							holidayCont += "목 ";
+						}else if(list.holidays[i] == 6){
+							holidayCont += "금 ";
+						}else{
+							holidayCont += "토 ";
+						}
+					}
+				}else{
+					holidayCont = list.holiday_etc;
+					if (holidayCont == null || holidayCont == '') {
+						holidayCont = "-";
+					}
+				}
+				
 				
 				_html += "<tr><td><div class='in list-in'><div class='card align-middle list-card'><div class='card-body'><ul class='list-ul'><li class='list-li-img'><a href='<c:url value='/store/detail?idx="+list.idx+"'/>'><div class='list-img-thum'>";
-				_html += "<img alt='' src='"+imgPath+"'></div></a></li>";
-				_html += "<li class='list-li-contents'><a href='<c:url value='/store/detail?idx="+list.idx+"'/>'><h6 class='list-title'><span class='list-category'>"+list.category+"</span>&nbsp;&nbsp;&nbsp;"+list.store_Nm+"</h6></a>";
-				_html += "<p class='list-cont'>"+_choose+"</p></li>";
+				_html += "<img alt='' src='"+imgPath+"'><div class='ready-block "+holiday+"'><i class='fas'>&#xf2e7;</i> 정기휴일</div></div></a></li>";
+				_html += "<li class='list-li-contents list-li-contents-1'><a href='<c:url value='/store/detail?idx="+list.idx+"'/>'><h6 class='list-title'><span class='list-category'>"+list.category+"</span>&nbsp;&nbsp;&nbsp;"+list.store_Nm+"</h6></a>";
+				_html += "<p class='list-cont'><i class='fas'>&#xf017;</i><span class='miniTitle'> 영업시간</span>"+_choose+"<br><i class='fas' style='font-size: 1.1rem;'>&#xf273;</i><span class='miniTitle'> 휴일</span> "+holidayCont+"</p></li>";
 				_html += "<li class='list-li-hit'><i style='font-size:1.3rem' class='fa open-utils' onclick ='onUtils("+i+","+ii+")'>&#xf141;</i><br><i style='font-size:1.3rem' class='far'>&#xf0a6;</i> "+list.hit_Count+"</li></ul></div></div>";
 				_html += "<div class='utils' id='"+ii+"utils"+i+"'><div class='util'><i onclick='telOrPop(\""+list.store_Nm+"\",\""+list.store_Tel+"\")' style='font-size:24px; color: #FFF;' class='fas'>&#xf095;</i></div>";
 				_html += "<div class='util'><i onclick='findLoad(\""+list.store_Nm+"\",\""+list.longitude+"\",\""+list.latitude+"\");' style='font-size:24px; color: #FFF;' class='fas'>&#xf3c5;</i></div>";

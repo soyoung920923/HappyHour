@@ -65,22 +65,50 @@
 				<div class="card align-middle list-card photo">
 				    <div class="card-body">				       
 				       <table id="detail-cont">
+				       	<colgroup>
+				       		 <col class="col"/>
+				       		 <col />
+				       	</colgroup>
 				       	<tr>
-				       		<th>대표번호</th>
+				       		<th><i class='fas'>&#xf095;</i> &nbsp;&nbsp;대표번호</th>
 				       		<td>${store.store_Tel}</td>
 				       	</tr>
 				       	<tr>
-				       		<th>운영시간</th>
-				       		<td>${store.store_open} ~ ${store.store_close}<c:if test="${store.store_break eq 0}">(브레이크타임 없음)</c:if></td>
+				       		<th><i class='fas'>&#xf017;</i> &nbsp;&nbsp;운영시간</th>
+				       		<td>${store.store_open} ~ ${store.store_close}</td>
 				       	</tr>
 				       	<c:if test="${store.store_break eq 1}">
 				       		<tr>
 					       		<th>브레이크타임</th>
 					       		<td>${store.break_start} ~ ${store.break_end}</td>
 					       	</tr>
-				       	</c:if>				       	
+				       	</c:if>
 				       	<tr>
-				       		<th>위치</th>
+				       		<th><i class='fas' style="font-size: 1.1rem;">&#xf273;</i> &nbsp;&nbsp;휴일</th>
+				       		<td>
+				       			<c:choose>
+				       				<c:when test="${store.holidays ne null}">매주
+					       				<c:forEach items="${store.holidays}" var="holiday">
+						       				<c:if test="${holiday eq 2}">월 </c:if>
+						       				<c:if test="${holiday eq 3}">화 </c:if>
+						       				<c:if test="${holiday eq 4}">수 </c:if>
+						       				<c:if test="${holiday eq 5}">목 </c:if>
+						       				<c:if test="${holiday eq 6}">금 </c:if>
+						       				<c:if test="${holiday eq 7}">토 </c:if>
+						       				<c:if test="${holiday eq 1}">일 </c:if>
+						       			</c:forEach>
+					       			</c:when>
+					       			<c:otherwise>
+					       				<c:choose>
+					       					<c:when test="${store.holiday_etc ne null && store.holiday_etc ne ''}">${store.holiday_etc}</c:when>
+					       					<c:otherwise>-</c:otherwise>
+					       				</c:choose>
+					       			</c:otherwise>
+					       		</c:choose>
+				       		</td>
+				       	</tr>			       	
+				       	<tr>
+				       		<th><i class='fas' style="font-size: 1.2rem;">&#xf3c5;</i> &nbsp;&nbsp;위치</th>
 				       		<td>${store.address}</td>
 				       	</tr>
 				       	<tr>

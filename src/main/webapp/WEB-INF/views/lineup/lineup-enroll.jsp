@@ -37,9 +37,9 @@
 				        <h6 class="form-signin-heading" style="text-align:center;color:1F2229;">양식에 맞춰 입력해 주세요</h6>
 						<div id="chk-wrap">
 					    	<br>
-					    	<input type="radio" class="btn-check" name="lineup_yn" id="success-outlined" autocomplete="off" value="1" <c:if test="${lineup.lineup_yn ne '2'}"> checked </c:if>/>
+					    	<input type="radio" class="btn-check" name="lineup_yn" id="success-outlined" autocomplete="off" value="1" checked/>
 							<label class="btn btn-outline-success_" for="success-outlined">줄서기</label>							
-							<input type="radio" class="btn-check" name="lineup_yn" id="danger-outlined" autocomplete="off" value="2" <c:if test="${lineup.lineup_yn eq '2'}"> checked </c:if>/>
+							<input type="radio" class="btn-check" name="lineup_yn" id="danger-outlined" autocomplete="off" value="2"/>
 							<label class="btn btn-outline-danger" for="danger-outlined">예약</label>
 					    </div>
 					    <div id="yesCaption">
@@ -62,9 +62,13 @@
 					    </div>
 					    <%-- <label class="sy-only">*연락처</label><br>
 					    <input type="text" name="lineup_tel" id="storeTel" class="form-control" placeholder="'-' 없이 숫자만 입력" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" value="${store.store_Tel }"><br> --%>
-						<label class="sy-only">*인원</label><br>
-					    <input type="text" name="lineup_count" id="lineupCount" class="form-control" placeholder="최대 10명" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" value="${store.store_Tel }"><br>
-						
+						<div id="count-box">
+							<label class="sy-only">*인원</label><br>
+						    <input type="text" name="lineup_count" id="lineupCount" class="form-control" placeholder="최대 10명" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" value=""><br>							
+						</div>
+						<div id="notice-box">
+							<h5 class="sy-only"></h5>
+						</div>
 						<div id="enroll-btn-wrap" style="text-align:center;">
 			              <button type="button" class="btn-btn btn form-control" id="enroll-btn">확&nbsp;인</button>
 			              <c:if test="${lineup ne null}">
@@ -87,9 +91,31 @@
 </body>
 <style>
 	#yesCaption{height: 0; overflow: hidden;}
+	#notice-box{display:none;}
+	#notice-box >h5{text-align: center;}
 </style>
 <script type="text/javascript">
 $(function(){
+	
+	var holiday = '${storeDt.holiday}';
+	
+	if (holiday == 'holiday') {
+		$('#count-box').hide();
+		$('#notice-box >h5').text("오늘은 휴일입니다.");
+		$('#notice-box').show();
+	}
+	
+	var lService = '${storeDt.line_yn}';
+	var rService = '${storeDt.rsv_yn}';
+	var lNoti = '${storeDt.line_notice}';
+	var rNoti = '${storeDt.rsv_notice}';
+	
+	if (lService == 0) {
+		$('#count-box').hide();
+		$('#notice-box >h5').text(lNoti);
+		$('#notice-box').show();
+	}
+	
 	var saveOrDelete = 0;
 	
     var isCap = $('input[name="lineup_yn"]:checked').val();
@@ -102,18 +128,42 @@ $(function(){
 	
 	$(document).on('change', "input[name='lineup_yn']" ,function() {
 		isCap = $(this).val();
-		
 		if (isCap == 2) {
-			$('#yesCaption').animate({
-				height: '+=150'
-			}, 500);
+			if (rService == 0) {
+				$('#count-box').hide();
+				$('#notice-box >h5').text(rNoti);
+				$('#notice-box').show();
+			}else{
+				$('#count-box').show();
+				$('#notice-box >h5').text("");
+				$('#notice-box >h5').hide;
+				$('#yesCaption').animate({
+					height: '+=150'
+				}, 500);
+			}
+			
 		}else{
+			if (lService == 0 || holiday == 'holiday') {
+				$('#count-box').hide();
+				if (lService == 0) {
+					$('#notice-box >h5').text(lNoti);
+				}else{
+					$('#notice-box >h5').text("오늘은 휴일입니다.");
+				}
+				
+				$('#notice-box').show();
+			}else{
+				$('#count-box').show();
+				$('#notice-box >h5').text("");
+				$('#notice-box >h5').hide;
+			}
 			$('#date option:eq(0)').prop("selected", true);
 			$('#time option:eq(0)').prop("selected", true);
 			$('#yesCaption').animate({
 				height: '-=150'
 			}, 200);
 		}
+				
 	});
 	
 	$('#lineupCount').keyup(function(){
@@ -126,7 +176,15 @@ $(function(){
 	})
 	
 	$('#enroll-btn').click(function(){
-		submitWhere(saveOrDelete);
+		if ((lService == 0 || holiday == 'holiday') && isCap == 1) {
+			alert("준비중입니다.");
+			return;
+		}else if(rService == 0 && isCap == 2){
+			alert("준비중입니다.");
+			return;
+		}else{			
+			submitWhere(saveOrDelete);
+		}
 	});
 	
 	$('#delete-btn').click(function(){
@@ -143,19 +201,7 @@ $(function(){
 	function submitWhere(saveOrDelete){
 		
 		if (saveOrDelete == 0) {
-			
-		    /* if($('#storeNm').val() == null || $('#storeNm').val() == ''){
-				alert('이름을 입력하세요');
-				$(this).focus();
-				return;
-			} */
-			
-		    if($('input[name="lineup_yn"]').val() == null || $('input[name="lineup_yn"]').val() == ''){
-				alert('구분을 입력하세요');
-				$(this).focus();
-				return;
-			}
-		    
+		   
 		    if (isCap == 2) {
 		    	if($('#date').val() == null || $('#date').val() == ''){
 					alert('예약날짜를 선택하세요');
@@ -168,19 +214,13 @@ $(function(){
 					return;
 				}
 			}
-		    
-		   	/* if($('#storeTel').val() == null || $('#storeTel').val() == ''){
-				alert('연락처를 입력하세요');
-				$(this).focus();
-				return;
-			} */
+		   
 		   	if($('#lineupCount').val() == null || $('#lineupCount').val() == ''){
 				alert('인원수를 입력하세요');
 				$(this).focus();
 				return;
 			}
-		   	
-		   	
+		   			   	
 		   	$('#f').attr('action','enroll');
 		}else{
 			$('#f').attr('action','delete');

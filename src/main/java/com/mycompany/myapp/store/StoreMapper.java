@@ -24,4 +24,6 @@ public interface StoreMapper {
 
 	String getDelOid(int idx);
 
+	int updateService(StoreDTO store);
+
 }

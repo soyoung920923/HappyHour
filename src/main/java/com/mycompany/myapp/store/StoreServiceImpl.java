@@ -2,6 +2,8 @@ package com.mycompany.myapp.store;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +46,13 @@ public class StoreServiceImpl implements StoreService{
 			store.setStore_Img(aboutFile.get("img"));
 			store.setStore_Img_Oid(aboutFile.get("imgOid"));
 		}
+		if (store.getHolidays() != null) {
+			String holiday = "";
+			for (int i = 0; i < store.getHolidays().length; i++) {
+				holiday += store.getHolidays()[i]+"`";
+			}
+			store.setHoliday(holiday);
+		}
 		int result = 0;
 		if (msg.equals("등록")) {	
 			result = storeMapper.enrollStore(store);
@@ -63,9 +72,16 @@ public class StoreServiceImpl implements StoreService{
 			Integer idt = list.get(i).getStore_Idt();
 			String setCategory = commonUtil.storeCategory(idt);
 			list.get(i).setCategory(setCategory);
-		}	 
+			
+			if (list.get(i).getHoliday() != null && list.get(i).getHoliday() != "") {
+				String holiday = list.get(i).getHoliday();
+				String holidays[] = holiday.split("`");
+				list.get(i).setHolidays(holidays);
+			}
+			
+		 }
 			 
-		return list;
+		 return list;
 	}
 
 	@Override
@@ -79,6 +95,12 @@ public class StoreServiceImpl implements StoreService{
 		
 		String address = commonUtil.storeAddress(store.getStore_Address(), store.getStore_Address_Dt());
 		store.setAddress(address);
+		
+		if (store.getHoliday() != null && store.getHoliday() != "") {
+			String holiday = store.getHoliday();
+			String holidays[] = holiday.split("`");
+			store.setHolidays(holidays);
+		}
 		
 		return store;
 	}

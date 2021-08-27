@@ -2,6 +2,7 @@ package com.mycompany.myapp.store;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,9 +38,7 @@ public class StoreDTO implements Serializable{
 	private String break_start;
 	private String break_end;
 	private int store_break;
-	
-	
-	
+		
 	private String category;
 	private String address;
 	private String latitude;
@@ -47,4 +46,16 @@ public class StoreDTO implements Serializable{
 	private int distance;
 	
 	private final String PATH = "\\happyImage\\";
+	
+	private int newRsv;
+	private int newLnu;
+	private int line_yn;
+	private int rsv_yn;
+	private String line_notice;
+	private String rsv_notice;
+	
+	private String holidays[];
+	private String holiday;
+	private String holiday_etc;
+	
 }

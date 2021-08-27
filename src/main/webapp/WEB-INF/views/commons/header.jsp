@@ -149,7 +149,7 @@
 					</div>
 	    			<div id="map_h" class="h-map"></div>
 	    			<div id="map_x" class="h-map h-map2">내 위치를 켜주세요.</div>
-	    			<input type="button" id="closeMyPointUtil" value="닫&nbsp;기" class="btn-btn btn form-control" style="margin-bottom: 0.8rem; "/>
+	    			<input type="button" id="closeMyPointUtil" value="닫&nbsp;기" class="btn-btn btn form-control btn-clz" style="margin-bottom: 0.8rem; "/>
 	    		</div>
 	  		</div>
 	  	</div>
@@ -168,10 +168,18 @@
 	    			<h2 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">Approve Reservation</h2>
 	    		</div>
 	    		<div class="card-body">
-	    			<form id="approveReservation" name="approveReservation">
-	    				<input type="hidden" name="idx" id="idx"/>  			
+	    			<form id="approveReservation" name="approveReservation" action="/happyhour/lineup/oneclick?idx=0" method="post">
+	    				<input type="hidden" name="lidx" id="lidx"/>  			
 	    				<input type="hidden" name="dateTime" id="dateTime"/>  			
-	    				<input type="hidden" name="oneclick" id="oneclick" value="no"/>  			
+	    				<input type="hidden" name="oneclick" id="oneclick" value="no"/>
+	    				<table id="rsv-table">
+	    					<tr><th>이름</th><th>연락처</th><th>인원</th></tr>
+	    					<tr>
+	    						<td><input type="text" id="nm" readOnly class="box-input" style="border: 0px solid #fff; text-align: center; font-size: 0.9rem;"/></td>
+	    						<td><input type="text" id="tel" readOnly class="box-input" style="border: 0px solid #fff; text-align: center; font-size: 0.9rem;"/></td>
+	    						<td><input type="text" id="cnt" readOnly class="box-input" style="border: 0px solid #fff; text-align: center; font-size: 0.9rem;"/></td>
+	    					</tr>
+	    				</table>  			
 		    			<div style="margin: 30px 0px;">
 		    				<input type="radio" class="btn-check" name="approval" id="success-outlined1" autocomplete="off" value="0" checked/>
 							<label class="btn btn-outline-success_" for="success-outlined1">승인</label>						
@@ -181,10 +189,94 @@
 		    			<div style="margin-bottom: 30px;">
 		    				*고객에게 전송할 문자 내용을 입력해주세요.
 		    				<textarea class="form-control" id="userMsg" name="userMsg"></textarea>
+		    				<div id="test_cnt" style="width: 100%; text-align:right; font-size: 0.8rem; display: none;">(0 / 40)</div>
 		    			</div>	    				
 	    			</form>
 	    			<input type="button" id="submitMyReserve" value="완&nbsp;료" class="btn-btn btn form-control"/>
-	    			<input type="button" id="closeMyReserveUtil" value="닫&nbsp;기" class="btn-btn btn form-control" style="margin-bottom: 0.8rem; "/>
+	    			<input type="button" id="closeMyReserveUtil" value="닫&nbsp;기" class="btn-btn btn form-control btn-clz" style="margin-bottom: 0.8rem; "/>
+	    		</div>
+	  		</div>
+	  	</div>
+	  </div>
+	  
+	  <!-- 식당-예약/줄서기 설정 모달 팝업 -->
+	  <div id="myReserveSetting">
+	  	<br>
+	  	<br>
+	  	<br>
+	  	<br>
+	  	<br>
+	  	<div id="ms-modal" class="in">	  		
+	    	<div class="card align-middle">
+	    		<div class="card-title" style="margin-top: 30px;">
+	    			<h2 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">Setting</h2>
+	    		</div>
+	    		<div class="card-body">
+	    			<form id="settingReservation" name="settingReservation" action="" method="post">	    				
+	    				*<span class="pathName"></span> 기능 			
+		    			<div style="margin-bottom: 30px;">
+		    				<input type="radio" class="btn-check" name="serviceYn" id="success-outlined2" autocomplete="off" value="1"/>
+							<label class="btn btn-outline-success_" for="success-outlined2">켜기</label>						
+							<input type="radio" class="btn-check" name="serviceYn" id="danger-outlined2" autocomplete="off" value="0"/>
+							<label class="btn btn-outline-danger" for="danger-outlined2">끄기</label>
+		    			</div>
+		    			<div style="margin-bottom: 30px;">
+		    				*<span class="pathName"></span> 미사용 시 공지할 내용을 입력해주세요.
+		    				<textarea class="form-control" id="noticeMsg" name="noticeMsg"></textarea>
+		    				<div id="test_cnt1" style="width: 100%; text-align:right; font-size: 0.8rem; display: none;">(0 / 40)</div>
+		    			</div>	    				
+	    			</form>
+	    			<input type="button" id="submitMySetting" value="완&nbsp;료" class="btn-btn btn form-control"/>
+	    			<input type="button" id="closeMySetting" value="닫&nbsp;기" class="btn-btn btn form-control btn-clz" style="margin-bottom: 0.8rem; "/>
+	    		</div>
+	  		</div>
+	  	</div>
+	  </div>
+	  
+	  <!-- 식당-휴일 설정 모달 팝업 -->
+	  <div id="myHolidaySetting">
+	  	<br>
+	  	<br>
+	  	<br>
+	  	<br>
+	  	<br>
+	  	<div id="mh-modal" class="in">	  		
+	    	<div class="card align-middle">
+	    		<div class="card-title" style="margin-top: 30px;">
+	    			<h2 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">Holiday<br><span id="holiday_storeNm"></span></h2>
+	    		</div>
+	    		<div class="card-body">
+	    			<form id="settingHoliday" name="settingHoliday" action="" method="post">
+	    				<input type="hidden" name="hstore"  id="hstore" value=""/>
+	    				* 휴일선택 			
+		    			<div style="margin-bottom: 10px;">
+		    				<input type="radio" class="btn-check" name="todayYn" id="success-outlined3" autocomplete="off" value="1" checked/>
+							<label class="btn btn-outline-success_" for="success-outlined3">오늘</label>						
+							<input type="radio" class="btn-check" name="todayYn" id="danger-outlined3" autocomplete="off" value="0"/>
+							<label class="btn btn-outline-danger" for="danger-outlined3">날짜지정</label>
+		    			</div>
+		    			<div id="holiday-input-date">
+		    				<span id="s-title">* 시작일</span>
+			    			<input type="date" class="form-control" name="startDate" id="startDate"/>
+			    			<span id="e-title">* 끝일</span>
+			    			<input type="date" class="form-control" name="endDate" id="endDate"/>
+		    			</div>
+		    			<div style="margin-bottom: 30px;"> 
+		    				* 휴일구분
+		    				<select class="form-control" name="holiday_status" id="holiday_status">
+								<option value="" disabled selected hidden>선택하세요</option>
+								<option value="준비중">준비중</option>
+								<option value="휴가중">휴가중</option>
+								<option value="수리중">수리중</option>
+								<option value="임시휴일">임시휴일</option>
+								<option value="정기휴일">정기휴일</option>
+								<option value="기타휴일">기타휴일</option>
+							</select>
+		    			</div>	    				
+	    			</form>
+	    			<h6 style="width: 100%; text-align:right; padding-right: 0.4rem;"><a href="" id="history"><i class='fas'>&#xf064;</i> 등록한 휴일 보기</a></h6>
+	    			<input type="button" id="submitMyHoliday" value="완&nbsp;료" class="btn-btn btn form-control"/>
+	    			<input type="button" id="closeMyHoliday" value="닫&nbsp;기" class="btn-btn btn form-control btn-clz" style="margin-bottom: 0.8rem; "/>
 	    		</div>
 	  		</div>
 	  	</div>

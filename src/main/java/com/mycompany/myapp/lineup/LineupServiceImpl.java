@@ -2,6 +2,7 @@ package com.mycompany.myapp.lineup;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.JsonAdapter;
 import com.mycompany.common.CommonUtil;
@@ -59,43 +61,49 @@ public class LineupServiceImpl implements LineupService{
 		// TODO Auto-generated method stub
 		int result = 0;
 		if (msg.equals("등록")) {		
-			String dateTime = "";
+			String date= "";
+			String time= "";
 			if (lineup.getLineup_yn() == 2) {			
-				dateTime = lineup.getDate()+" "+lineup.getTime();
-				lineup.setDateTime(dateTime+":00");
+				date = lineup.getDate();
+				time = lineup.getTime();
+				lineup.setDateTime(lineup.getDate()+" "+lineup.getTime()+":00");
 				
 				lineup.setLineup_visit(4); // 임시예약				
 			}else {
 				lineup.setLineup_visit(0); // 입장전
 			}			
 			result = lineupMapper.insertLineup(lineup);
-			int idx = lineup.getIdx();
-			Map<String, Object> storeUser = lineupMapper.getStoreUser(idx);
-			String storeName = storeUser.get("storeName").toString();
-			String storeMobile = storeUser.get("storeMobile").toString();
-			String oneclick0 = "192.168.25.44:8080/happyhour/lineup/oneclick?idx="+lineup.getIdx()+"dateTime="+dateTime+"&approval=0";
-			String oneclick5 = "192.168.25.44:8080/happyhour/lineup/oneclick?idx="+lineup.getIdx()+"&approval=5";
-			NaverShortUrl shortUrl = new NaverShortUrl();
-			JSONParser jsonParser = new JSONParser();
-			String madData = "";
-			try {
-				madData = shortUrl.shortUrl(oneclick0);
-				JSONObject jobj = (JSONObject) jsonParser.parse(madData);
-				JSONObject jobjResult = (JSONObject) jsonParser.parse((String) jobj.get("result"));
-				oneclick0 = jobjResult.get("url").toString();
-				madData = shortUrl.shortUrl(oneclick5);
-				jobj = (JSONObject) jsonParser.parse(madData);
-				jobjResult = (JSONObject) jsonParser.parse((String) jobj.get("result"));
-				oneclick5 = jobjResult.get("url").toString();
-			} catch (org.json.simple.parser.ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			String cont = "["+storeName+" 예약 요청]\n희망일시: "+dateTime+"\n승인: "+oneclick0+"\n반려: "+oneclick5;
-			String cont2 = new String(cont.getBytes("8859_1"), "UTF-8");
-			if (lineup.getLineup_yn() == 2 && result > 0) {
-				NaverSmsService naverSms = new NaverSmsService();
-				naverSms.sendSms(storeMobile, cont2, null, null, null);
+			if (result > 0 && lineup.getLineup_yn() == 2) {				
+				int idx = lineup.getIdx();
+				Map<String, Object> storeUser = lineupMapper.getStoreUser(idx);
+				String storeName = storeUser.get("storeName").toString();
+				String storeMobile = storeUser.get("storeMobile").toString();
+				String oneclick0 = "192.168.25.5:8080/happyhour/lineup/oneclick/0/"+date+"/"+time+"?idx="+lineup.getIdx();		        
+		        System.out.println(oneclick0);
+				String oneclick5 = "192.168.25.5:8080/happyhour/lineup/oneclick/5/"+date+"/"+time+"?idx="+lineup.getIdx();
+				NaverShortUrl shortUrl = new NaverShortUrl();
+				JSONParser jsonParser = new JSONParser();
+				String mataData = "";
+				try {
+					mataData = shortUrl.shortUrl(oneclick0);
+					JSONObject jobj = (JSONObject) jsonParser.parse(mataData);
+					Gson gson = new Gson();
+					JSONObject jobjResult = (JSONObject) jsonParser.parse(gson.toJson(jobj.get("result")));
+					oneclick0 = jobjResult.get("url").toString();
+					mataData = shortUrl.shortUrl(oneclick5);
+					jobj = (JSONObject) jsonParser.parse(mataData);
+					jobjResult = (JSONObject) jsonParser.parse(gson.toJson(jobj.get("result")));
+					oneclick5 = jobjResult.get("url").toString();
+				} catch (org.json.simple.parser.ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String cont = new String("["+storeName+"]\n예약: "+date+" "+time+"\n승인: "+oneclick0+"\n반려: "+oneclick5);
+				System.out.println(cont);
+				if (lineup.getLineup_yn() == 2 && result > 0) {
+					NaverSmsService naverSms = new NaverSmsService();
+					naverSms.sendSms(storeMobile, cont, null, null, null, "LMS");
+				}
 			}
 		}else {
 			result = lineupMapper.updateLineup(lineup);
@@ -119,21 +127,19 @@ public class LineupServiceImpl implements LineupService{
 		if ("1".equals(param.get("path").toString()) && "2".equals(param.get("visit").toString())) {			
 			LineupDTO nowTeam = lineupMapper.nowTeam(param);
 			recipient = nowTeam.getLineup_tel();
-			msg = "대기순번에 방문하지 않으셔서 줄서기가 취소되었습니다.";
-			String msg2 = new String(msg.getBytes("8859_1"), "UTF-8");
-			naverSms.sendSms(recipient, msg2, null, null, null);
+			msg = "대기순번에 방문하지 않으셔서 줄서기가 취소되었습니다.";			
+			naverSms.sendSms(recipient, msg, null, null, null, "SMS");
 		}
 		
 		if ("2".equals(param.get("path").toString()) && ("3".equals(param.get("visit").toString())|| "2".equals(param.get("visit").toString()))) {
 			LineupDTO nowTeam = lineupMapper.nowTeam(param);
 			String smsId = nowTeam.getSms_id();
-			NaverSmsResponseDTO apiResp = naverSms.sendSms(null, null ,null, null, smsId);
+			NaverSmsResponseDTO apiResp = naverSms.sendSms(null, null ,null, null, smsId, null);
 			System.out.println(apiResp);
 			if ("2".equals(param.get("visit").toString())) {
 				recipient = nowTeam.getLineup_tel();
 				msg = "예약시간에 방문하지 않으셔서 예약이 취소되었습니다.";
-				String msg2 = new String(msg.getBytes("8859_1"), "UTF-8");
-				naverSms.sendSms(recipient, msg2, null, null, null);
+				naverSms.sendSms(recipient, msg, null, null, null, "SMS");
 			}
 		}
 		
@@ -146,8 +152,8 @@ public class LineupServiceImpl implements LineupService{
 			if (nextTeam != null) {				
 				recipient = nextTeam.getLineup_tel();
 				msg = "다음 입장순번입니다. 지금 바로 방문해주세요.";
-				String msg2 = new String(msg.getBytes("8859_1"), "UTF-8");
-				naverSms.sendSms(recipient, msg2, null, null, null);			}
+				naverSms.sendSms(recipient, msg, null, null, null, "SMS");			
+			}
 		}
 		return result;
 	}
@@ -158,12 +164,11 @@ public class LineupServiceImpl implements LineupService{
 		Map<String, Object> isMyLineup = lineupMapper.isMyLineup(idx);
 		int user = Integer.parseInt(isMyLineup.get("USER").toString().trim());
 		int store = Integer.parseInt(isMyLineup.get("STORE").toString().trim());
-		//return userIdx == user || userIdx == store;
-		return false;
+		return userIdx == user || userIdx == store;
 	}
 
 	@Override
-	public int oneclick(int idx, String dateTime, int approval) throws ParseException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException {
+	public int oneclick(int idx, String dateTime, int approval, String userMsg) throws ParseException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException {
 		// TODO Auto-generated method stub
 		String reserveTime = null;
 		String reserveTimeZone ="Asia/Seoul";	
@@ -186,10 +191,13 @@ public class LineupServiceImpl implements LineupService{
 
 		System.out.println(reserveTime);
 		System.out.println(reserveTimeZone);
-		
-		int result = lineupMapper.oneclick(idx, approval);
+		LineupDTO lineup = new LineupDTO();
+		lineup.setIdx(idx);
+		lineup.setLineup_visit(approval);
+		int result = lineupMapper.oneclick(lineup);
 		NaverSmsService naverSms = new NaverSmsService();
 		String tel = null;
+		String rmsg = null;
 		String msg = null;
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("idx", idx);
@@ -198,40 +206,20 @@ public class LineupServiceImpl implements LineupService{
 			tel = nowTeam.getLineup_tel();
 			if (approval == 0) {
 				// 예약 승인
-				msg = dateTime+"에 예약하셨습니다.";
-				NaverSmsResponseDTO apiResp = naverSms.sendSms(tel, msg ,reserveTime, reserveTimeZone, null);
+				rmsg = dateTime+"에 예약하셨습니다.";
+				NaverSmsResponseDTO apiResp = naverSms.sendSms(tel, rmsg ,reserveTime, reserveTimeZone, null, "SMS");
 				String smsId = apiResp.getRequestId();
-				LineupDTO lineup = new LineupDTO();
-				lineup.setIdx(idx);
 				lineup.setSms_id(smsId);
 				lineupMapper.updateSmsId(lineup);
-				msg = dateTime+"에 예약이 확정되었습니다.";
-				String msg2 = new String(msg.getBytes("8859_1"), "UTF-8");
-				naverSms.sendSms(tel, msg2, null, null, null);
+				msg = userMsg == null? dateTime+"에 예약이 확정되었습니다." : userMsg;
+				naverSms.sendSms(tel, msg, null, null, null, "SMS");
 			}else {
-				msg = "식당의 사정으로 예약이 반려되었습니다.";
-				String msg2 = new String(msg.getBytes("8859_1"), "UTF-8");
-				naverSms.sendSms(tel, msg2, null, null, null);
+				msg = userMsg == null? "식당의 사정으로 예약이 반려되었습니다." : userMsg;
+				naverSms.sendSms(tel, msg, null, null, null, "SMS");
 			}			
 		}
 		return result;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
 	
 	
 }
