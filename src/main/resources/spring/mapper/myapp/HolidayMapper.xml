@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myapp.holiday.HolidayMapper">
+	
+	<insert id="enroll" parameterType="Holiday">
+		INSERT INTO HH_HOLIDAY(
+			STORE_ORIGIN,
+			HOLIDAY_START,
+			HOLIDAY_END,
+			HOLIDAY_STATUS,
+			REGIST_DATE,
+		    REGIST_ID,
+		    UPDATE_DATE,
+		    UPDATE_ID
+		)VALUES(
+			#{store_origin},
+			#{holiday_start},
+			#{holiday_end},
+			#{holiday_status},
+			NOW(),
+			#{regist_id},
+			NOW(),
+			#{update_id}
+		)
+	</insert>
+	
+	<select id="getTotalCount" resultType="int" parameterType="Param">
+		SELECT COUNT(*) FROM HH_HOLIDAY
+		WHERE 1=1
+		<if test="idx != null and idx != '' and idx != 0">
+			AND STORE_ORIGIN = #{idx}
+		</if>
+	</select>
+	
+	<select id="getHolidays" resultType="Holiday" parameterType="Param">
+		SELECT
+			@ROWNUM := @ROWNUM +1 as ROWNUM,
+			H.IDX,
+			H.STORE_ORIGIN,
+			H.HOLIDAY_START,
+			H.HOLIDAY_END,
+			H.HOLIDAY_STATUS,
+			H.REGIST_DATE,
+		    H.REGIST_ID,
+		    H.UPDATE_DATE,
+		    H.UPDATE_ID
+		FROM HH_HOLIDAY H, (select @rownum := 0) tmp
+		WHERE 1=1
+		<if test="idx != null and idx != '' and idx != 0">
+			AND STORE_ORIGIN = #{idx}
+		</if>
+		ORDER BY HOLIDAY_START ASC, UPDATE_DATE DESC
+		<if test="startCount != null and startCount != ''">
+			LIMIT #{startCount}, #{endCount}
+		</if>		
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM HH_HOLIDAY
+		WHERE IDX = #{idx}
+	</delete>
+	
+</mapper>
