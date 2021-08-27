@@ -2,7 +2,6 @@ package com.mycompany.myapp.lineup;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.codehaus.jackson.JsonParser;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
@@ -23,10 +21,7 @@ import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.JsonAdapter;
 import com.mycompany.common.CommonUtil;
 import com.mycompany.common.NaverShortUrl;
 import com.mycompany.common.SearchParam;
@@ -207,10 +202,12 @@ public class LineupServiceImpl implements LineupService{
 			if (approval == 0) {
 				// 예약 승인
 				rmsg = dateTime+"에 예약하셨습니다.";
-				NaverSmsResponseDTO apiResp = naverSms.sendSms(tel, rmsg ,reserveTime, reserveTimeZone, null, "SMS");
-				String smsId = apiResp.getRequestId();
-				lineup.setSms_id(smsId);
-				lineupMapper.updateSmsId(lineup);
+				
+			    NaverSmsResponseDTO apiResp = naverSms.sendSms(tel, rmsg ,reserveTime,reserveTimeZone, null, "SMS"); 
+			    String smsId = apiResp.getRequestId();
+			    lineup.setSms_id(smsId); 
+			    lineupMapper.updateSmsId(lineup);
+				 
 				msg = userMsg == null? dateTime+"에 예약이 확정되었습니다." : userMsg;
 				naverSms.sendSms(tel, msg, null, null, null, "SMS");
 			}else {

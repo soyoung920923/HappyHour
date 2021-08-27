@@ -282,15 +282,17 @@ public class LineupController {
 				}
 				rsvDay = cal.get(Calendar.DAY_OF_WEEK); // 예약일 요일
 				// 휴무일 정보로 오늘 휴무인지 여부 및 예약일 세팅
-				for (int j = 0; j < storeDt.getHolidays().length; j++) {
-					if (dayOfWeek == Integer.parseInt(storeDt.getHolidays()[j])) {
-						storeDt.setHoliday("holiday");
+				if (storeDt.getHolidays() != null) {					
+					for (int j = 0; j < storeDt.getHolidays().length; j++) {
+						if (dayOfWeek == Integer.parseInt(storeDt.getHolidays()[j])) {
+							storeDt.setHoliday("holiday");
+						}
+						if (rsvDay == Integer.parseInt(storeDt.getHolidays()[j])) {
+							cal.add(Calendar.DATE, +1);
+						}
 					}
-					if (rsvDay == Integer.parseInt(storeDt.getHolidays()[j])) {
-						cal.add(Calendar.DATE, +1);
-					}
+					dateSet.add(df.format(cal.getTime()));
 				}
-				dateSet.add(df.format(cal.getTime()));
 			}			
 			List<String> timeSet = commonUtil.timeSet();
 			
@@ -526,7 +528,6 @@ public class LineupController {
 		
 	}
 	
-	@ResponseBody
 	@RequestMapping(value = {"/oneclick/{approval}/{date}/{time}", "/oneclick"}, method= {RequestMethod.GET,  RequestMethod.POST})
 	public String oneclick(Model model, @RequestParam(name="idx", required = false) Integer idx,
 			@PathVariable(name="date", required = false) String date,

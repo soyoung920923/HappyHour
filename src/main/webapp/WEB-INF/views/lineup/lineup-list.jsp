@@ -465,6 +465,7 @@
 		}
 		
 		$('#closeMyReserveUtil').click(function(){
+			$("input[id='success-outlined1']").prop('checked',true);
 			$('#myReserveUtil').hide();
 		});
 		
@@ -477,10 +478,11 @@
 		
 		$(document).on('change', "input[name='approval']" ,function() {
 			approval = $("input[name='approval']:checked").val();
+			
 			if (approval == 0) {
-				$('#userMsg').text(dateTime+"에 예약이 확정되었습니다.");
+				$('#userMsg').val($('#dateTime').val()+"에 예약이 확정되었습니다.");
 			}else{
-				$('#userMsg').text("식당의 사정으로 예약이 반려되었습니다.");
+				$('#userMsg').val("식당의 사정으로 예약이 반려되었습니다.");
 			}
 		});
 		

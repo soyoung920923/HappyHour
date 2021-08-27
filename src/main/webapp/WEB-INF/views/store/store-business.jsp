@@ -189,8 +189,8 @@
 				var list = resultList[i];
 				var imgPath = "/happyImage/"+list.store_Img_Oid;
 				
-				_html += "<tr><td><div class='in list-in'><div class='card align-middle list-card'><div class='card-body'><ul class='list-ul'><li class='list-li-img'><a href='<c:url value='/store/enroll?idx="+list.idx+"'/>'><div class='list-img-thum'>";
-				_html += "<img alt='' src='"+imgPath+"'></div></a></li>";
+				_html += "<tr><td><div class='in list-in'><div class='card align-middle list-card'><div class='card-body'><ul class='list-ul'><li class='list-li-img'><a href='<c:url value='/store/detail?idx="+list.idx+"'/>'><div class='list-img-thum'>";
+				_html += "<img alt='' src='"+imgPath+"'><div class='ready-block block'><i class='fas'>&#xf002;</i> 상세페이지</div></div></a></li>";
 				_html += "<li class='list-li-contents'><a href='<c:url value='/store/enroll?idx="+list.idx+"'/>'><h6 class='list-title'><span class='list-category'>"+list.category+"</span>&nbsp;&nbsp;&nbsp;"+list.store_Nm+"</h6></a>";
 				_html += "<p class='list-cont'><a href='/happyhour/lineup/list/1?store="+list.idx+"&myOrStore=store'><input type='button' class='btn-btn btn form-contol modi-btn' value='줄서기 현황'/></a>";
 				_html += "<a href='/happyhour/lineup/list/2?store="+list.idx+"&myOrStore=store'><input type='button' class='btn-btn btn form-contol modi-btn' value='예약관리'/></a></p></li>";
