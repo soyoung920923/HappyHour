@@ -34,14 +34,16 @@
 <div class="container">
     <div class="m-5 p-3 text-center"
          style="border: 1px solid gray;border-radius:15px;background-color:white;" id="font2">
-        <form name="meF" id="meF" action="edit" method="POST">
-        <h1 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">MyPage</h1>
+         
+        <form name="meF" id="meF" action="userEdit" method="POST">
+        <h1 class="card-title text-center" style="col1or:#E30F0C; font-family: 'Ubuntu', sans-serif;">MyPage</h1>
         <br>
         <div class="selectB">
         <select name="user_dt" style="align:right;">
         <option value="0" <c:if test="${user.user_dt eq 0}">selected</c:if>>미인증</option>
         <option value="1" <c:if test="${user.user_dt eq 1}">selected</c:if>>일반회원</option>
         <option value="2" <c:if test="${user.user_dt eq 2}">selected</c:if>>스토어회원</option>
+        <option value="3" <c:if test="${user.user_dt eq 3}">selected</c:if>>휴먼회원</option>
         <option value="4" <c:if test="${user.user_dt eq 4}">selected</c:if>>탈퇴회원</option>
         <option value="9" <c:if test="${user.user_dt eq 9}">selected</c:if>>관리자</option>
         </select>
@@ -56,12 +58,11 @@
                     <td><input type="text" value="${user.name}" name="name"
                                id="name" class="form-control" maxlength="11" required></td>
                     <th>아이디</th>
-                    <td>${user.id }</td>
+                    <td>${user.id }</td>   
                 </tr>
                 <tr>
                     <th>이메일</th>
-                    <td>${user.email }
-                     <input type="hidden" id="email" name="email" value="${user.email }"></td>
+                    <td>${user.email }</td>     
                     <th>연락처</th>
                     <td>
                     <input type="text" value="${user.tel }" name="tel" id="tel" class="form-control" maxlength="11" required></td>
@@ -84,13 +85,16 @@
                 </tr>
                 <tr>
                    <th>동의</th>
-                   <td><input type="checkbox" name="agree2" id="agree2" value="1" style="margin: auto;color:#1F2229;" checked>&nbsp;마케팅수신동의(선택)
-                   <input type="hidden" name="agree2" id="agree2_hidden" value="0" style="margin: auto;color:#1F2229;"></td>
+                   <td><input type="checkbox" name="agree1" id="agree1" value="1" style="margin: auto;" disabled checked><a href="#agree1" style="color:#E30F0C;">&nbsp;이용약관(필수)</a>
+                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="agree2" id="agree2" value="1" style="margin: auto;color:#1F2229;" checked>&nbsp;마케팅수신동의(선택)<td>
+                   <input type="hidden" name="agree2" id="agree2_hidden" value="0" style="margin: auto;color:#1F2229;">
+                   <th>
+                   </th>
                 </tr>
             </table>
             <div class="container text-right">
                 <input type="hidden" id="res" name="res">
-                <button class="btn" id="rewrite" name="rewrite">수정하기</button>
+                <button type="button" class="btn" id="rewrite" name="rewrite">수정하기</button>
             </div>
         </form>
         <!-- 버튼정렬div -->

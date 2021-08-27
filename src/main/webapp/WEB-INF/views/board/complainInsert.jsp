@@ -32,11 +32,20 @@
         <br>
     <div class="row">
 
-            <form name="boardF" id="boardF" action="insert" method="post"
+            <form name="boardF" id="boardF" action="complainInsert" method="post"
                   enctype="multipart/form-data">
-
                 <input type="hidden" name="mode" value="insert">
                 <input type="hidden" name="id" value="${loginUser.id}">
+	                <c:if test="${loginUser.user_dt eq '9'}">
+		                <div align="right">
+		                <input type="checkbox" name="category" id="category" value="0"/>
+		                <label for="category">&nbsp;공지사항&nbsp;&nbsp;&nbsp;&nbsp;</label>
+		                <input type="hidden" name="category" id="category_hidden" value="1">
+		                </div>
+	                </c:if>
+	                <c:if test="${loginUser.user_dt ne '9'}">
+	               		<input type="hidden" name="category" id="category" value="1">
+	                </c:if>
                 <table class="table table-bordered">
                     <tr>
                         <th style="width: 20%">제목</th>
@@ -95,6 +104,9 @@
                 $content.focus();
                 return;
             }
+    		if(document.getElementById("category").checked){
+    			document.getElementById("category_hidden").disabled = true ;
+    		}	
 
             $('#boardF').submit();
         })

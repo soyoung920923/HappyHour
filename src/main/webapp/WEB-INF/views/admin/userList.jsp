@@ -51,6 +51,7 @@
 							<th>이름</th>
 							<th>아이디</th>
 							<th>회원상태</th>
+							<th>가입일</th>
 							<th>관리</th>
 						</tr>
 
@@ -78,19 +79,20 @@
                                     <c:if test="${user.user_dt==4}">
                                         <font color="#FF0000">탈퇴회원</font></c:if> 
                                     <c:if test="${user.user_dt==9}">
-                                        <font color="#4169E1">관리자</font></c:if>
-                                    </td>     
-									<td>
-                                    <c:if test="${user.user_dt ne '4'}">
-									<a href="#" onclick="userEdit('${user.origin_num}')"><font color="#4169E1"><b>수정</b></font></a>&nbsp;|&nbsp;
-									<a href="javascript:userDel('${user.origin_num}')"><font color="#FF0000"><b>탈퇴</b></font></a>
-                                    </c:if>                    
-									</td>
-									<c:if test="${user.user_dt eq '4'}">
+                                    <div style="font-size:20px;">
+                                         <span class="badge badge-primary">관리자</span>
+                                    </div>
+                                    </c:if>
+                                    </td> 
+                                    <td><c:out value="${user.jdate}" /></td>  
 									<td>
 									<a href="#" onclick="userEdit('${user.origin_num}')"><font color="#4169E1"><b>수정</b></font></a>
+                                    <c:if test="${user.user_dt ne '4'}">
+									&nbsp;|&nbsp;<a href="javascript:userDel('${user.origin_num}')"><font color="#FF0000"><b>탈퇴</b></font></a>
+                                    </c:if>                    
 									</td>
-                                    </c:if> 
+									<td>
+									</td>
 								   </tr>
 							</c:forEach>
 						</c:if>

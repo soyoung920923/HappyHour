@@ -108,8 +108,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public List<BoardDTO> myBoardselectAll(PagingDTO paging) {
-		// TODO Auto-generated method stub
-		return null;
+		return boardMapper.myBoardselectAll(paging);
 	}
 
 	@Override

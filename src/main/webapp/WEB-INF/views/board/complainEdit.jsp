@@ -32,7 +32,7 @@
         <br>
     <div class="row">
 
-            <form name="boardF" id="boardF" action="insert" method="post"
+            <form name="boardF" id="boardF" action="complainInsert" method="post"
                   enctype="multipart/form-data">
                 <input type="hidden" name="mode" value="edit">
                   <input type="hidden" name="id" value="${loginUser.id}">

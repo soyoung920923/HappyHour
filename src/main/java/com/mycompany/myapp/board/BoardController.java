@@ -55,18 +55,20 @@ public class BoardController {
 	public String complain(Model model, HttpServletRequest req, @RequestHeader("User-Agent") String userAgent,
 			@ModelAttribute("paging") PagingDTO paging,
 			@RequestParam(value = "findKeyword", required = false) String findKeyword,
-			@RequestParam(value = "findType", required = false) String findType) throws Exception {
+			@RequestParam(value = "findType", required = false) String findType,
+			@ModelAttribute("board") BoardDTO board) throws Exception {
 
 		int totalCount = this.boardService.getTotalCount(paging);
 		paging.setTotalCount(totalCount);
 		paging.setPagingBlock(10);// 페이징 블럭 단위값 => 10
 		paging.init(req.getSession());
 
-		List<BoardDTO> boardList = this.boardService.selectBoardAll(paging);
-
+		List<BoardDTO> boardList = this.boardService.selectBoardAll(paging);		
+		
 		String myctx = req.getContextPath();
 		String loc = "/complain";
 		String pageNavi = paging.getPageNavi(myctx, loc, userAgent);
+
 
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("pageNavi", pageNavi);
@@ -75,7 +77,7 @@ public class BoardController {
 	}
 
 	// 글 조회하기
-	@GetMapping("/view")
+	@GetMapping("/complainView")
 	public String boardView(Model model, @RequestParam(defaultValue = "0") Integer num, String id) {
 		if (num == 0) {
 			return "redirect:list";
@@ -92,7 +94,7 @@ public class BoardController {
 		return "board/complainView";
 	}
 
-	@RequestMapping(value = "/insert", method = RequestMethod.GET)
+	@RequestMapping(value = "/complainInsert", method = RequestMethod.GET)
 	public String complainInsert(Model model, HttpServletRequest req, HttpSession ses,
 			@ModelAttribute("board") BoardDTO board) {
 
@@ -107,14 +109,16 @@ public class BoardController {
 		} else {
 			String name = loginUser.getName();
 			String id = loginUser.getId();
+			String user_dt = loginUser.getUser_dt();
 			board.setName(name);
 			board.setId(id);
+			board.setUser_dt(user_dt);
 		}
 
 		return "board/complainInsert";
 	}
 
-	@RequestMapping(value = "/insert", method = RequestMethod.POST)
+	@RequestMapping(value = "/complainInsert", method = RequestMethod.POST)
 	public String complainInsertEnd(Model model, HttpServletRequest req, HttpSession ses,
 			@RequestParam("mfilename") MultipartFile mfilename, @RequestParam("mfilename2") MultipartFile mfilename2,
 			@ModelAttribute("board") BoardDTO board, @ModelAttribute("user") UserDTO user) {
@@ -130,8 +134,10 @@ public class BoardController {
 		} else {
 			String name = loginUser.getName();
 			String id = loginUser.getId();
+			String user_dt = loginUser.getUser_dt();
 			board.setName(name);
 			board.setId(id);
+			board.setUser_dt(user_dt);
 		}
 
 		// 1. 업로드 디렉토리의 절대경로 얻기
@@ -213,7 +219,7 @@ public class BoardController {
 	}
 
 	// 글 수정
-	@RequestMapping(value = "/edit", method = RequestMethod.POST)
+	@RequestMapping(value = "/compalinEdit", method = RequestMethod.POST)
 	public String complainEdit(Model model, HttpServletRequest req) {
 		int num = Integer.parseInt(req.getParameter("num"));
 		if (num == 0) {
@@ -257,7 +263,7 @@ public class BoardController {
 		return "board/complainReply";
 	}
 
-	@PostMapping("/delete")
+	@PostMapping("/complainDelete")
 	public String complainDelete(Model model, @RequestParam(defaultValue = " ") int num) {
 		if (num == 0) {
 			return "redirect:complain";
@@ -268,7 +274,7 @@ public class BoardController {
 		return util.addMsgLoc(model, str, "complain");
 	}// ----------------------------------------
 
-	@PostMapping(value = "/fileDown", produces = "application/octet-stream")
+	@PostMapping(value = "/fileDownload", produces = "application/octet-stream")
 	@ResponseBody
 	public ResponseEntity<org.springframework.core.io.Resource> download(HttpServletRequest req,
 			@RequestHeader("User-Agent") String userAgent, @RequestParam("fname") String fname,
@@ -307,7 +313,7 @@ public class BoardController {
 		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 	}// ----------------------------------------
 
-	@PostMapping(value = "/fileDown2", produces = "application/octet-stream")
+	@PostMapping(value = "/fileDownload2", produces = "application/octet-stream")
 	@ResponseBody
 	public ResponseEntity<org.springframework.core.io.Resource> download2(HttpServletRequest req,
 			@RequestHeader("User-Agent") String userAgent, @RequestParam("fname2") String fname2,

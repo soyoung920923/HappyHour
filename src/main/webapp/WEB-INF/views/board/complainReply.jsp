@@ -32,7 +32,7 @@
         <br>
 
 
-         <form name="boardF" id="boardF" action="insert"
+         <form name="boardF" id="boardF" action="complainInsert"
             method="post" enctype="multipart/form-data">
     
          <input type="hidden" name="mode" value="reply">

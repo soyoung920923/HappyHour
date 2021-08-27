@@ -48,10 +48,11 @@
 			<h5 class="text-right font-weight-bold">탈퇴회원</h5>
 		</c:if>
 		<c:if test="${user.user_dt==9}">
-			<h5 class="text-right font-weight-bold">관리자</h5>
+			<div style="text-align:right; margin-right:7px;margin-bottom: 0.5rem;font-size:20px;">
+			<span class="badge badge-primary">관리자</span>
+			</div>
 		</c:if>
 	    </div>
-		
 		
 		  <input type="hidden" name="id" value="${loginUser.id}">
 
@@ -70,7 +71,7 @@
 			</tr>
 			<tr>
 				<th colspan="1">내 주소</th>
-				<td colspan="4">(${user.postcode})&nbsp;${user.address}&nbsp;|&nbsp;${user.address_dt}</td>
+				<td colspan="4">(${user.postcode})&nbsp;${user.address}&emsp;&nbsp;${user.address_dt}</td>
 			</tr>
 		</table>
 		<div style="text-align:right; margin-right:30px;">

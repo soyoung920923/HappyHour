@@ -22,6 +22,8 @@ public class BoardDTO {
 	private int hits;
 	private int origin;
 	private String id;
+	private String exist;
+	private String user_dt; // 일반 = 1, 가게 = 2, 탈퇴회원 = 4, 관리자 =9 
 	
     private int refer; // 동일한 글 그룹번호
     private int level; // 답변 레벨

@@ -23,6 +23,7 @@
 		, user_dt
 		, email_idt
 		, postcode	
+		, jdate
 		from hh_user
 		<include refid="findWhere"/>) a
 		<![CDATA[
@@ -43,7 +44,7 @@
 	              TEL LIKE CONCAT('%',#{findKeyword},'%')
 	          </if>
 	          <if test="findType==4"><!-- 이메일 -->
-	              EMAIL LIKE CONCAT('%',#{findKeyword},'%')
+	              EMAILL LIKE CONCAT('%',#{findKeyword},'%') e
 	          </if>
            </where>
         </if>
@@ -58,12 +59,10 @@
 	</select>
 	
 	<update id="updateUser" parameterType="User">
-		update hh_user set id=#{id}
-		, name = #{name}
+		update hh_user set name = #{name}
 		, address = #{address}
 		, address_dt = #{address_dt}
 		, tel = #{tel}
-		, email = #{email}
 		, agree2 = #{agree2}
 		, user_dt = #{user_dt}
 		, postcode = #{postcode}

@@ -103,10 +103,14 @@ public class UserController {
 			return util.addMsgLoc(m, "이메일 인증이 안된 회원입니다. 이메일 인증을 해주세요", "/happyhour");
 		}
 		
-		String st = this.userService.checkUser_dt(user.getId());
+		String st = userService.checkUser_dt(user.getId());
 		
         if (st.trim().equals("4")) {
             return util.addMsgLoc(m, "탈퇴회원입니다. 고객센터에 문의 바랍니다.", "/happyhour");
+        }
+        
+        if (st.trim().equals("3")) {
+            return util.addMsgLoc(m, "휴먼회원입니다. 고객센터에 문의 바랍니다.", "/happyhour");
         }
 
 		if(loginUser!=null) {

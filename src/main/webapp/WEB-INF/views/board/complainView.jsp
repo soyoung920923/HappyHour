@@ -124,12 +124,12 @@
 
 </form>
 
-<form name="fileF" id="fileF" action="fileDown" method="post">
+<form name="fileF" id="fileF" action="fileDownload" method="post">
    <input type="hidden" name="fname" value="${board.filename}"> 
    <input type="hidden" name="origin_fname" value="${board.origin_filename}">
 </form>
 
-<form name="fileT" id="fileT" action="fileDown2" method="post">
+<form name="fileT" id="fileT" action="fileDownload2" method="post">
    <input type="hidden" name="fname2" value="${board.filename2}"> 
    <input type="hidden" name="origin_fname2" value="${board.origin_filename2}">
 </form>
@@ -152,7 +152,7 @@ $(document).ready(function(){
 	    if (yn) {
 	
 	       $('#boardF').prop('method', 'post');
-	       $('#boardF').prop('action', 'delete');
+	       $('#boardF').prop('action', 'complainDelete');
 	    }
 	    
 	}
@@ -202,6 +202,8 @@ $(document).ready(function(){
 		var url = "${pageContext.request.contextPath}/selectCommentAll";
 		var paramData = {"num" : "${board.num}"};
 		var loginUserId = '${loginUser.id}';
+		var loginUserName = '${loginUser.name}';
+
 		$.ajax({
             type: 'POST',
             url: url,
@@ -217,7 +219,6 @@ $(document).ready(function(){
 	                     htmls += '<svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder:32x32">';
 	                     htmls += '<title>Placeholder</title>';
 	                     htmls += '<rect width="100%" height="100%" fill="#fff48c"></rect>';
-	                     htmls += '<text x="50%" fill="#fff48c" dy=".3em">32x32</text>';
 	                     htmls += '</svg>';
 	                     htmls += '<p class="media-body pb-3 mb-0 small lh-125 border-bottom horder-gray">';
 	                     htmls += '<span class="d-block">';
@@ -226,12 +227,16 @@ $(document).ready(function(){
 	                     htmls += '<span style="padding-left: 7px; font-size: 9pt">';
 	                     if( loginUserId == this.id){
 	                     htmls += '<a href="javascript:void(0)" onclick="editComment(' + this.cnum + ', \'' + this.id + '\', \'' + this.ccontent + '\' )" style="padding-right:5px">수정</a>';
-	                     htmls += '<a href="javascript:void(0)" onclick="deleteComment(' + this.cnum + ')" >삭제</a>';
+	                     htmls += '<a href="javascript:void(0)" onclick="deleteComment(' + this.cnum + ')" style="padding-right:5px" >삭제</a>';
 	                     }
+	                     htmls += '<a href="javascript:void(0)" onclick="replyComment(' + this.cnum + ', \'' + loginUserId + '\', \'' + loginUserName + '\' )" style="padding-right:5px">답글</a>';
 	                     htmls += '</span>';
 	                     htmls += '</span>';
 	                     htmls += this.ccontent;
 	                     htmls += '</p>';
+	                     htmls += '<div class="hide" id="cnum' + this.cnum + '">';
+	                     
+	                     htmls += '</div>';
 	                     htmls += '</div>';
 	                });	
 			 }
@@ -271,15 +276,14 @@ $(document).ready(function(){
 		htmls += '<div class="media text-muted pt-3" id="cnum' + cnum + '">';
 		htmls += '<svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder:32x32">';
 		htmls += '<title>Placeholder</title>';
-		htmls += '<rect width="100%" height="100%" fill="#007bff"></rect>';
-		htmls += '<text x="50%" fill="#007bff" dy=".3em">32x32</text>';
+		htmls += '<rect width="100%" height="100%" fill="#fff48c"></rect>';
 		htmls += '</svg>';
 		htmls += '<p class="media-body pb-3 mb-0 small lh-125 border-bottom horder-gray">';
 		htmls += '<span class="d-block">';
 		htmls += '<strong class="text-gray-dark">' + id + '</strong>';
 		htmls += '<strong class="text-gray-dark">' + '(' + name + ')' + '</strong>';
 		htmls += '<span style="padding-left: 7px; font-size: 9pt">';
-		htmls += '<a href="javascript:void(0)" onclick="updateComment(' + cnum + ', \'' + id + '\', \'' + name + '\' )" style="padding-right:5px">저장</a>';
+		htmls += '<a href="javascript:void(0)" onClick="updateComment(' + cnum + ', \'' + id + '\', \'' + name + '\' )" style="padding-right:5px">저장</a>';
 		htmls += '<a href="javascript:void(0)" onClick="showCommentList()">취소<a>';
 		htmls += '</span>';
 		htmls += '</span>';		
@@ -323,6 +327,18 @@ $(document).ready(function(){
 		alert("댓글이 수정되었습니다.")
 		location.reload();
 		
+	}
+	
+	function replyComment(cnum, id, name){
+		
+		var loginUserId = '${loginUser.id}';
+		var loginUserName = '${loginUser.name}';
+		
+		if(loginUserId == null){
+			alert("로그인 후 이용해 주세요.")
+		}else{
+			
+		}
 	}
 	
 </script>

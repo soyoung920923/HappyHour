@@ -41,5 +41,7 @@ public interface BoardMapper {
 
 	Integer selectCommentCNumMax(CommentDTO comment);
 
+	List<BoardDTO> myBoardselectAll(PagingDTO paging);
+
 	
 }

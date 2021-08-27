@@ -4,7 +4,7 @@
 <mapper namespace="com.mycompany.myapp.board.BoardMapper">
 
    <select id="getTotalCount" resultType="int" parameterType="Paging">
-   		select count(num) from hh_board
+   		select count(num) from hh_board where exist = 'Y'
    		<include refid="findWhere"/>
    </select>
    
@@ -12,17 +12,22 @@
 	     select * from(select num
 		        , title
 		        , content
-		        , row_number() over( order by refer	desc, sunbun asc) rn
+		        , row_number() over(order by category asc, refer desc, sunbun asc) rn
 		        , register_day
 		        , if(date_sub(now(), interval 7 day) <![CDATA[<=]]> register_day, 1, 0) as newImg
 		        , filename
+		        , category
 		        , hits
 		        , name
+		        , id
 		        , refer
 		        , level
 		        , sunbun
+		        , user_dt
 		          from hh_board	
-		          <include refid="findWhere" />) a
+		          where exist = 'Y'
+		          <include refid="findWhere" />
+		          ) a
          <![CDATA[
 	      WHERE a.RN > #{start} and a.RN < #{end}
 	      ]]>
@@ -35,23 +40,7 @@
    <select id = "selectBoardByNum" resultType="Board" parameterType="int">
    		select * from hh_board where num = #{num}
    </select>
-
-	<sql id="findWhere">
-        <if test="findKeyword != null and findKeyword !=''">
-           <where>
-	           <if test="findType==1"><!-- 제목 -->
-	              TITLE LIKE CONCAT('%',#{findKeyword},'%')
-	          </if>
-	          <if test="findType==2"><!-- 작성자 -->
-	              NAME LIKE CONCAT('%',#{findKeyword},'%')
-	          </if>
-	          <if test="findType==3"><!-- 내용 -->
-	              CONTENT LIKE CONCAT('%',#{findKeyword},'%')
-	          </if>
-           </where>
-        </if>
-    </sql>
-    
+   
     	<!-- 게시물 num MAX값 select -->
 	<select id="selectBoardNumMax" parameterType="String" resultType="Integer">
 		select max(num) as max from hh_board
@@ -59,14 +48,14 @@
     
      <insert id="insertBoard" parameterType="Board">
    		insert into hh_board(num, title, content, register_day, filename, origin_filename, category, hits,
-   								origin, name, filename2, origin_filename2, id, refer, level, sunbun )
-   		values(#{refer}, #{title}, #{content:VARCHAR}, now(), #{filename:VARCHAR}, #{origin_filename:VARCHAR}, 0,
-   		#{hits}, #{origin}, #{name}, #{filename2:VARCHAR} ,#{origin_filename2:VARCHAR}, #{id}, #{refer}, 
-   		#{level}, #{sunbun})
+   								origin, name, filename2, origin_filename2, id, refer, level, sunbun, exist, user_dt )
+   		values(#{refer}, #{title}, #{content:VARCHAR}, now(), #{filename:VARCHAR}, #{origin_filename:VARCHAR}, #{category},
+   		#{hits}, #{origin}, #{name}, #{filename2:VARCHAR} ,#{origin_filename2:VARCHAR}, #{id}, #{refer},
+   		#{level}, #{sunbun}, 'Y' , #{user_dt})
    </insert>
    
    <delete id="deleteBoard" parameterType="int">
-        delete from hh_board where num = #{num}
+        update hh_board set exist = 'N' where num = #{num} 
    </delete>
    
    <update id="updateBoard" parameterType="Board">
@@ -96,24 +85,18 @@
    <!-- [3 단계]: 답변글 insert하기 -->
    <insert id="replyBoard" parameterType="Board">
       insert into hh_board(title ,content, register_day, filename, origin_filename,
-      category, hits, origin, name, filename2, origin_filename2, id , level, refer, sunbun)
-      values(#{title}, #{content:VARCHAR}, now(), #{filename:VARCHAR},  #{origin_filename:VARCHAR}, 0
-            , #{hits},#{origin}, #{name}, #{filename2:VARCHAR}, #{origin_filename2:VARCHAR}, #{id}, #{level}, #{refer}, #{sunbun})
+      category, hits, origin, name, filename2, origin_filename2, id , level, refer, sunbun, exist)
+      values(#{title}, #{content:VARCHAR}, now(), #{filename:VARCHAR},  #{origin_filename:VARCHAR}, 1
+            , #{hits},#{origin}, #{name}, #{filename2:VARCHAR}, #{origin_filename2:VARCHAR}, #{id}, #{level}, #{refer}, #{sunbun}, 'Y')
    </insert>
 
    <!-- 부모글하고 같은 insert시 num 부분에 refer값이 들어가야한다. 
       # 부모의 refer와 동일하게 넣어준다.(글그룹하고 동일한) -->
 
-   
-   	<update id="leaveMember" parameterType="int">
-		update hh_user set user_dt = 4
-		where origin_num = #{origin_num}
-	</update>
-	
 	<!-- 내가 쓴 글 조회하기  -->
    <select id="getMyBoardTotal" resultType="int" parameterType="Paging">
-   		select count(num) from hh_board where id = #{id}
-   		<include refid="myfindWhere"/>
+   		select count(num) from hh_board where id = #{id} and exist = 'Y'
+   		<include refid="findWhere"/>
    </select>
    
   <select id="myBoardselectAll" resultType="Board" parameterType="Paging">
@@ -130,14 +113,14 @@
 		        , level
 		        , sunbun
 		          from hh_board	 
-		          where id = #{id}
-		          <include refid="myfindWhere" />) a
+		          where id = #{id} and exist = 'Y'
+		          <include refid="findWhere" />) a
          <![CDATA[
 	      WHERE a.RN > #{start} and a.RN < #{end}
 	      ]]>
    </select>
 
- 	<sql id="myfindWhere">
+ 	<sql id="findWhere">
         <if test="findKeyword != null and findKeyword !=''">
 	           <if test="findType==1"><!-- 제목 -->
 	             AND TITLE LIKE CONCAT('%',#{findKeyword},'%')
@@ -156,13 +139,13 @@
 	</select>
       
     <select id="selectCommentAll" resultType="Comment">
-       select cnum, num, crefer, clevel, csunbun, name, id, ccontent, wdate  from hh_comment where num = #{num} 
-       order by crefer	desc, csunbun asc
+       select cnum, num, crefer, clevel, csunbun, name, id, ccontent, wdate from hh_comment where num = #{num} and cexist = 'Y' 
+       order by crefer	desc, csunbun asc 
    </select>
     
     <insert id="insertComment" parameterType="Comment">
-        insert into hh_comment (num, cnum, name, id, wdate, ccontent, crefer, clevel, csunbun)
-        values(#{num}, #{crefer}, #{name}, #{id}, now(), #{ccontent}, #{crefer}, #{clevel} ,#{csunbun})
+        insert into hh_comment (num, cnum, name, id, wdate, ccontent, crefer, clevel, csunbun, cexist)
+        values(#{num}, #{crefer}, #{name}, #{id}, now(), #{ccontent}, #{crefer}, #{clevel} ,#{csunbun}, 'Y')
     </insert>
     
     <update id="updateComment">
@@ -170,7 +153,7 @@
     </update>
     
     <delete id="deleteComment" parameterType="int">
-       delete from hh_comment where cnum = #{cnum}
+       update hh_comment set cexist = 'N' 
     </delete>
     
 </mapper>
