@@ -100,14 +100,14 @@ public class HolidayController {
 			StoreDTO storeDt = storeService.getStoreDt(store);
 			model.addAttribute("storeNm", storeDt.getStore_Nm());
 			if (isMyStore) {				
-				  SearchParam param = new SearchParam(); 
+				  SearchParam param = new SearchParam();
+				  param.setIdx(store); 
 				  int total = holidayMapper.getTotalCount(param);
 				  model.addAttribute("total", total);
 				  param.setStartCount(0);
 				  param.setEndCount(5); 
 				  //param.setViewCount(5); 
-				  param.setTotalCount(total);
-				  param.setIdx(store); 
+				  param.setTotalCount(total);			  
 				  List<HolidayDTO> holidays = holidayService.getHolidays(param); 
 				  model.addAttribute("list", holidays);
 				  rt = "/holiday/holiday-list";

@@ -153,7 +153,7 @@ function findPostcode() {
     }).open();
 }
 
-var idck = /^[A-za-z0-9]{4,12}$/g;
+var idck = /^[a-z0-9]{4,12}$/;
 var emailck = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 var telck = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
 
@@ -164,7 +164,7 @@ function checkId(uid){
         .removeClass('text-primary');
     if(!idck.test( $("input[name=id]").val()))
     {
-        $('#msgId').text('아이디는 4~12자 이내의 영문자 또는 숫자여야 합니다. 특수문자는 _,-만 사용하실 수 있습니다.')
+        $('#msgId').text('아이디는 4~12자 이내의 영문자 또는 숫자여야 합니다. 특수문자는 사용하실 수 없습니다.')
             .addClass('text-danger');
         $('#id').select();
 

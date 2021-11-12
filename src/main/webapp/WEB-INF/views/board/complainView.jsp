@@ -73,10 +73,10 @@
   </div>   
            <div style="text-align:right;">
              <c:if test="${loginUser.id eq board.id}">
-               <form id="boardF" method="post" >
+               <form id="boardF" method="post" style="display: inline-block;">
                <input type="hidden" name="num" id="num" value="<c:out value="${board.num}"/>">
-                       <button class="btn" onclick="goEdit()"style="margin-bottom: 0.3rem;">수정</button>
-                       <button class="btn" onclick="goDel()" style="margin-bottom: 0.3rem;">삭제</button> 
+                       <button class="btn" onclick="goEdit()">수정</button>
+                       <button class="btn" onclick="goDel()">삭제</button> 
                </form>     
             </c:if>   
                  <button class="btn" onclick="history.back()">목록</button>
