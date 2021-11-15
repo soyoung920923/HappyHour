@@ -119,19 +119,6 @@
 		<jsp:include page="../commons/footer.jsp"/>
 	</footer>
 </body>
-<style>
-#bbs th{
- font-family: 'Ubuntu', sans-serif;
- font-size: 0.9rem;
- font-weight: bolder;
-}
-
-.page-item.active .page-link {
- color:white;
- background:#E30F0C;
- border-color:#E30F0C;
-}
-</style>
 <script type="text/javascript">
 	$(function() {
 		$('#findF').on('submit', function() {

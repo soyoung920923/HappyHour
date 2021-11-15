@@ -31,7 +31,7 @@
 <br>
 <br>
 <!-- 내정보 -->
-<div class="in list-in" style="width:70%;">
+<div class="container">
    <div class="card align-middle list-card photo">
 	  <div class="card-body">	
 		<h1 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">MyPage</h1>

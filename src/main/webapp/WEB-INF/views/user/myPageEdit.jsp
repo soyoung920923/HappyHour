@@ -54,8 +54,8 @@
                     <td>${user.email }
                      <input type="hidden" id="email" name="email" value="${user.email }"></td>
                     <th>연락처</th>
-                    <td>
-                    <input type="text" value="${user.tel }" name="tel" id="tel" class="form-control" maxlength="11" required></td>
+                    <td>${user.tel }
+                    <input type="hidden" value="${user.tel }" name="tel" id="tel" class="form-control"></td>
                 </tr>
                 <tr> 
                    <th>우편번호</th>
@@ -99,7 +99,7 @@
             <div class="container text-right">
                 <input type="hidden" id="res" name="res">
                 <button class="btn" id="rewrite" name="rewrite">수정하기</button>
-                <button type="reset" class="btn" id="resetbtn">다시쓰기</button>
+                <!-- <button type="reset" class="btn" id="resetbtn">다시쓰기</button> -->
             </div>
         </form>
         <!-- 버튼정렬div -->
