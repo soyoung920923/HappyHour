@@ -22,26 +22,37 @@
 <main> 
 <br>
 <br>
-<div class="in list-in" style="width:70%;">
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="in list-in">
    <div class="card align-middle list-card photo">
 	  <div class="card-body">	
 		<h1 class="card-title text-center" style="color:#E30F0C; font-family: 'Ubuntu', sans-serif;">Admin Page</h1>
 
 
-<nav class="navbar navbar-expand-sm bg-white navbar-white">
-    <a class="navbar-brand" href="#">${loginUser.name}님</a>
-    <div class="collapse navbar-collapse" id="adminNavbar">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/admin/userList">회원 관리</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/admin/boardList">게시판 관리</a>
-            </li>
-
-        </ul>
-    </div>
-</nav>
+		<nav class="navbar navbar-expand-sm bg-white navbar-white">
+		    <%-- <a class="navbar-brand" href="#">${loginUser.name}님</a> --%>
+		   <ul class="mr-auto">
+		           <li class="nav-item">
+		               <a class="nav-link" href="${pageContext.request.contextPath}/admin/userList">회원 관리</a>
+		           </li>
+		           <li class="nav-item">
+		               <a class="nav-link" href="${pageContext.request.contextPath}/admin/boardList">게시판 관리</a>
+		           </li>
+		           <li class="nav-item">
+		               <a class="nav-link" href="${pageContext.request.contextPath}/banner/list">배너 관리</a>
+		            </li>
+		
+		        </ul>
+		</nav>
 
 
 
@@ -51,10 +62,17 @@
 
 </main>
 
-	 <footer>
+	 <%-- <footer>
 		<jsp:include page="../commons/footer.jsp"/>
-	</footer>
+	</footer> --%>
 </body>
 
 </html>
+
+
+<style>
+	.mr-auto{margin: 0 auto;}
+	.nav-item{
+	text-align: center;}
+</style>
 

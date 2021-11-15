@@ -94,7 +94,7 @@
 	font-size: 1.2rem;
 }
 
-#bottom-nav, #bottom-nav2, #bottom-nav3 {
+#bottom-nav, #bottom-nav2, #bottom-nav3, #bottom-nav4 {
 	width: 100%;
 	height: 56px;
 	background-color: #fff;
@@ -106,17 +106,17 @@
 }
 
 #bottom-nav::-webkit-scrollbar, #bottom-nav2::-webkit-scrollbar,
-	#bottom-nav3::-webkit-scrollbar {
+	#bottom-nav3::-webkit-scrollbar, #bottom-nav4::-webkit-scrollbar {
 	display: none;
 }
 
-#bottom-nav-ul, #bottom-nav-ul2, #bottom-nav-ul3 {
+#bottom-nav-ul, #bottom-nav-ul2, #bottom-nav-ul3, #bottom-nav-ul4 {
 	padding: 0 2rem;
 	margin: 0 auto;
 	display: inline-block;
 }
 
-.bottom-nav-li, .bottom-nav-li2, .bottom-nav-li3 {
+.bottom-nav-li, .bottom-nav-li2, .bottom-nav-li3, .bottom-nav-li4 {
 	display: flex;
 	padding: 0.9rem 2rem;
 	display: inline-block;

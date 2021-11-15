@@ -130,6 +130,16 @@
 		</div>
 	  </div>
 	  
+	  <div id="fixed-box4">
+	  	<div id="bottom-nav4">			
+			<ul id="bottom-nav-ul4">
+				<li class="bottom-nav-li4 on"><a href="${pageContext.request.contextPath}/admin/userList" id="user-mng">회원 관리</a></li>
+				<li class="bottom-nav-li4"><a href="${pageContext.request.contextPath}/admin/boardList" id="board-mng">게시판 관리</a></li>
+				<li class="bottom-nav-li4"><a href="${pageContext.request.contextPath}/banner/list" id="board-mng">배너 관리</a></li>
+			</ul>			
+		</div>
+	  </div>
+	  
 	  <!-- 내위치 모달 팝업 -->
 	  <div id="myPointUtil">
 	  	<br>

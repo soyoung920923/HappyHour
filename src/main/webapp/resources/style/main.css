@@ -329,7 +329,7 @@ footer{
 	z-index: 9999;
 	text-align: right;
 }
-#fixed-box, #fixed-box2, #fixed-box3{
+#fixed-box, #fixed-box2, #fixed-box3, #fixed-box4{
 	width: 100%;
 	position: fixed;
 	bottom: 0%;
@@ -349,7 +349,7 @@ footer{
 	height: 3.5rem;
 	margin-right: 0.7rem;
 }
-#bottom-nav, #bottom-nav2, #bottom-nav3{
+#bottom-nav, #bottom-nav2, #bottom-nav3, #bottom-nav4{
 	display: none;
 }
 .bottom-nav-arrow{
