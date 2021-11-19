@@ -27,11 +27,8 @@
               <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/store/list">식당</a>
               </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">Q&A</a>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <li><a class="dropdown-item" href="${pageContext.request.contextPath}/complain">Q&A</a></li>
-                </ul>
+              <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/complain">Q&A</a>
               </li>
               <c:if test="${loginUser eq null}">
               	<li class="nav-item">
@@ -401,7 +398,7 @@
               	}else{
               		$('.bottom-nav-li').eq(0).addClass('on');
               	}
-			}else if (url.indexOf("/user/login") > -1 || url.indexOf("myInfo") > -1 || url.indexOf("myIndex") > -1 || url.indexOf("lineup/list") > -1 || url.indexOf("business") > -1) {     			
+			}else if (url.indexOf("/user/login") > -1 || url.indexOf("myInfo") > -1 || url.indexOf("myIndex") > -1 || url.indexOf("lineup/list") > -1 || url.indexOf("business") > -1 || url.indexOf("holiday") > -1) {     			
 				$('.nav-item').eq(3).children('a').addClass('active');
 				if (url.indexOf("/user/login") < 0) {
 					$('#bottom-nav3').css('display','block');
@@ -411,7 +408,7 @@
 						$('.bottom-nav-li3').eq(0).addClass('on');					
 					}else if(url.indexOf("myIndex") > -1 || url.indexOf("lineup/list") > -1){
 						$('.bottom-nav-li3').eq(1).addClass('on');	
-					}else if(url.indexOf("business") > -1){
+					}else if(url.indexOf("business") > -1 || url.indexOf("holiday") > -1){
 						$('.bottom-nav-li3').eq(2).addClass('on');
 					}
 				}

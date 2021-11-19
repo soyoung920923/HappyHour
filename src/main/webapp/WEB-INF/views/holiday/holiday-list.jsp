@@ -199,11 +199,6 @@
 		var store = $('#store').val();
 		var storeNm = '${storeNm}';
 		
-		$('#bottom-nav3').css('display','block');
-		$('#fixed-box-top').css('bottom','5.5%');
-		$('.bottom-nav-li3').removeClass('on');
-		$('.bottom-nav-li3').eq(2).addClass('on');
-		
 		$('#moreList').click(function(){
 			moreList('store-list',5);
 		});
