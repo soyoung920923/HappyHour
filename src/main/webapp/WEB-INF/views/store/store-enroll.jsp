@@ -242,14 +242,12 @@ $(function(){
 			$(this).val("1");
 			$('#break_start').prop('disabled',false);
 			$('#break_end').prop('disabled',false);
-			console.log($(this).val());
 		}else{
 			$(this).val("0");			
 			$('#break_start option:eq(0)').prop("selected", true);
 			$('#break_end option:eq(0)').prop("selected", true);
 			$('#break_start').prop('disabled',true);
 			$('#break_end').prop('disabled',true);
-			console.log($(this).val());
 		}
 	});
 	

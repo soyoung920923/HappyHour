@@ -210,7 +210,6 @@
 		
 		function moreList(id, cnt) {
 			var listLength = $('.listS').length;
-			console.log(listLength);
 			var callLength = listLength;
 			var total = $('#totalCount').val();
 			
@@ -223,7 +222,6 @@
 				data		: $('#searchList').serialize(),
 				dataType	: "json",
 				success		: function(result){
-					console.log(result);
 					if (result.resultCnt > 0) {
 						var resultList = result.resultList;						
 						drawMoreList(resultList);

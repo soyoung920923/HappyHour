@@ -19,6 +19,7 @@
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
     <title>Happy Hour</title>
+    <link rel="shortcut icon" href="<c:url value='/resources/image/alarm_fa_icon.ico'/>">
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/carousel/">
     

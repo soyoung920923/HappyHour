@@ -118,12 +118,6 @@
 <script type="text/javascript">
 	$(function() {
 		
-		$('#bottom-nav4').css('display','block');
-		$('#fixed-box-top').css('bottom','5.5%');
-		$('.bottom-nav-li4').removeClass('on');
-		$('.bottom-nav-li4').eq(1).addClass('on');
-		
-		
 		$('#findF').on('submit', function() {
 			var $type = $('#findType');
 			var $keyword = $('#findKeyword');

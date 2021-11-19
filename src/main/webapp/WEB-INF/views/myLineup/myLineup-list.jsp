@@ -265,14 +265,6 @@
 		
 		var pastOrNot = $('#pastOrNot').val();
 		
-		/* $('#bottom-nav2').css('display','block');
-		$('#fixed-box-top').css('bottom','5.5%'); */
-		
-		$('#bottom-nav3').css('display','block');
-		$('#fixed-box-top').css('bottom','5.5%');
-		$('.bottom-nav-li3').removeClass('on');
-		$('.bottom-nav-li3').eq(1).addClass('on');
-		
 		/* var real = "/happyhour/lineup/list/${path}?userIdx=${userIdx}&myOrStore=myPage";
 		var past = "/happyhour/lineup/list/${path}?userIdx=${userIdx}&myOrStore=myPage&past=past"; */
 		var lineup_url = window.location.href;
@@ -294,7 +286,6 @@
 		
 		function moreList(id, cnt) {
 			var listLength = $('.listS').length;
-			console.log(listLength);
 			var callLength = listLength;
 			var total = $('#totalCount').val();
 			
@@ -307,7 +298,6 @@
 				data		: $('#searchList').serialize(),
 				dataType	: "json",
 				success		: function(result){
-					console.log(result);
 					if (result.resultCnt > 0) {
 						var resultList = result.resultList;						
 						drawMoreList(resultList);

@@ -136,11 +136,6 @@
 	$(function(){
 		
 		var ii = 0;
-		$('#bottom-nav').css('display','block');
-		$('.bottom-nav-arrow').css('display','block');
-		$('#fixed-box-top').css('bottom','5.5%');
-		
-		
 
 		$('#moreList').click(function(){
 			moreList('store-list',5);
@@ -289,14 +284,11 @@
 		name = nm;
 		longitude = lg;
 		latitude = lt;
-		console.log("내위치:	"+myLong+"	/	"+myLati);
-		console.log("목적지:	"+latitude+"	/	"+longitude);
 		if (isMobile()) {				
 			url = "http://m.map.naver.com/route.nhn?menu=route&sname=내위치&sx="+myLong+"&sy="+myLati+"&ename="+name+"&ex="+longitude+"&ey="+latitude+"&pathType=0&showMap=true";
 		}else{
 			url = "http://map.naver.com/index.nhn?slng="+myLong+"&slat="+myLati+"&stext=내위치&elng="+longitude+"&elat="+latitude+"&etext="+name+"&menu=route&pathType=1";
 		}
-		console.log(url);
 		location.href = url;
 	}
 	function isMobile() {

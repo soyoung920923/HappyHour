@@ -458,7 +458,8 @@ public class LineupController {
 	public String visitTeam(Model model, @RequestParam(name="visit", required = false) int visit,
 			@RequestParam(name="idx", required = false) int idx,
 			@RequestParam(name="path", required = false) String path,
-			@RequestParam(name="store", required = false) String store, HttpSession session) throws ParseException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException{
+			@RequestParam(name="store", required = false) String store, 
+			HttpSession session) throws ParseException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException{
 		
 		UserDTO user = commonUtil.getUser(session);
 		String msg = "";
@@ -505,7 +506,7 @@ public class LineupController {
 						url="/happyhour/lineup/list";
 						if (path != null && path != "") {
 							url += "/"+path;
-							if (store != null && store != "") {
+							if (store != null && store != "" && visit != 3) {
 								url += "?store="+store+"&myOrStore=store";
 							}else {
 								url += "?userIdx="+user.getOrigin_num()+"&myOrStore=myPage";

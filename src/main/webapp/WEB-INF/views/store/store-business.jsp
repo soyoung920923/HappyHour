@@ -141,10 +141,6 @@
 <script type="text/javascript">
 	$(function(){
 		var ii = 0;
-		$('#bottom-nav3').css('display','block');
-		$('#fixed-box-top').css('bottom','5.5%');
-		$('.bottom-nav-li3').removeClass('on');
-  		$('.bottom-nav-li3').eq(2).addClass('on');
 
 		$('#moreList').click(function(){
 			moreList('store-list',5);
@@ -268,7 +264,6 @@
 		
 	function findLoad(name,longitude,latitude){
 		var url = "https://map.kakao.com/link/to/"+name+","+longitude+","+latitude;
-		console.log(url);
 		// 모바일(앱) -> var url2 = "kakaomap://route?sp=37.537229,127.005515&ep="+longitude+","+latitude+"&by=CAR"
 		location.href = url;
 	}

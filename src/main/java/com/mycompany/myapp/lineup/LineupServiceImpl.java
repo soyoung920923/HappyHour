@@ -127,14 +127,16 @@ public class LineupServiceImpl implements LineupService{
 		}
 		
 		if ("2".equals(param.get("path").toString()) && ("3".equals(param.get("visit").toString())|| "2".equals(param.get("visit").toString()))) {
-			LineupDTO nowTeam = lineupMapper.nowTeam(param);
-			String smsId = nowTeam.getSms_id();
-			NaverSmsResponseDTO apiResp = naverSms.sendSms(null, null ,null, null, smsId, null);
-			System.out.println(apiResp);
+			LineupDTO nowTeam = lineupMapper.nowTeam(param);			
 			if ("2".equals(param.get("visit").toString())) {
 				recipient = nowTeam.getLineup_tel();
 				msg = "예약시간에 방문하지 않으셔서 예약이 취소되었습니다.";
 				naverSms.sendSms(recipient, msg, null, null, null, "SMS");
+			}else {
+				String smsId = nowTeam.getSms_id();
+				if (smsId != null && !smsId.equals("")) {					
+					NaverSmsResponseDTO apiResp = naverSms.sendSms(null, null ,null, null, smsId, null);
+				}
 			}
 		}
 		

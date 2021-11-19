@@ -89,6 +89,7 @@
 			</a>
 		</p>
 	  </div>
+	  <!-- bottom nav 식당 -->
 	  <div id="fixed-box">
 		<div id="bottom-nav">			
 			<ul id="bottom-nav-ul">
@@ -111,15 +112,17 @@
 			<i style='font-size:1.3rem' class='fas'>&#xf0da;</i>
 	  </div>
 	  
-	  <div id="fixed-box2">
+	  <!-- bottom nav 줄서기/예약 -->
+	  <!-- <div id="fixed-box2">
 	  	<div id="bottom-nav2">			
 			<ul id="bottom-nav-ul2">
 				<li class="bottom-nav-li2 on"><a href="" id="real">실시간</a></li>
 				<li class="bottom-nav-li2"><a href="" id="past">지난내역</a></li>
 			</ul>			
 		</div>
-	  </div>
+	  </div> -->
 	  
+	  <!-- bottom nav 마이페이지 -->
 	  <div id="fixed-box3">
 	  	<div id="bottom-nav3">			
 			<ul id="bottom-nav-ul3">
@@ -130,6 +133,7 @@
 		</div>
 	  </div>
 	  
+	  <!-- bottom nav 관리자 -->
 	  <div id="fixed-box4">
 	  	<div id="bottom-nav4">			
 			<ul id="bottom-nav-ul4">
@@ -371,50 +375,65 @@
       		});
       		
       		var url = window.location.href;
-      		console.log(url);
-      		/*header nav*/
-      		if (url.indexOf("store/list") > -1 || url.indexOf("store/detail") > -1 || url.indexOf("lineup/enroll") > -1) {
-      			$('.nav-item > a').removeClass('active');
-				$('.nav-item').eq(1).children('a').addClass('active');
-			}else if (url.indexOf("/user/login") > -1) {
-      			$('.nav-item > a').removeClass('active');
-				$('.nav-item').eq(3).children('a').addClass('active');
-			}else if (url.indexOf("myInfo") > -1) {
-      			$('.nav-item > a').removeClass('active');
-				$('.nav-item').eq(3).children('a').addClass('active');
-			}else if (url.indexOf("complain") > -1) {
-      			$('.nav-item > a').removeClass('active');
-				$('.nav-item').eq(2).children('a').addClass('active');
-			}else if (url.indexOf("admin") > -1) {
-      			$('.nav-item > a').removeClass('active');
-				$('.nav-item').eq(5).children('a').addClass('active');
-			}else{
-				$('.nav-item > a').removeClass('active');
-				$('.nav-item').eq(0).children('a').addClass('active');
-			}
-      		
-      		
-      		/*bottom nav*/
           	var dv = url.lastIndexOf("/");
           	var pth = url.substring(dv+1);
-          	console.log(pth);
-          		
-          	if (url.indexOf("store/list/"+pth) > -1) {
-          		$('.bottom-nav-li').removeClass('on');
-          		$('.bottom-nav-li').eq(pth).addClass('on');
-          		if (pth > 6) {
-          			$('#bottom-nav').animate({
-            			scrollLeft: '+=600'
-            		}, 200);
-          		}else if (pth > 3) {
-          			$('#bottom-nav').animate({
-            			scrollLeft: '+=400'
-            		}, 200);
-    			}
-          	}else{
-          		$('.bottom-nav-li').removeClass('on');
-          		$('.bottom-nav-li').eq(0).addClass('on');
-          	}
+
+      		$('.nav-item > a').removeClass('active');
+      		
+      		if ((url.indexOf("store/list") > -1 || url.indexOf("store/detail") > -1 || url.indexOf("lineup/enroll") > -1) && url.indexOf("business") < 0) {      			
+				$('.nav-item').eq(1).children('a').addClass('active');
+				$('#bottom-nav').css('display','block');
+        		$('.bottom-nav-arrow').css('display','block');
+        		$('#fixed-box-top').css('bottom','5.5%');
+        		$('.bottom-nav-li').removeClass('on');
+        		
+        		if (url.indexOf("store/list/"+pth) > -1) {            		
+              		$('.bottom-nav-li').eq(pth).addClass('on');
+              		if (pth > 6) {
+              			$('#bottom-nav').animate({
+                			scrollLeft: '+=600'
+                		}, 200);
+              		}else if (pth > 3) {
+              			$('#bottom-nav').animate({
+                			scrollLeft: '+=400'
+                		}, 200);
+        			}
+              	}else{
+              		$('.bottom-nav-li').eq(0).addClass('on');
+              	}
+			}else if (url.indexOf("/user/login") > -1 || url.indexOf("myInfo") > -1 || url.indexOf("myIndex") > -1 || url.indexOf("lineup/list") > -1 || url.indexOf("business") > -1) {     			
+				$('.nav-item').eq(3).children('a').addClass('active');
+				if (url.indexOf("/user/login") < 0) {
+					$('#bottom-nav3').css('display','block');
+					$('#fixed-box-top').css('bottom','5.5%');
+					$('.bottom-nav-li3').removeClass('on');
+					if (url.indexOf("myInfo") > -1) {
+						$('.bottom-nav-li3').eq(0).addClass('on');					
+					}else if(url.indexOf("myIndex") > -1 || url.indexOf("lineup/list") > -1){
+						$('.bottom-nav-li3').eq(1).addClass('on');	
+					}else if(url.indexOf("business") > -1){
+						$('.bottom-nav-li3').eq(2).addClass('on');
+					}
+				}
+				
+			}else if (url.indexOf("complain") > -1) {      			
+				$('.nav-item').eq(2).children('a').addClass('active');
+			}else if (url.indexOf("admin") > -1 || url.indexOf("banner/list") > -1) {      			
+				$('.nav-item').eq(5).children('a').addClass('active');
+				$('#bottom-nav4').css('display','block');
+				$('#fixed-box-top').css('bottom','5.5%');
+				$('.bottom-nav-li4').removeClass('on');
+				if (url.indexOf("userList") > -1) {
+					$('.bottom-nav-li4').eq(0).addClass('on');					
+				}else if(url.indexOf("boardList") > -1){
+					$('.bottom-nav-li4').eq(1).addClass('on');	
+				}else{
+					$('.bottom-nav-li4').eq(2).addClass('on');	
+				}
+			}else{				
+				$('.nav-item').eq(0).children('a').addClass('active');
+			}
+      		        	
           		    		
       		$('.go-top > a').click(function(){
       			$('body').animate({scrollTop:0},500);
@@ -483,8 +502,8 @@
     			success		: function(result){
     				console.log("success");   				
     			},
-    			error		: function(){
-    				console.log("error");
+    			error		: function(e){
+    				console.log(e);
     			}			
     		});
       	}

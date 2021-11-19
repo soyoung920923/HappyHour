@@ -77,20 +77,15 @@ function myLocation(event){
 	        
 	        var lat = position.coords.latitude, // 위도
 	            lon = position.coords.longitude; // 경도        
-	        console.log("geo:	"+lat+"/"+lon);             
             searchDetailAddrFromCoords(lon,lat, function(result, status) {
                 if (status === kakao.maps.services.Status.OK) {
                     var detailAddr = !!result[0].road_address ? '도로명주소 : ' + result[0].road_address.address_name : '';
                     detailAddr += '지번 주소 : ' + result[0].address.address_name;
                     
-                    var content = '법정동 주소정보' + detailAddr;
-
-                    console.log(content);                                     
+                    var content = '법정동 주소정보' + detailAddr;                                    
                 }   
             });
-            console.log("--내위치--");
             var coords = new kakao.maps.LatLng(lat,lon );
-        	console.log(coords);
 	        // 결과값으로 받은 위치를 마커로 표시합니다
 	        var marker = new kakao.maps.Marker({
 	            map: map,
@@ -114,8 +109,7 @@ function myLocation(event){
 	} else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
 	    
 	    var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),    
-	        message = 'geolocation을 사용할수 없어요..'
-	        console.log(message);
+	        message = 'geolocation을 사용할수 없어요..';
 	    //displayMarker(locPosition, message);
 	}
 	

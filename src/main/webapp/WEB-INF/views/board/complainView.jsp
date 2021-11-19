@@ -318,7 +318,6 @@ $(document).ready(function(){
          , type : 'POST'
          , dataType : 'text'
          , success: function(result){
-                console.log(result);
                 showCommentList();
          }
          , error: function(error){

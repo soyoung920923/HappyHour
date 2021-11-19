@@ -360,18 +360,12 @@
 		var pastOrNot = $('#pastOrNot').val();
 		var store = $('#store').val();
 		
-		$('#bottom-nav3').css('display','block');
-		$('#fixed-box-top').css('bottom','5.5%');
-		$('.bottom-nav-li3').removeClass('on');
-		$('.bottom-nav-li3').eq(2).addClass('on');
-		
 		$('#moreList').click(function(){
 			moreList('store-list',5);
 		});
 		
 		function moreList(id, cnt) {
 			var listLength = $('.listS').length;
-			console.log(listLength);
 			var callLength = listLength;
 			var total = $('#totalCount').val();
 			
@@ -384,7 +378,6 @@
 				data		: $('#searchList').serialize(),
 				dataType	: "json",
 				success		: function(result){
-					console.log(result);
 					if (result.resultCnt > 0) {
 						var resultList = result.resultList;						
 						drawMoreList(resultList);
@@ -562,7 +555,6 @@
 		$('.pathName').text(pathName);
 		$("input:radio[name='serviceYn']:radio[value='"+$('#service').val()+"']").prop('checked', true);
 		$('#settingReservation').attr('action','/happyhour/store/setting/'+path+'?idx='+store);
-		console.log($('#service').val());
 		$('#noticeMsg').val(pathName+" 준비중");
 		$('#myReserveSetting').show();
 		$('#myReserveSetting').on('scroll touchmove mousewheel', function(event) {
