@@ -102,16 +102,15 @@
 					</c:forEach>
 				</c:if>	
 			  </table>
-				    <div class="container" style="padding-top: 30px;" id="paging">
-						${pageNavi}
-				    </div>
+			  <div class="container" style="padding-top: 30px;" id="paging">
+					${pageNavi}
+			  </div>
 			  <div align="right">
 				  <a href="${pageContext.request.contextPath}/complainInsert"> <button class="btn">글쓰기</button></a>
 			  </div>
-
-				</div>
 	</div>
-
+</div>
+<br>
   
 
 </main>

@@ -107,7 +107,9 @@
 			</div>
 		</div>
 	</div>
-
+<br>
+<br>
+<br>
 <!-- 회원 탈퇴 -->
 <form name="frm" method="POST">
 	<input type="hidden" name="origin_num">

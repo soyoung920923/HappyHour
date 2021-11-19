@@ -85,16 +85,17 @@
 					</c:forEach>
 				</c:if>	
 			  </table>
-			  				<div style="text-align: right; padding-right: 15px">
-								<b>총 게시글 ${totalCount} 개</b>
-							</div>
-				    <div class="container" style="padding-top: 30px;" id="paging">
-						${pageNavi}
-				    </div>
+			  	<div style="text-align: right; padding-right: 15px">
+					<b>총 게시글 ${totalCount} 개</b>
 				</div>
-	</div>
-
-  
+				<div class="container" style="padding-top: 30px;" id="paging">
+					${pageNavi}
+				</div>
+	 </div>
+</div>
+<br>
+<br>
+<br>
 
 </main>
 	 <%-- <footer>
